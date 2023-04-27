@@ -4,8 +4,8 @@ pragma solidity ^0.8.10;
 
 import {StringUtils} from "../lib/Utils/StringUtils.sol";
 import {Base64} from "../lib/Utils/Base64.sol";
-import "forge-std/src/console.sol";
 
+import "forge-std/src/console.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
