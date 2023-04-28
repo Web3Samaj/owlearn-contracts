@@ -6,9 +6,20 @@ import "forge-std/src/Test.sol";
 import "../src/OwlearnId.sol";
 
 contract OwnlearnIdScript is Test {
-    OwlearnId public ownlearnId;
+    OwlearnId public owlearnId;
 
     function setUp() public {
-        ownlearnId = new OwlearnId();
+        owlearnId = new OwlearnId("owl");
+    }
+
+    function testRegister() public {
+        address alice = address(0x1);
+        startHoax(alice, 100e18);
+
+        uint amount = owlearnId.price("Dhruv");
+
+        owlearnId.register{value: amount}("Dhruv");
+
+        assertEq(owlearnId.getAddress("Dhruv"), alice);
     }
 }
