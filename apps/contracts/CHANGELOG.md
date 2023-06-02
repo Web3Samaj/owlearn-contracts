@@ -1,5 +1,12 @@
 # @owlearn/contracts
 
+## 0.1.1
+
+### Patch Changes
+
+- - Added deployment script for Counter.sol smart contract. This is a test contract.
+  - Added packages required for hardhat to run.
+
 ## 0.1.0
 
 ### Minor Changes
