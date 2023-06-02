@@ -1,0 +1,105 @@
+{
+  "address": "0xEC5d9118aCE28526020d420a1A975029704250e5",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "increment",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "number",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "newNumber",
+          "type": "uint256"
+        }
+      ],
+      "name": "setNumber",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0x6f087255ccd310069be66650b8d7d6b4ce6b742238a5a7d692dd8be792341c24",
+  "receipt": {
+    "to": null,
+    "from": "0x67BE2C36e75B7439ffc2DCb99dBdF4fbB2455930",
+    "contractAddress": "0xEC5d9118aCE28526020d420a1A975029704250e5",
+    "transactionIndex": 9,
+    "gasUsed": "111805",
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008000000000000000000000008000000000000000000000000000000020800000000000000000000100000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000200000000000000000080000000000000400000000000000000000000000004000000000000000000001000000000100000000000000000000100000000000000000000000000000000000000000000000000000000000002000000000100000",
+    "blockHash": "0xbf873cc772ed971ead1d494e96767462297173753b26007e6dde25f468301a07",
+    "transactionHash": "0x6f087255ccd310069be66650b8d7d6b4ce6b742238a5a7d692dd8be792341c24",
+    "logs": [
+      {
+        "transactionIndex": 9,
+        "blockNumber": 36351367,
+        "transactionHash": "0x6f087255ccd310069be66650b8d7d6b4ce6b742238a5a7d692dd8be792341c24",
+        "address": "0x0000000000000000000000000000000000001010",
+        "topics": [
+          "0x4dfe1bbbcf077ddc3e01291eea2d5c70c2b422b415d95645b9adcfd678cb1d63",
+          "0x0000000000000000000000000000000000000000000000000000000000001010",
+          "0x00000000000000000000000067be2c36e75b7439ffc2dcb99dbdf4fbb2455930",
+          "0x0000000000000000000000003a22c8bc68e98b0faf40f349dd2b2890fae01484"
+        ],
+        "data": "0x0000000000000000000000000000000000000000000000000001310ee3cb473c0000000000000000000000000000000000000000000000000ddfb67ab43e9fef000000000000000000000000000000000000000000000a2978f6d6ee0210a0570000000000000000000000000000000000000000000000000dde856bd07358b3000000000000000000000000000000000000000000000a2978f807fce5dbe793",
+        "logIndex": 19,
+        "blockHash": "0xbf873cc772ed971ead1d494e96767462297173753b26007e6dde25f468301a07"
+      }
+    ],
+    "blockNumber": 36351367,
+    "cumulativeGasUsed": "3010523",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [],
+  "numDeployments": 1,
+  "solcInputHash": "3934839e589aae09c4205b4ef834e270",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.19+commit.7dd6d404\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"increment\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"number\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"newNumber\",\"type\":\"uint256\"}],\"name\":\"setNumber\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/Counter.sol\":\"Counter\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":1000},\"remappings\":[\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\"]},\"sources\":{\"src/Counter.sol\":{\"content\":\"// SPDX-License-Identifier: UNLICENSED\\npragma solidity ^0.8.13;\\n\\ncontract Counter {\\n    uint256 public number;\\n\\n    function setNumber(uint256 newNumber) public {\\n        number = newNumber;\\n    }\\n\\n    function increment() public {\\n        number++;\\n    }\\n}\\n\",\"keccak256\":\"0x09277f949d59a9521708c870dc39c2c434ad8f86a5472efda6a732ef728c0053\",\"license\":\"UNLICENSED\"}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b50610110806100206000396000f3fe6080604052348015600f57600080fd5b5060043610603c5760003560e01c80633fb5c1cb1460415780638381f58a146053578063d09de08a14606d575b600080fd5b6051604c3660046083565b600055565b005b605b60005481565b60405190815260200160405180910390f35b6051600080549080607c83609b565b9190505550565b600060208284031215609457600080fd5b5035919050565b60006001820160d3577f4e487b7100000000000000000000000000000000000000000000000000000000600052601160045260246000fd5b506001019056fea26469706673582212201e9c2a66648acf915cda3ac2823e4d05e93d5c93bf2d1bfc951573163f49bdd964736f6c63430008130033",
+  "deployedBytecode": "0x6080604052348015600f57600080fd5b5060043610603c5760003560e01c80633fb5c1cb1460415780638381f58a146053578063d09de08a14606d575b600080fd5b6051604c3660046083565b600055565b005b605b60005481565b60405190815260200160405180910390f35b6051600080549080607c83609b565b9190505550565b600060208284031215609457600080fd5b5035919050565b60006001820160d3577f4e487b7100000000000000000000000000000000000000000000000000000000600052601160045260246000fd5b506001019056fea26469706673582212201e9c2a66648acf915cda3ac2823e4d05e93d5c93bf2d1bfc951573163f49bdd964736f6c63430008130033",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 3,
+        "contract": "src/Counter.sol:Counter",
+        "label": "number",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_uint256"
+      }
+    ],
+    "types": {
+      "t_uint256": {
+        "encoding": "inplace",
+        "label": "uint256",
+        "numberOfBytes": "32"
+      }
+    }
+  }
+}

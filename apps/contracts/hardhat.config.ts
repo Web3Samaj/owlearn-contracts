@@ -35,7 +35,7 @@ const sharedNetworkConfig: NetworkUserConfig = {};
 const sharedCompilerConfig = {
   optimizer: {
     enabled: true,
-    runs: OPTIMIZER_RUNS,
+    runs: parseInt(OPTIMIZER_RUNS as string),
   },
   outputSelection: {
     "*": {
@@ -66,7 +66,7 @@ const config: HardhatUserConfig = {
     artifacts: "build/artifacts",
     cache: "build/cache",
     deploy: "deploy",
-    sources: "contracts",
+    sources: "src",
   },
   solidity: {
     compilers: [{ version: "0.8.19", settings: sharedCompilerConfig }],

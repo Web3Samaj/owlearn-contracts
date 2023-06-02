@@ -1,0 +1,55 @@
+{
+  "31337": [
+    {
+      "name": "hardhat",
+      "chainId": "31337",
+      "contracts": {}
+    }
+  ],
+  "80001": [
+    {
+      "name": "mumbai",
+      "chainId": "80001",
+      "contracts": {
+        "Counter": {
+          "address": "0xEC5d9118aCE28526020d420a1A975029704250e5",
+          "abi": [
+            {
+              "inputs": [],
+              "name": "increment",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "number",
+              "outputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "newNumber",
+                  "type": "uint256"
+                }
+              ],
+              "name": "setNumber",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
