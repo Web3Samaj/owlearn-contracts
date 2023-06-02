@@ -1,6 +1,6 @@
-# @owlearn/utils
+# @owlearn/contracts
 
-## 0.2.0
+## 0.1.0
 
 ### Minor Changes
 
@@ -8,8 +8,7 @@
   - Installed necessary packages of hardhat to support development.
   - Added a util function to check for undefined variable.
 
-## 0.1.0
+### Patch Changes
 
-### Minor Changes
-
-- Initial package creation of utils package for Owlearn.
+- Updated dependencies
+  - @owlearn/utils@0.2.0
