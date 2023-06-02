@@ -1531,6 +1531,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@owlearn/server@workspace:apps/server":
+  version: 0.0.0-use.local
+  resolution: "@owlearn/server@workspace:apps/server"
+  languageName: unknown
+  linkType: soft
+
 "@owlearn/utils@workspace:^, @owlearn/utils@workspace:packages/utils":
   version: 0.0.0-use.local
   resolution: "@owlearn/utils@workspace:packages/utils"
