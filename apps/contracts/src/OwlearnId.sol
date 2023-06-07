@@ -16,13 +16,13 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 /// @title OwlearnID
 /// @notice A namespace NFT contract that mints unique user handles.
 /// @author Dhruv <contact.dhruvagarwal@gmail.com>
-contract OwlearnId is ERC721URIStorage, Ownable, IOwlearnId {
+contract OwlearnId is ERC721URIStorage, Ownable, OwlearnIdStorage {
     // for tracking of tokenIds
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
 
     // domain extension ->  .owl
-    string public immutable tld;
+    string public tld;
 
     /**
      * @dev The constructor sets NFT Implementation and the TLD
@@ -30,7 +30,6 @@ contract OwlearnId is ERC721URIStorage, Ownable, IOwlearnId {
      * @param _tld the domain name extension
      */
     constructor(string memory _tld) payable ERC721("Owlearn Id", "OWLID") {
-        owner = payable(msg.sender);
         tld = _tld;
         console.log("%s name service deployed ", _tld);
     }
@@ -59,9 +58,9 @@ contract OwlearnId is ERC721URIStorage, Ownable, IOwlearnId {
 
     /**
      * @dev to get the Price for minting a new domain
-     * @note Payable function to send the price for minting the domain
+     * @notice Payable function to send the price for minting the domain
      * @param name domain Name to mint
-     * @return amount amount to be paid for minting
+     * @return recordID amount to be paid for minting
      */
     function register(
         string calldata name
@@ -145,7 +144,7 @@ contract OwlearnId is ERC721URIStorage, Ownable, IOwlearnId {
     /**
      * @dev get the name record from Address
      *
-     * @param name domain Name to fetch for
+     * @param user domain Name to fetch for
      * @return Record domain Name record
      */
     function getNameRecordFromAddress(
@@ -156,7 +155,7 @@ contract OwlearnId is ERC721URIStorage, Ownable, IOwlearnId {
 
     /**
      * @dev withdraw the funds collected
-     * @note restricted only for the owner
+     * @notice restricted only for the owner
      */
     function withdraw() public onlyOwner {
         uint256 amount = address(this).balance;
