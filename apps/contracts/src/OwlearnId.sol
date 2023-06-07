@@ -7,7 +7,7 @@ import {StringUtils} from "./libraries/StringUtils.sol";
 import {Base64} from "./libraries/Base64.sol";
 import {IOwlearnId} from "./interfaces/IOwlearnId.sol";
 
-import "forge-std/src/console.sol";
+import "forge-std/console.sol";
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
