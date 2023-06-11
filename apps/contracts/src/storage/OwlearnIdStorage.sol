@@ -17,8 +17,8 @@ abstract contract OwlearnIdStorage {
         uint256 tokenId; // recordId
     }
 
-    // address => record
-    mapping(address => Record) public domainRecords;
+    // address => recordId
+    mapping(address => string) public domainRecords;
 
     // tokenId (recordId) => record
     mapping(string => Record) public domainNames;

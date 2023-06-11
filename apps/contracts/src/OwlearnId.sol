@@ -63,7 +63,9 @@ contract OwlearnId is ERC721URIStorage, Ownable, OwlearnIdStorage {
      */
     function price(string calldata name) public pure returns (uint256 amount) {
         uint256 len = StringUtils.strlen(name);
-        require(len > 0);
+
+        if (len == 0) revert InvalidName(name);
+
         if (len == 3) {
             return threeLetterMultipler * 1 ether; // 10 Matic for len 3
         } else if (len == 4) {
@@ -82,23 +84,15 @@ contract OwlearnId is ERC721URIStorage, Ownable, OwlearnIdStorage {
     function register(
         string calldata name
     ) public payable returns (uint recordID) {
-        require(domainNames[name].user == address(0));
-        require(domainRecords[msg.sender].user == address(0));
+        if (domainNames[name].user != address(0)) revert AlreadyRegistered();
 
         // fetching the price and check
         uint256 _price = price(name);
-        require(msg.value >= _price, "Not Enough Matic paid");
+        require(msg.value >= _price, "NOT ENOUGH MATIC PAID");
 
-        // Combine the name passed into the function  with the TLD
-        string memory _name = string(abi.encodePacked(name, ".", tld));
+        string memory finalSvg = _getSVG(name);
 
-        // Create the SVG (image) for the NFT with the name
-        string memory finalSvg = string(
-            abi.encodePacked(svgPartOne, _name, svgPartTwo)
-        );
         uint256 newRecordId = _tokenIds.current();
-        uint256 length = StringUtils.strlen(name);
-        string memory strLen = Strings.toString(length);
 
         console.log(
             "Registering %s.%s on the contract with tokenID %d",
@@ -107,7 +101,69 @@ contract OwlearnId is ERC721URIStorage, Ownable, OwlearnIdStorage {
             newRecordId
         );
 
-        // Create the JSON metadata of our NFT. We do this by combining strings and encoding as base64
+        string memory finalTokenUri = _getMetadata(name, finalSvg);
+
+        console.log(
+            "\n--------------------------------------------------------"
+        );
+        console.log("Final tokenURI", finalTokenUri);
+        console.log(
+            "--------------------------------------------------------\n"
+        );
+
+        // Minting the NFT
+        _safeMint(msg.sender, newRecordId);
+
+        // Set the Token URI
+        _setTokenURI(newRecordId, finalTokenUri);
+
+        // Prepare the recordData
+        Record memory _record = Record({
+            domain: name,
+            user: msg.sender,
+            tokenId: newRecordId
+        });
+
+        // Store the Recors in the mapping
+        domainRecords[msg.sender] = name;
+        domainNames[name] = _record;
+
+        // Incrementing the TokenId for NFT
+        _tokenIds.increment();
+        return newRecordId;
+    }
+
+    /**
+     * @dev to get the Price for minting a new domain
+     *
+     * @param name domain Name to mint
+     * @return finalSvg final SVG of the Custom Domain Image for the NFT
+     */
+    function _getSVG(
+        string calldata name
+    ) internal view returns (string memory finalSvg) {
+        // Combine the name passed into the function  with the TLD
+        string memory _name = string(abi.encodePacked(name, ".", tld));
+
+        // Create the SVG (image) for the NFT with the name
+        finalSvg = string(abi.encodePacked(svgPartOne, _name, svgPartTwo));
+    }
+
+    /**
+     * @dev to get the Price for minting a new domain
+     *
+     * @param name domain Name to mint
+     * @param finalSvg the Svg string for the NFT image
+     * @return finalTokenUri Token URI of the NFT to be minted
+     */
+    function _getMetadata(
+        string calldata name,
+        string memory finalSvg
+    ) internal view returns (string memory finalTokenUri) {
+        uint256 length = StringUtils.strlen(name);
+        string memory strLen = Strings.toString(length);
+        string memory _name = string(abi.encodePacked(name, ".", tld));
+
         string memory json = Base64.encode(
             abi.encodePacked(
                 '{"name": "',
@@ -119,31 +175,11 @@ contract OwlearnId is ERC721URIStorage, Ownable, OwlearnIdStorage {
                 '"}'
             )
         );
+        // Create the JSON metadata of our NFT. We do this by combining strings and encoding as base64
 
-        string memory finalTokenUri = string(
+        finalTokenUri = string(
             abi.encodePacked("data:application/json;base64,", json)
         );
-
-        console.log(
-            "\n--------------------------------------------------------"
-        );
-        console.log("Final tokenURI", finalTokenUri);
-        console.log(
-            "--------------------------------------------------------\n"
-        );
-
-        _safeMint(msg.sender, newRecordId);
-        _setTokenURI(newRecordId, finalTokenUri);
-        Record memory _record = Record({
-            domain: name,
-            user: msg.sender,
-            tokenId: newRecordId
-        });
-
-        domainRecords[msg.sender] = _record;
-        domainNames[name] = _record;
-        _tokenIds.increment();
-        return newRecordId;
     }
 
     /**
@@ -162,11 +198,11 @@ contract OwlearnId is ERC721URIStorage, Ownable, OwlearnIdStorage {
      * @dev get the name record from Address
      *
      * @param user domain Name to fetch for
-     * @return Record domain Name record
+     * @return recordId domain Name record Id
      */
     function getNameRecordFromAddress(
         address user
-    ) public view returns (Record memory) {
+    ) public view returns (string memory) {
         return domainRecords[user];
     }
 
