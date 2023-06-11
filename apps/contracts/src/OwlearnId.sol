@@ -22,6 +22,8 @@ contract OwlearnId is ERC721URIStorage, Ownable, OwlearnIdStorage {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
 
+    /*///////////////////// Constants //////////////////////////////////*/
+
     // domain extension ->  .owl
     string public tld;
 
@@ -29,12 +31,14 @@ contract OwlearnId is ERC721URIStorage, Ownable, OwlearnIdStorage {
     uint256 public constant fourLetterMultiplier = 5;
     uint256 public constant priceMultiplier = 3;
 
-    /*///////////////////////////////////////////////////////////////
-                          Errors
-    //////////////////////////////////////////////////////////////*/
+    /*///////////////////// Errors //////////////////////////////////*/
     error Unauthorized();
     error AlreadyRegistered();
     error InvalidName(string name);
+
+    /*///////////////////// Events //////////////////////////////////*/
+
+    event owlIdRegistered(address user, string name, uint tokenId);
 
     /*/////////////////////// NFT SVG  /////////////////////////////*/
     string svgPartOne =
@@ -130,6 +134,8 @@ contract OwlearnId is ERC721URIStorage, Ownable, OwlearnIdStorage {
 
         // Incrementing the TokenId for NFT
         _tokenIds.increment();
+
+        emit owlIdRegistered(msg.sender, name, newRecordId);
         return newRecordId;
     }
 
