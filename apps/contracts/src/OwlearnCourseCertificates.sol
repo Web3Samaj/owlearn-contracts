@@ -19,8 +19,8 @@ contract OwlearnCourseCerticates is ERC721, Ownable {
 
     /*======================== Event Functions ========================*/
 
-    event Attest(address indexed to, uint256 indexed tokenId);
-    event Revoke(address indexed to, uint256 indexed tokenId);
+    event NftMinted(address indexed to, uint256 indexed tokenId);
+    event NftBurned(address indexed to, uint256 indexed tokenId);
 
     /*======================== Constructor Functions ========================*/
 
@@ -35,18 +35,32 @@ contract OwlearnCourseCerticates is ERC721, Ownable {
     // =============================================================
     //                           EXTNERNAL FUNCTIONS
     // =============================================================
-
+    /**
+     * @dev  Set a base URI for the NFT collection if needed
+     *
+     * @param newURI New Base URI to be set
+     */
     function setBaseURI(string memory newURI) external onlyOwner {
         baseURI = newURI;
     }
 
-    // Minted by a manager , or need to be whitelisted
+    /**
+     * @dev  Safe Mint a Certificate to a learner
+     *
+     * Minted by a manager , or need to be whitelisted
+     * @param to  Address to which NFT is to be minted
+     */
     function safeMint(address to) public onlyOwner {
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         _safeMint(to, tokenId);
     }
 
+    /**
+     * @dev  burn an NFT
+     *
+     * @param tokenId tokenID to be minted
+     */
     function burn(uint256 tokenId) public virtual {
         require(
             _isApprovedOrOwner(_msgSender(), tokenId),
@@ -55,6 +69,11 @@ contract OwlearnCourseCerticates is ERC721, Ownable {
         _burn(tokenId);
     }
 
+    /**
+     * @dev  Revoke a Certificate NFT , in Case of issues
+     *
+     * @param tokenId tokenID to be minted
+     */
     function revoke(uint256 tokenId) external onlyOwner {
         _burn(tokenId);
     }
@@ -63,10 +82,20 @@ contract OwlearnCourseCerticates is ERC721, Ownable {
     //                           INTERNAL FUNCTIONS
     // =============================================================
 
+    /**
+     * @dev  base URI returned , Overriden
+     *
+     */
     function _baseURI() internal view override returns (string memory) {
         return baseURI;
     }
 
+    /*======================== SBT Functions ========================*/
+
+    /**
+     * @dev _beforeTokenTransfer Limit the transfer to just mint or burn , no transfers are allowed , making it a Soul Bound Token
+     *
+     */
     function _beforeTokenTransfer(
         address from,
         address to,
@@ -79,15 +108,19 @@ contract OwlearnCourseCerticates is ERC721, Ownable {
         );
     }
 
+    /**
+     * @dev _afterTokenTransfer add events to define when a NFT is minted or Revoked
+     *
+     */
     function _afterTokenTransfer(
         address from,
         address to,
         uint256 tokenId
     ) internal {
         if (from == address(0)) {
-            emit Attest(to, tokenId);
+            emit NftMinted(to, tokenId);
         } else if (to == address(0)) {
-            emit Revoke(to, tokenId);
+            emit NftBurned(to, tokenId);
         }
     }
 }

@@ -217,6 +217,11 @@ contract OwlearnCourseResource is ERC721A, Ownable {
         return super.tokenURI(tokenId);
     }
 
+    /**
+     * @dev  Set a base URI for the NFT collection if needed
+     *
+     * @param _uri New Base URI to be set
+     */
     function setBaseURI(string memory _uri) external {
         baseURI = _uri;
     }
