@@ -126,7 +126,9 @@ contract OwlearnCourseResource is ERC721A, Ownable {
         emit CourseResourceBurned(tokenId);
     }
 
-    /*======================== Internal functions ========================*/
+    // =============================================================
+    //                           INTERNAL FUNCTIONS
+    // =============================================================
 
     /**
      * @dev mint new Course NFTs along with setting URIs for each NFT
