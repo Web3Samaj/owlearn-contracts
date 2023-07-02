@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.10;
+pragma solidity ^0.8.12;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
@@ -18,6 +18,8 @@ contract OwlearnCourseCerticates is ERC721, Ownable {
 
     string public baseURI;
 
+    address public manager;
+
     /*======================== Event Functions ========================*/
 
     event NftMinted(address indexed to, uint256 indexed tokenId);
@@ -25,12 +27,26 @@ contract OwlearnCourseCerticates is ERC721, Ownable {
 
     /*======================== Constructor Functions ========================*/
 
+    /**
+     * @dev Intialise the Course Certificate Contracts
+     *
+     * @param courseCertificateName  Name of the Course Certificate, will also be the name of NFT Collection
+     * @param courseCertificateSymbol  Symbol of the Course Certificate, will be the symbol of NFT Collection
+     * @param certificateBaseURI  NFT URI , dynamic , off-chain server link , fetching progree & certificates for a Course Learner
+     */
     constructor(
         string memory courseCertificateName,
         string memory courseCertificateSymbol,
         string memory certificateBaseURI
     ) ERC721(courseCertificateName, courseCertificateSymbol) {
         baseURI = certificateBaseURI;
+        manager = msg.sender;
+    }
+
+    /*======================== Modifier Functions ========================*/
+    modifier onlyManager() {
+        require(msg.sender == manager, "ONLY MANAGER AUTHORISED");
+        _;
     }
 
     // =============================================================
@@ -48,10 +64,11 @@ contract OwlearnCourseCerticates is ERC721, Ownable {
     /**
      * @dev  Safe Mint a Certificate to a learner
      *
+     * @dev Another restrictions could be added like a fees
      * Minted by a manager , or need to be whitelisted
      * @param to  Address to which NFT is to be minted
      */
-    function safeMint(address to) public onlyOwner {
+    function safeMint(address to) public onlyManager {
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         _safeMint(to, tokenId);

@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.10;
+pragma solidity ^0.8.12;
 
 import "@erc721a/contracts/ERC721A.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-/// @title OwlearnCourseResource
+/// @title OwlearnCourseResources
 /// @notice ERC721A NFT Contract responsible for course resources
 /// @author Dhruv <contact.dhruvagarwal@gmail.com>
-contract OwlearnCourseResource is ERC721A, Ownable {
+contract OwlearnCourseResources is ERC721A, Ownable {
     // =============================================================
     //                           STORAGE
     // =============================================================
@@ -77,9 +77,7 @@ contract OwlearnCourseResource is ERC721A, Ownable {
      *
      * @param courseNFTURIs  courseNFTURIs to be minted , containing info about the particular resource
      */
-    function _initialiseCourse(
-        string[] memory courseNFTURIs
-    ) internal onlyOwner {
+    function _initialiseCourse(string[] memory courseNFTURIs) internal {
         require(isInitialised == false, "Already Initialised");
 
         isInitialised = true;
