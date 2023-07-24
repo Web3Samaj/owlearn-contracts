@@ -23,7 +23,7 @@ contract OwlearnEducatorBadge is
      * @param token0URI  token URI of the Basic Educator badge id-0
      */
     constructor(string memory token0URI) ERC1155("") {
-        _setURI(0, token0URI);
+        _setURI(1, token0URI);
     }
 
     // =============================================================

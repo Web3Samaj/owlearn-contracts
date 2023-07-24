@@ -52,7 +52,8 @@ contract OwlearnCourse is OwlearnCourseResources {
         courseCertificates = new OwlearnCourseCerticates(
             certificateName,
             certificateSymbol,
-            certificateBaseURI
+            certificateBaseURI,
+            courseCreator
         );
     }
 
@@ -60,7 +61,7 @@ contract OwlearnCourse is OwlearnCourseResources {
     /**
      * @dev  Mint a Course Certificate NFT
      *
-     * Add restrictions
+     * Add restrictions using modules
      */
     function mintCourseCertificate() public {
         courseCertificates.safeMint(msg.sender);

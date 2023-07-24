@@ -13,7 +13,6 @@ contract OwlearnCourseResources is ERC721A, Ownable {
     //                           STORAGE
     // =============================================================
 
-    bool public isInitialised;
     string public courseDetailsURI;
 
     /*========================  URI Storage variable ======================== */
@@ -63,11 +62,6 @@ contract OwlearnCourseResources is ERC721A, Ownable {
 
     /*======================== Modifier Functions ========================*/
 
-    modifier onlyInitialised() {
-        require(isInitialised, "Not Yet Initialised");
-        _;
-    }
-
     // =============================================================
     //                           EXTNERNAL FUNCTIONS
     // =============================================================
@@ -78,10 +72,6 @@ contract OwlearnCourseResources is ERC721A, Ownable {
      * @param courseNFTURIs  courseNFTURIs to be minted , containing info about the particular resource
      */
     function _initialiseCourse(string[] memory courseNFTURIs) internal {
-        require(isInitialised == false, "Already Initialised");
-
-        isInitialised = true;
-
         // mint the initial NFTs
         _mintandSetURI(msg.sender, courseNFTURIs);
     }
@@ -91,9 +81,7 @@ contract OwlearnCourseResources is ERC721A, Ownable {
      *
      * @param courseNFTURIs  courseNFTURIs to be minted , containing info about the particular resource
      */
-    function mintCourseNFTs(
-        string[] memory courseNFTURIs
-    ) external onlyOwner onlyInitialised {
+    function mintCourseNFTs(string[] memory courseNFTURIs) external onlyOwner {
         // it starts from currentIndex & mint NFTs from this ownward
         _mintandSetURI(msg.sender, courseNFTURIs);
     }
@@ -217,10 +205,12 @@ contract OwlearnCourseResources is ERC721A, Ownable {
 
     /**
      * @dev  Set a base URI for the NFT collection if needed
+     * @dev  If base URI is set , then the result of tokenURI, will be a concat string of baseURI + tokenURI we set
+     * @dev  Default value set to ""
      *
      * @param _uri New Base URI to be set
      */
-    function setBaseURI(string memory _uri) external {
+    function setBaseURI(string memory _uri) external onlyOwner {
         baseURI = _uri;
     }
 }

@@ -33,14 +33,17 @@ contract OwlearnCourseCerticates is ERC721, Ownable {
      * @param courseCertificateName  Name of the Course Certificate, will also be the name of NFT Collection
      * @param courseCertificateSymbol  Symbol of the Course Certificate, will be the symbol of NFT Collection
      * @param certificateBaseURI  NFT URI , dynamic , off-chain server link , fetching progree & certificates for a Course Learner
+     * @param courseCreator  creator of the Course , who will also control the Collection
      */
     constructor(
         string memory courseCertificateName,
         string memory courseCertificateSymbol,
-        string memory certificateBaseURI
+        string memory certificateBaseURI,
+        address courseCreator
     ) ERC721(courseCertificateName, courseCertificateSymbol) {
         baseURI = certificateBaseURI;
         manager = msg.sender;
+        _transferOwnership(courseCreator);
     }
 
     /*======================== Modifier Functions ========================*/
@@ -66,11 +69,14 @@ contract OwlearnCourseCerticates is ERC721, Ownable {
      *
      * @dev Another restrictions could be added like a fees
      * Minted by a manager , or need to be whitelisted
+     * restricted to manager for now , as the safeMint will be called from the OwlearnCourse.sol
      * @param to  Address to which NFT is to be minted
      */
     function safeMint(address to) public onlyManager {
-        uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
+
+        // token Id Starts from 1
+        uint256 tokenId = _tokenIdCounter.current();
         _safeMint(to, tokenId);
     }
 
