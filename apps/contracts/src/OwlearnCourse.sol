@@ -4,6 +4,7 @@ pragma solidity ^0.8.12;
 import "./OwlearnCourseCertificates.sol";
 import "./OwlearnCourseResources.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "./interfaces/IMintModule.sol";
 
 /// @title OwlearnCourse
 /// @notice Course Master Contract , Single Point of Entry to create , and manage Course with Resource & Certificates Contract
@@ -17,11 +18,19 @@ contract OwlearnCourse is Ownable {
 
     OwlearnCourseResources public courseResources;
 
+    /*======================== State Variables ========================*/
+
+    address public mintModule;
+    uint public creatorId;
+    uint public courseId;
+
     /*======================== Constructor Functions ========================*/
 
     /**
      * @dev Intialise the course by creating Resource and Certificates Contract
      *
+     * @param _creatorId  Id fo the Course Creator on Owlearn
+     * @param _courseId  Id of the Course being created on Owlearn
      * @param courseName  Name of the Course , will also be the name of NFT Collection
      * @param courseSymbol  Symbol of the Course , will be the symbol of NFT Collection
      * @param courseCreator  creator of the Course , who will also control the Collection
@@ -30,6 +39,8 @@ contract OwlearnCourse is Ownable {
      * @param certificateBaseURI   NFT URI , dynamic , off-chain server link , fetching progree & certificates for a Course Learner
      */
     constructor(
+        uint _creatorId,
+        uint _courseId,
         string memory courseName,
         string memory courseSymbol,
         address courseCreator,
@@ -37,6 +48,8 @@ contract OwlearnCourse is Ownable {
         string[] memory courseNFTURIs,
         string memory certificateBaseURI
     ) {
+        creatorId = _creatorId;
+        courseId = _courseId;
         courseResources = new OwlearnCourseResources(
             courseName,
             courseSymbol,
@@ -58,6 +71,21 @@ contract OwlearnCourse is Ownable {
             certificateSymbol,
             certificateBaseURI,
             courseCreator
+        );
+    }
+
+    /*======================== Resource Functions ========================*/
+
+    function setAndInitialiseMintModule(
+        address _mintModule,
+        bytes calldata data
+    ) public onlyOwner {
+        // Need to add a whitelist module check here
+        mintModule = _mintModule;
+        IMintModule(_mintModule).initialiseMintModule(
+            creatorId,
+            courseId,
+            data
         );
     }
 
@@ -99,10 +127,21 @@ contract OwlearnCourse is Ownable {
      * @dev  Mint a Course Certificate NFT
      *
      * Add restrictions using modules
+     * TASK  : Add customization tasks
      */
-    function mintCourseCertificate() public {
-        courseCertificates.safeMint(msg.sender);
+    function mintCourseCertificate(address to, bytes calldata data) public {
+        IMintModule(mintModule).beforeMint(creatorId, courseId, to, data);
+
+        uint tokenId = courseCertificates.safeMint(to);
+
+        IMintModule(mintModule).afterMint(
+            creatorId,
+            courseId,
+            to,
+            tokenId,
+            data
+        );
     }
 
-    // @dev All other Certificate functions like Burn or Mint are to be accessed from the main contract
+    ///@dev All other Certificate functions like Burn or Mint are to be accessed from the main contract
 }

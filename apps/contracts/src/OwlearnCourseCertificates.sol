@@ -69,12 +69,14 @@ contract OwlearnCourseCerticates is ERC721, Ownable {
      * restricted to manager for now , as the safeMint will be called from the OwlearnCourse.sol
      * @param to  Address to which NFT is to be minted
      */
-    function safeMint(address to) public onlyManager {
+    function safeMint(address to) public onlyManager returns (uint) {
         _tokenIdCounter.increment();
 
         // token Id Starts from 1
         uint256 tokenId = _tokenIdCounter.current();
         _safeMint(to, tokenId);
+
+        return tokenId;
     }
 
     /**
