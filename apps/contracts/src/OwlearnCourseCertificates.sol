@@ -22,9 +22,6 @@ contract OwlearnCourseCerticates is ERC721, Ownable {
 
     /*======================== Event Functions ========================*/
 
-    event NftMinted(address indexed to, uint256 indexed tokenId);
-    event NftBurned(address indexed to, uint256 indexed tokenId);
-
     /*======================== Constructor Functions ========================*/
 
     /**
@@ -141,10 +138,6 @@ contract OwlearnCourseCerticates is ERC721, Ownable {
         address to,
         uint256 tokenId
     ) internal {
-        if (from == address(0)) {
-            emit NftMinted(to, tokenId);
-        } else if (to == address(0)) {
-            emit NftBurned(to, tokenId);
-        }
+        if (from == address(0)) {} else if (to == address(0)) {}
     }
 }

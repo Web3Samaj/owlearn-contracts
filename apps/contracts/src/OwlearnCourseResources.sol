@@ -14,6 +14,7 @@ contract OwlearnCourseResources is ERC721A, Ownable {
     // =============================================================
 
     string public courseDetailsURI;
+    address public owlearnCourse;
 
     /*========================  URI Storage variable ======================== */
 
@@ -46,44 +47,42 @@ contract OwlearnCourseResources is ERC721A, Ownable {
      * @param courseCreator  creator of the Course , who will also control the Collection
      * @param courseURI  courseURI , containing any extra course Info , not to be stored on-chain
      * @param courseNFTURIs  courseNFTURIs to be minted , containing info about the particular resource
+     * @param courseAddress Owlearn Course Main Contract, just to add the the onlyCourse Modifier
      */
     constructor(
         string memory courseName,
         string memory courseSymbol,
         address courseCreator,
         string memory courseURI,
-        string[] memory courseNFTURIs
+        string[] memory courseNFTURIs,
+        address courseAddress
     ) ERC721A(courseName, courseSymbol) {
         transferOwnership(courseCreator);
         courseDetailsURI = courseURI;
         _initialiseCourse(courseNFTURIs);
+        owlearnCourse = courseAddress;
         emit CourseInitialised(courseName, courseSymbol, courseCreator);
     }
 
     /*======================== Modifier Functions ========================*/
+
+    modifier onlyCourse() {
+        require(msg.sender == owlearnCourse, "ONLY COURSE CONTRACT");
+        _;
+    }
 
     // =============================================================
     //                           EXTNERNAL FUNCTIONS
     // =============================================================
 
     /**
-     * @dev Intialise the course by minting the new NFTs for the course first
-     *
-     * @param courseNFTURIs  courseNFTURIs to be minted , containing info about the particular resource
-     */
-    function _initialiseCourse(string[] memory courseNFTURIs) internal {
-        // mint the initial NFTs
-        _mintandSetURI(msg.sender, courseNFTURIs);
-    }
-
-    /**
      * @dev mint new Course NFTs , after it is intialised once
      *
      * @param courseNFTURIs  courseNFTURIs to be minted , containing info about the particular resource
      */
-    function mintCourseNFTs(string[] memory courseNFTURIs) external onlyOwner {
+    function mintCourseNFTs(string[] memory courseNFTURIs) external onlyCourse {
         // it starts from currentIndex & mint NFTs from this ownward
-        _mintandSetURI(msg.sender, courseNFTURIs);
+        _mintandSetURI(owner(), courseNFTURIs);
     }
 
     /**
@@ -95,7 +94,7 @@ contract OwlearnCourseResources is ERC721A, Ownable {
     function editCourseNFT(
         uint tokenId,
         string memory newNFTURI
-    ) external onlyOwner {
+    ) external onlyCourse {
         _setTokenURI(tokenId, newNFTURI);
 
         emit CourseResourceUpdated(tokenId, newNFTURI);
@@ -106,7 +105,7 @@ contract OwlearnCourseResources is ERC721A, Ownable {
      *
      * @param tokenId  tokenId of the NFT for which resource is to be deleted
      */
-    function deleteCourseNFT(uint tokenId) external {
+    function deleteCourseNFT(uint tokenId) external onlyCourse {
         _burn(tokenId);
 
         emit CourseResourceBurned(tokenId);
@@ -115,6 +114,16 @@ contract OwlearnCourseResources is ERC721A, Ownable {
     // =============================================================
     //                           INTERNAL FUNCTIONS
     // =============================================================
+
+    /**
+     * @dev Intialise the course by minting the new NFTs for the course first
+     *
+     * @param courseNFTURIs  courseNFTURIs to be minted , containing info about the particular resource
+     */
+    function _initialiseCourse(string[] memory courseNFTURIs) internal {
+        // mint the initial NFTs
+        _mintandSetURI(msg.sender, courseNFTURIs);
+    }
 
     /**
      * @dev mint new Course NFTs along with setting URIs for each NFT

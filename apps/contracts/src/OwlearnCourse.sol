@@ -3,16 +3,19 @@ pragma solidity ^0.8.12;
 
 import "./OwlearnCourseCertificates.sol";
 import "./OwlearnCourseResources.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 /// @title OwlearnCourse
 /// @notice Course Master Contract , Single Point of Entry to create , and manage Course with Resource & Certificates Contract
 /// @author Dhruv <contact.dhruvagarwal@gmail.com>
 /// @notice OwlearnCourseResource is this inherited and the same contract
 /// @notice Certificate Contract is external contract
-contract OwlearnCourse is OwlearnCourseResources {
-    /*======================== Initialised Certificates contract ========================*/
+contract OwlearnCourse is Ownable {
+    /*======================== Initialised Certificates & Resource contract ========================*/
 
     OwlearnCourseCerticates public courseCertificates;
+
+    OwlearnCourseResources public courseResources;
 
     /*======================== Constructor Functions ========================*/
 
@@ -33,15 +36,16 @@ contract OwlearnCourse is OwlearnCourseResources {
         string memory courseURI,
         string[] memory courseNFTURIs,
         string memory certificateBaseURI
-    )
-        OwlearnCourseResources(
+    ) {
+        courseResources = new OwlearnCourseResources(
             courseName,
             courseSymbol,
             courseCreator,
             courseURI,
-            courseNFTURIs
-        )
-    {
+            courseNFTURIs,
+            address(this)
+        );
+
         string memory certificateName = string(
             abi.encodePacked("Certificate Badge for", courseName)
         );
@@ -55,6 +59,39 @@ contract OwlearnCourse is OwlearnCourseResources {
             certificateBaseURI,
             courseCreator
         );
+    }
+
+    /*======================== Resource Functions ========================*/
+
+    /**
+     * @dev mint new Course NFTs , after it is intialised once
+     *
+     * @param courseNFTURIs  courseNFTURIs to be minted , containing info about the particular resource
+     */
+    function mintCourseNFTs(string[] memory courseNFTURIs) external onlyOwner {
+        courseResources.mintCourseNFTs(courseNFTURIs);
+    }
+
+    /**
+     * @dev mint new Course NFTs , after it is intialised once
+     *
+     * @param tokenId  tokenId of the NFT for which resource is to be updated
+     * @param newNFTURI  new & updated NFT URI containing info about the particular resource
+     */
+    function editCourseNFT(
+        uint tokenId,
+        string memory newNFTURI
+    ) external onlyOwner {
+        courseResources.editCourseNFT(tokenId, newNFTURI);
+    }
+
+    /**
+     * @dev mint new Course NFTs , after it is intialised once
+     *
+     * @param tokenId  tokenId of the NFT for which resource is to be deleted
+     */
+    function deleteCourseNFT(uint tokenId) external onlyOwner {
+        courseResources.deleteCourseNFT(tokenId);
     }
 
     /*======================== Certificate Functions ========================*/
