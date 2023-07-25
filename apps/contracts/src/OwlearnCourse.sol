@@ -11,7 +11,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 /// @notice OwlearnCourseResource is this inherited and the same contract
 /// @notice Certificate Contract is external contract
 contract OwlearnCourse is Ownable {
-    /*======================== Initialised Certificates & Resource contract ========================*/
+    /*======================== Initialised Certificates & Resources contract ========================*/
 
     OwlearnCourseCerticates public courseCertificates;
 

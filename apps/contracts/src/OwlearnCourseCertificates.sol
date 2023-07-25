@@ -128,16 +128,4 @@ contract OwlearnCourseCerticates is ERC721, Ownable {
             "The NFT is non transferrable"
         );
     }
-
-    /**
-     * @dev _afterTokenTransfer add events to define when a NFT is minted or Revoked
-     *
-     */
-    function _afterTokenTransfer(
-        address from,
-        address to,
-        uint256 tokenId
-    ) internal {
-        if (from == address(0)) {} else if (to == address(0)) {}
-    }
 }

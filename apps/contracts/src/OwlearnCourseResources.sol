@@ -86,7 +86,7 @@ contract OwlearnCourseResources is ERC721A, Ownable {
     }
 
     /**
-     * @dev mint new Course NFTs , after it is intialised once
+     * @dev edit a single NFT , just changing the Contents and it's URI
      *
      * @param tokenId  tokenId of the NFT for which resource is to be updated
      * @param newNFTURI  new & updated NFT URI containing info about the particular resource
@@ -101,7 +101,7 @@ contract OwlearnCourseResources is ERC721A, Ownable {
     }
 
     /**
-     * @dev mint new Course NFTs , after it is intialised once
+     * @dev delete the Course NFT  ,with the tokenID , directly
      *
      * @param tokenId  tokenId of the NFT for which resource is to be deleted
      */
