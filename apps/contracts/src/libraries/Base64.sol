@@ -6,7 +6,7 @@ pragma solidity ^0.8.0;
 /// @notice Provides a function for encoding some bytes in base64
 /// @author Brecht Devos <brecht@loopring.org>
 library Base64 {
-    bytes internal constant TABLE =
+    bytes internal constant _TABLE =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
     /// @notice Encodes some bytes to the base64 representation
@@ -20,7 +20,7 @@ library Base64 {
         // Add some extra buffer at the end
         bytes memory result = new bytes(encodedLen + 32);
 
-        bytes memory table = TABLE;
+        bytes memory table = _TABLE;
 
         assembly {
             let tablePtr := add(table, 1)
