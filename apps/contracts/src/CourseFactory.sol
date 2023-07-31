@@ -14,7 +14,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract OwlearnCourseFactory is Ownable {
     /*///////////////////// Mappings & Variables //////////////////////////////////*/
 
-    mapping(uint courseId => address courseCollectionAddress) public getCourse;
+    mapping(uint => address) public getCourse;
     uint public totalCourses = 1;
     address[] public allCourses;
     OwlearnEducatorBadge private _educateBadgeNFT;
