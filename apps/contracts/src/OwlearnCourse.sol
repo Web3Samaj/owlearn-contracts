@@ -14,7 +14,7 @@ import "./interfaces/IMintModule.sol";
 contract OwlearnCourse is Ownable {
     /*======================== Initialised Certificates & Resources contract ========================*/
 
-    OwlearnCourseCerticates public courseCertificates;
+    OwlearnCourseCertificates public courseCertificates;
 
     OwlearnCourseResources public courseResources;
 
@@ -66,7 +66,7 @@ contract OwlearnCourse is Ownable {
             abi.encodePacked("CB_", courseSymbol)
         );
 
-        courseCertificates = new OwlearnCourseCerticates(
+        courseCertificates = new OwlearnCourseCertificates(
             certificateName,
             certificateSymbol,
             certificateBaseURI,

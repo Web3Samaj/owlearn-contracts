@@ -5,10 +5,10 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-/// @title OwlearnCourseCerticates
+/// @title OwlearnCourseCertificates
 /// @notice ERC721 NFT Contract responsible for course certificates with Dynamic URI
 /// @author Dhruv <contact.dhruvagarwal@gmail.com>
-contract OwlearnCourseCerticates is ERC721, Ownable {
+contract OwlearnCourseCertificates is ERC721, Ownable {
     // =============================================================
     //                           STORAGE
     // =============================================================

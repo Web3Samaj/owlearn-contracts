@@ -9,7 +9,7 @@ import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol";
 /// @title OwlearnEducatorBadge
 /// @notice An ERC1155 Contract as an Educator badge to all the educators on the platform , along with the badge Levels
 /// @author Dhruv <contact.dhruvagarwal@gmail.com>
-/// Basic Educator Badge - Id - 0
+/// Basic Educator Badge - Id - 1
 contract OwlearnEducatorBadge is
     ERC1155URIStorage,
     Ownable,
