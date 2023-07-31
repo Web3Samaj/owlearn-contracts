@@ -59,7 +59,7 @@ contract OwlearnCourseResources is ERC721AUpgradeable, OwnableUpgradeable, Owlea
         __ERC721A_init(courseName, courseSymbol);
         _transferOwnership(courseCreator);
         courseDetailsURI = courseURI;
-        _initialiseCourse(courseNFTURIs);
+        _initialiseCourse(courseCreator, courseNFTURIs);
         owlearnCourse = courseAddress;
         emit CourseInitialised(courseName, courseSymbol, courseCreator);
     }
@@ -120,9 +120,12 @@ contract OwlearnCourseResources is ERC721AUpgradeable, OwnableUpgradeable, Owlea
      *
      * @param courseNFTURIs  courseNFTURIs to be minted , containing info about the particular resource
      */
-    function _initialiseCourse(string[] memory courseNFTURIs) internal {
+    function _initialiseCourse(
+        address courseCreator,
+        string[] memory courseNFTURIs
+    ) internal {
         // mint the initial NFTs
-        _mintandSetURI(msg.sender, courseNFTURIs);
+        _mintandSetURI(courseCreator, courseNFTURIs);
     }
 
     /**
