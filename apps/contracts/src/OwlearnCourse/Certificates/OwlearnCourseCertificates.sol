@@ -8,9 +8,13 @@ import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/Own
 /// @title OwlearnCourseCerticates
 /// @notice ERC721 NFT Contract responsible for course certificates with Dynamic URI
 /// @author Dhruv <contact.dhruvagarwal@gmail.com>
-contract OwlearnCourseCerticates is ERC721Upgradeable, OwnableUpgradeable, OwlearnCourseCerticatesStorage {
+contract OwlearnCourseCerticates is
+    ERC721Upgradeable,
+    OwnableUpgradeable,
+    OwlearnCourseCerticatesStorage
+{
     using CountersUpgradeable for CountersUpgradeable.Counter;
-    
+
     /*///////////////////// Constructor //////////////////////////////////*/
     /**
      * @dev Lock implementation contract
@@ -34,7 +38,7 @@ contract OwlearnCourseCerticates is ERC721Upgradeable, OwnableUpgradeable, Owlea
         string memory courseCertificateSymbol,
         string memory certificateBaseURI,
         address courseCreator
-    ) external payable initializer  {
+    ) external payable initializer {
         __ERC721_init(courseCertificateName, courseCertificateSymbol);
         __Ownable_init();
         baseURI = certificateBaseURI;
