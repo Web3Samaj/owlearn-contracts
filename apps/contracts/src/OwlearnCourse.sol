@@ -9,8 +9,6 @@ import "./interfaces/IMintModule.sol";
 /// @title OwlearnCourse
 /// @notice Course Master Contract , Single Point of Entry to create , and manage Course with Resource & Certificates Contract
 /// @author Dhruv <contact.dhruvagarwal@gmail.com>
-/// @notice OwlearnCourseResource is this inherited and the same contract
-/// @notice Certificate Contract is external contract
 contract OwlearnCourse is Ownable {
     /*======================== Initialised Certificates & Resources contract ========================*/
 
