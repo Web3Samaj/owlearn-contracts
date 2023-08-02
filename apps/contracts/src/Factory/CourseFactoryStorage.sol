@@ -10,17 +10,6 @@ import {OwlearnEducatorBadge} from "../EducatorBadge/OwlearnEducatorBadge.sol";
 /// @author Dhruv <contact.dhruvagarwal@gmail.com>
 
 contract CourseFactoryStorage {
-    /*///////////////////// Events //////////////////////////////////*/
-    event CourseCreated(
-        address indexed courseAddress,
-        string courseName,
-        string courseSymbol,
-        address indexed creator,
-        string courseURI,
-        string[] courseNFTURIs,
-        string certificateBaseURI
-    );
-
     /*///////////////////// Mappings & Variables //////////////////////////////////*/
 
     struct CourseCreationProps {

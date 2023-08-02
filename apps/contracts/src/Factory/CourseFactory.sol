@@ -13,6 +13,16 @@ import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/Own
 /// @author Dhruv <contact.dhruvagarwal@gmail.com>
 // storage contracts should always be inherited last
 contract OwlearnCourseFactory is OwnableUpgradeable, CourseFactoryStorage {
+    /*///////////////////// Events //////////////////////////////////*/
+    event CourseCreated(
+        address indexed courseAddress,
+        string courseName,
+        string courseSymbol,
+        address indexed creator,
+        string courseURI,
+        string[] courseNFTURIs,
+        string certificateBaseURI
+    );
 
     /*///////////////////// Constructor //////////////////////////////////*/
     /**
