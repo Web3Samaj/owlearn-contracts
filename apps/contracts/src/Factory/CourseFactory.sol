@@ -3,8 +3,8 @@ pragma solidity ^0.8.10;
 
 // Source : https://github.com/Web3Samaj/owlearn-contracts/blob/5-feat-coursefactory/apps/contracts/src/CourseFactory.sol
 
-import "./OwlearnCourse.sol";
-import "./OwlearnEducatorBadge.sol";
+import "../OwlearnCourse/OwlearnCourse.sol";
+import "../EducatorBadge/OwlearnEducatorBadge.sol";
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 

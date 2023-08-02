@@ -3,10 +3,10 @@ pragma solidity ^0.8.10;
 
 // From https://github.com/Web3Samaj/owlearn-contracts/blob/3-feat-owlearn-id-for-users/apps/contracts/src/OwlearnId.sol
 
-import {OwlearnIdStorage} from "./storage/OwlearnIdStorage.sol";
-import {StringUtils} from "./libraries/StringUtils.sol";
-import {Base64} from "./libraries/Base64.sol";
-import {IOwlearnId} from "./interfaces/IOwlearnId.sol";
+import {OwlearnIdStorage} from "./OwlearnIdStorage.sol";
+import {StringUtils} from "../libraries/StringUtils.sol";
+import {Base64} from "../libraries/Base64.sol";
+import {IOwlearnId} from "../interfaces/IOwlearnId.sol";
 
 import "forge-std/console.sol";
 

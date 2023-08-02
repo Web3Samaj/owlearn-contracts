@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.12;
 
-import "./OwlearnCourseCertificates.sol";
-import "./OwlearnCourseResources.sol";
+import "./Certificates/OwlearnCourseCertificates.sol";
+import "./Resources/OwlearnCourseResources.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "./interfaces/IMintModule.sol";
+import "../interfaces/IMintModule.sol";
 
 /// @title OwlearnCourse
 /// @notice Course Master Contract , Single Point of Entry to create , and manage Course with Resource & Certificates Contract
