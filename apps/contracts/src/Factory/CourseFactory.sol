@@ -4,52 +4,36 @@ pragma solidity ^0.8.10;
 // Source : https://github.com/Web3Samaj/owlearn-contracts/blob/5-feat-coursefactory/apps/contracts/src/CourseFactory.sol
 
 import "../OwlearnCourse/OwlearnCourse.sol";
-import "../EducatorBadge/OwlearnEducatorBadge.sol";
+import {CourseFactoryStorage, OwlearnEducatorBadge} from "./CourseFactoryStorage.sol";
 
-import "@openzeppelin/contracts/access/Ownable.sol";
+import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
 /// @title OwlearnCourseFactory
 /// @notice A Factory contract to create a new course with create2 method
 /// @author Dhruv <contact.dhruvagarwal@gmail.com>
-contract OwlearnCourseFactory is Ownable {
-    /*///////////////////// Mappings & Variables //////////////////////////////////*/
-
-    mapping(uint => address) public getCourse;
-    uint public totalCourses = 1;
-    address[] public allCourses;
-    OwlearnEducatorBadge private _educateBadgeNFT;
-
-    struct CourseCreationProps {
-        string courseName;
-        string courseSymbol;
-        address courseCreator;
-        string courseURI;
-        string[] courseNFTURIs;
-        string certificateBaseURI;
-    }
-
-    /*///////////////////// Events //////////////////////////////////*/
-    event CourseCreated(
-        address indexed courseAddress,
-        string courseName,
-        string courseSymbol,
-        address indexed creator,
-        string courseURI,
-        string[] courseNFTURIs,
-        string certificateBaseURI
-    );
+// storage contracts should always be inherited last
+contract OwlearnCourseFactory is OwnableUpgradeable, CourseFactoryStorage {
 
     /*///////////////////// Constructor //////////////////////////////////*/
+    /**
+     * @dev Lock implementation contract
+     */
+    constructor() {
+        // disabling initialisation of implementation contract to prevent attacks
+        _disableInitializers();
+    }
 
-    constructor(OwlearnEducatorBadge educatorBadgeNFT) {
-        _educateBadgeNFT = educatorBadgeNFT;
+    /*======================== Initializer Functions ========================*/
+    function initialize(OwlearnEducatorBadge educatorBadgeNFT) external initializer {
+        __Ownable_init();
+        educateBadgeNFT = educatorBadgeNFT;
     }
 
     /*///////////////////// Modifier //////////////////////////////////*/
 
     modifier onlyEducatorBadgeHolder() {
         require(
-            _educateBadgeNFT.balanceOf(msg.sender, 1) == 1,
+            educateBadgeNFT.balanceOf(msg.sender, 1) == 1,
             "ONLY EDUCATOR BADGE HOLDERS ALLOWED"
         );
         _;
