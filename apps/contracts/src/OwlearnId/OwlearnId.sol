@@ -4,8 +4,8 @@ pragma solidity ^0.8.10;
 // From https://github.com/Web3Samaj/owlearn-contracts/blob/3-feat-owlearn-id-for-users/apps/contracts/src/OwlearnId.sol
 
 import {OwlearnIdStorage} from "./OwlearnIdStorage.sol";
-import {StringUtils} from "../libraries/StringUtils.sol";
-import {Base64} from "../libraries/Base64.sol";
+import {StringUtils} from "@ensdomains/ens-contracts/contracts/ethregistrar/StringUtils.sol";
+import {Base64Upgradeable} from "@openzeppelin/contracts-upgradeable/utils/Base64Upgradeable.sol";
 import {IOwlearnId} from "../interfaces/IOwlearnId.sol";
 
 import "forge-std/console.sol";
@@ -171,12 +171,12 @@ contract OwlearnId is ERC721URIStorage, Ownable, OwlearnIdStorage {
         string memory strLen = Strings.toString(length);
         string memory _name = string(abi.encodePacked(name, ".", tld));
 
-        string memory json = Base64.encode(
+        string memory json = Base64Upgradeable.encode(
             abi.encodePacked(
                 '{"name": "',
                 _name,
                 '", "description": "A domain on the Owlearn", "image": "data:image/svg+xml;base64,',
-                Base64.encode(bytes(finalSvg)),
+                Base64Upgradeable.encode(bytes(finalSvg)),
                 '","length":"',
                 strLen,
                 '"}'
