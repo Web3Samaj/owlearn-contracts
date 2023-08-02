@@ -39,6 +39,9 @@ contract OwlearnCourseResourcesScript is Test {
     }
 
     function testCourseMintNewCourseNFTs() public {
+        console.log(owlearnCourseResources.owner());
+        console.log(owlearnCourseResources.owlearnCourse());
+        console.log(msg.sender);
         owlearnCourseResources.mintCourseNFTs(newNFTURIs);
         assertEq(owlearnCourseResources.balanceOf(alice), 4);
         assertEq(owlearnCourseResources.tokenURI(2), "s3");
