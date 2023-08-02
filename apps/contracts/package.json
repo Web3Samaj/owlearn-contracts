@@ -10,6 +10,7 @@
     "hardhat": "^2.14.1"
   },
   "dependencies": {
+    "@ensdomains/ens-contracts": "^0.0.22",
     "@nomicfoundation/hardhat-chai-matchers": "^1.0.0",
     "@nomicfoundation/hardhat-network-helpers": "^1.0.0",
     "@nomicfoundation/hardhat-toolbox": "^2.0.2",

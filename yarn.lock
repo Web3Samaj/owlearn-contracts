@@ -398,6 +398,34 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@ensdomains/buffer@npm:^0.1.1":
+  version: 0.1.1
+  resolution: "@ensdomains/buffer@npm:0.1.1"
+  checksum: 196cf0a6a34e473a13b47458c56b4db1a9db226e5939af77497da02cb60ccfabff24613380e66154a64c8c372526e7ee8fa790bffaa55a70ddfe5b6c199ec9f7
+  languageName: node
+  linkType: hard
+
+"@ensdomains/ens-contracts@npm:^0.0.22":
+  version: 0.0.22
+  resolution: "@ensdomains/ens-contracts@npm:0.0.22"
+  dependencies:
+    "@ensdomains/buffer": ^0.1.1
+    "@ensdomains/solsha1": 0.0.3
+    "@openzeppelin/contracts": ^4.1.0
+    dns-packet: ^5.3.0
+  checksum: ff91f09ad714647f670306630d194a6ee629c29909f5a71f228e1248f2604d4fe2616f62b87ecd3bc61c6c3ec104eda848fd5297592657f6f58936ddee117086
+  languageName: node
+  linkType: hard
+
+"@ensdomains/solsha1@npm:0.0.3":
+  version: 0.0.3
+  resolution: "@ensdomains/solsha1@npm:0.0.3"
+  dependencies:
+    hash-test-vectors: ^1.3.2
+  checksum: 1a84ccc329da4d40422c770e0baea1a63869f31a417589e3451a9997542c2f6683b6f8d3410de97580bbdce0567aba79328a86c7fda8925e446e02d724be6880
+  languageName: node
+  linkType: hard
+
 "@esbuild/android-arm64@npm:0.17.19":
   version: 0.17.19
   resolution: "@esbuild/android-arm64@npm:0.17.19"
@@ -1062,6 +1090,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@leichtgewicht/ip-codec@npm:^2.0.1":
+  version: 2.0.4
+  resolution: "@leichtgewicht/ip-codec@npm:2.0.4"
+  checksum: 468de1f04d33de6d300892683d7c8aecbf96d1e2c5fe084f95f816e50a054d45b7c1ebfb141a1447d844b86a948733f6eebd92234da8581c84a1ad4de2946a2d
+  languageName: node
+  linkType: hard
+
 "@manypkg/find-root@npm:^1.1.0":
   version: 1.1.0
   resolution: "@manypkg/find-root@npm:1.1.0"
@@ -1535,6 +1570,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@openzeppelin/contracts@npm:^4.1.0":
+  version: 4.9.3
+  resolution: "@openzeppelin/contracts@npm:4.9.3"
+  checksum: 4932063e733b35fa7669b9fe2053f69b062366c5c208b0c6cfa1ac451712100c78acff98120c3a4b88d94154c802be05d160d71f37e7d74cadbe150964458838
+  languageName: node
+  linkType: hard
+
 "@openzeppelin/contracts@npm:^4.9.1":
   version: 4.9.1
   resolution: "@openzeppelin/contracts@npm:4.9.1"
@@ -1585,6 +1627,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@owlearn/contracts@workspace:apps/contracts"
   dependencies:
+    "@ensdomains/ens-contracts": ^0.0.22
     "@nomicfoundation/hardhat-chai-matchers": ^1.0.0
     "@nomicfoundation/hardhat-foundry": ^1.0.1
     "@nomicfoundation/hardhat-network-helpers": ^1.0.0
@@ -4050,6 +4093,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dns-packet@npm:^5.3.0":
+  version: 5.6.0
+  resolution: "dns-packet@npm:5.6.0"
+  dependencies:
+    "@leichtgewicht/ip-codec": ^2.0.1
+  checksum: 1b643814e5947a87620f8a906287079347492282964ce1c236d52c414e3e3941126b96581376b180ba6e66899e70b86b587bc1aa23e3acd9957765be952d83fc
+  languageName: node
+  linkType: hard
+
 "doctrine@npm:^2.1.0":
   version: 2.1.0
   resolution: "doctrine@npm:2.1.0"
@@ -6030,6 +6082,13 @@ __metadata:
     readable-stream: ^3.6.0
     safe-buffer: ^5.2.0
   checksum: 26b7e97ac3de13cb23fc3145e7e3450b0530274a9562144fc2bf5c1e2983afd0e09ed7cc3b20974ba66039fad316db463da80eb452e7373e780cbee9a0d2f2dc
+  languageName: node
+  linkType: hard
+
+"hash-test-vectors@npm:^1.3.2":
+  version: 1.3.2
+  resolution: "hash-test-vectors@npm:1.3.2"
+  checksum: f51d49cb86058aa70f92cbdebb02e30bc458d3f02645931f65ff329a32f8beb7ba91be303d7555d17b443a49124fceb007a5eaa2f6d333b8939eaf764f034fb5
   languageName: node
   linkType: hard
 
