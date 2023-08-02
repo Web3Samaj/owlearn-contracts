@@ -1643,6 +1643,7 @@ __metadata:
     "@types/mocha": ">=9.1.0"
     chai: ^4.2.0
     dotenv: ^16.1.3
+    erc721a-upgradeable: ^4.2.3
     hardhat: ^2.14.1
     hardhat-contract-sizer: ^2.9.0
     hardhat-deploy: ^0.11.30
@@ -4221,6 +4222,13 @@ __metadata:
   version: 2.2.1
   resolution: "env-paths@npm:2.2.1"
   checksum: 65b5df55a8bab92229ab2b40dad3b387fad24613263d103a97f91c9fe43ceb21965cd3392b1ccb5d77088021e525c4e0481adb309625d0cb94ade1d1fb8dc17e
+  languageName: node
+  linkType: hard
+
+"erc721a-upgradeable@npm:^4.2.3":
+  version: 4.2.3
+  resolution: "erc721a-upgradeable@npm:4.2.3"
+  checksum: 1392111e4ae17cc96613f0cfbe07e003798060e38c955f6f38d747018c81e08498fe483270bb48270bb577da4cad0f3aa79380b253fb39638e89dcb143899d4f
   languageName: node
   linkType: hard
 

@@ -1,26 +1,16 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.12;
 
-import "@erc721a/contracts/ERC721A.sol";
-import "@openzeppelin/contracts/utils/Strings.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+import {ERC721AUpgradeable} from "erc721a-upgradeable/contracts/ERC721AUpgradeable.sol";
+import {OwlearnCourseResourcesStorage} from "./OwlearnCourseResourcesStorage.sol";
+import {StringsUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/StringsUpgradeable.sol";
+import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
 /// @title OwlearnCourseResources
 /// @notice ERC721A NFT Contract responsible for course resources
 /// @author Dhruv <contact.dhruvagarwal@gmail.com>
-contract OwlearnCourseResources is ERC721A, Ownable {
-    // =============================================================
-    //                           STORAGE
-    // =============================================================
-
-    string public courseDetailsURI;
-    address public owlearnCourse;
-
-    /*========================  URI Storage variable ======================== */
-
-    using Strings for uint256;
-    mapping(uint256 => string) private _tokenURIs;
-    string public baseURI = "";
+contract OwlearnCourseResources is ERC721AUpgradeable, OwnableUpgradeable, OwlearnCourseResourcesStorage {
+    using StringsUpgradeable for uint256;
 
     /*========================  Events ======================== */
 
@@ -37,8 +27,16 @@ contract OwlearnCourseResources is ERC721A, Ownable {
     event CourseResourceBurned(uint tokenId);
     event CourseResourceUpdated(uint tokenId, string newResourceURI);
 
-    /*======================== Constructor Functions ========================*/
+    /*///////////////////// Constructor //////////////////////////////////*/
+    /**
+     * @dev Lock implementation contract
+     */
+    constructor() {
+        // disabling initialisation of implementation contract to prevent attacks
+        _disableInitializers();
+    }
 
+    /*======================== Initializer Functions ========================*/
     /**
      * @dev Intialise the course by minting the new NFTs for the course first
      *
@@ -49,15 +47,17 @@ contract OwlearnCourseResources is ERC721A, Ownable {
      * @param courseNFTURIs  courseNFTURIs to be minted , containing info about the particular resource
      * @param courseAddress Owlearn Course Main Contract, just to add the the onlyCourse Modifier
      */
-    constructor(
+    function initialize(
         string memory courseName,
         string memory courseSymbol,
         address courseCreator,
         string memory courseURI,
         string[] memory courseNFTURIs,
         address courseAddress
-    ) ERC721A(courseName, courseSymbol) {
-        transferOwnership(courseCreator);
+    ) external payable initializer {
+        __Ownable_init();
+        __ERC721A_init(courseName, courseSymbol);
+        _transferOwnership(courseCreator);
         courseDetailsURI = courseURI;
         _initialiseCourse(courseNFTURIs);
         owlearnCourse = courseAddress;

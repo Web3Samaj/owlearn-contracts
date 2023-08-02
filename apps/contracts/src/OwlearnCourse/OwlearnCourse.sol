@@ -47,7 +47,9 @@ contract OwlearnCourse is OwnableUpgradeable, OwlearnCourseStorage {
         _transferOwnership(courseCreator);
         creatorId = _creatorId;
         courseId = _courseId;
-        courseResources = new OwlearnCourseResources(
+        courseResources = new OwlearnCourseResources();
+        // initialise course resource contract
+        courseResources.initialize(
             courseName,
             courseSymbol,
             courseCreator,
@@ -62,8 +64,10 @@ contract OwlearnCourse is OwnableUpgradeable, OwlearnCourseStorage {
         string memory certificateSymbol = string(
             abi.encodePacked("CB_", courseSymbol)
         );
-
-        courseCertificates = new OwlearnCourseCerticates(
+        // deploy certificates
+        courseCertificates = new OwlearnCourseCerticates();
+        // initialise certificates
+        courseCertificates.initialize(
             certificateName,
             certificateSymbol,
             certificateBaseURI,

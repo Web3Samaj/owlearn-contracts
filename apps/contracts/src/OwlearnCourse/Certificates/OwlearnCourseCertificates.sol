@@ -1,29 +1,26 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.12;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
+import {OwlearnCourseCerticatesStorage, CountersUpgradeable} from "./OwlearnCourseCerticatesStorage.sol";
+import {ERC721Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
+import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
 /// @title OwlearnCourseCerticates
 /// @notice ERC721 NFT Contract responsible for course certificates with Dynamic URI
 /// @author Dhruv <contact.dhruvagarwal@gmail.com>
-contract OwlearnCourseCerticates is ERC721, Ownable {
-    // =============================================================
-    //                           STORAGE
-    // =============================================================
-    using Counters for Counters.Counter;
+contract OwlearnCourseCerticates is ERC721Upgradeable, OwnableUpgradeable, OwlearnCourseCerticatesStorage {
+    using CountersUpgradeable for CountersUpgradeable.Counter;
+    
+    /*///////////////////// Constructor //////////////////////////////////*/
+    /**
+     * @dev Lock implementation contract
+     */
+    constructor() {
+        // disabling initialisation of implementation contract to prevent attacks
+        _disableInitializers();
+    }
 
-    Counters.Counter private _tokenIdCounter;
-
-    string public baseURI;
-
-    address public manager;
-
-    /*======================== Event Functions ========================*/
-
-    /*======================== Constructor Functions ========================*/
-
+    /*======================== Initializer Functions ========================*/
     /**
      * @dev Intialise the Course Certificate Contracts
      *
@@ -32,12 +29,14 @@ contract OwlearnCourseCerticates is ERC721, Ownable {
      * @param certificateBaseURI  NFT URI , dynamic , off-chain server link , fetching progree & certificates for a Course Learner
      * @param courseCreator  creator of the Course , who will also control the Collection
      */
-    constructor(
+    function initialize(
         string memory courseCertificateName,
         string memory courseCertificateSymbol,
         string memory certificateBaseURI,
         address courseCreator
-    ) ERC721(courseCertificateName, courseCertificateSymbol) {
+    ) external payable initializer  {
+        __ERC721_init(courseCertificateName, courseCertificateSymbol);
+        __Ownable_init();
         baseURI = certificateBaseURI;
         manager = msg.sender;
         _transferOwnership(courseCreator);

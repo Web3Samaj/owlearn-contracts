@@ -12,3 +12,8 @@
 [submodule "apps/contracts/lib/ens-contracts"]
 	path = apps/contracts/lib/ens-contracts
 	url = https://github.com/ensdomains/ens-contracts
+[submodule "apps/contracts/lib/ERC721A-Upgradeable"]
+	path = apps/contracts/lib/ERC721A-Upgradeable
+	url = https://github.com/chiru-labs/ERC721A-Upgradeable
+[submodule "lib/ERC721A-Upgradeable"]
+	branch = main
