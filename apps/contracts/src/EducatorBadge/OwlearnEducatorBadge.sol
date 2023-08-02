@@ -1,28 +1,39 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.10;
 
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155URIStorage.sol";
-import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
-import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol";
+import {OwnableUpgradeable} from  "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import {ERC1155URIStorageUpgradeable} from  "@openzeppelin/contracts-upgradeable/token/ERC1155/extensions/ERC1155URIStorageUpgradeable.sol";
+import {ERC1155BurnableUpgradeable, ERC1155Upgradeable} from  "@openzeppelin/contracts-upgradeable/token/ERC1155/extensions/ERC1155BurnableUpgradeable.sol";
+import {ERC1155SupplyUpgradeable} from  "@openzeppelin/contracts-upgradeable/token/ERC1155/extensions/ERC1155SupplyUpgradeable.sol";
 
 /// @title OwlearnEducatorBadge
 /// @notice An ERC1155 Contract as an Educator badge to all the educators on the platform , along with the badge Levels
 /// @author Dhruv <contact.dhruvagarwal@gmail.com>
 /// Basic Educator Badge - Id - 1
 contract OwlearnEducatorBadge is
-    ERC1155URIStorage,
-    Ownable,
-    ERC1155Burnable,
-    ERC1155Supply
+    OwnableUpgradeable,
+    ERC1155URIStorageUpgradeable,
+    ERC1155BurnableUpgradeable,
+    ERC1155SupplyUpgradeable
 {
     /*======================== Constructor Functions ========================*/
+    /**
+     * @dev Lock implementation contract
+     */
+    constructor() {
+        // disabling initialisation of implementation contract to prevent attacks
+        _disableInitializers();
+    }
+
+    /*======================== Initializer Functions ========================*/
+    
     /**
      * @dev Intialise the Educator Badge NFT Collections
      *
      * @param token0URI  token URI of the Basic Educator badge id-0
      */
-    constructor(string memory token0URI) ERC1155("") {
+    function initialize (string memory token0URI) external initializer {
+        __ERC1155_init("NULL");
         _setURI(1, token0URI);
     }
 
@@ -68,10 +79,10 @@ contract OwlearnEducatorBadge is
         public
         view
         virtual
-        override(ERC1155URIStorage, ERC1155)
+        override(ERC1155URIStorageUpgradeable, ERC1155Upgradeable)
         returns (string memory)
     {
-        return ERC1155URIStorage.uri(tokenId);
+        return ERC1155URIStorageUpgradeable.uri(tokenId);
     }
 
     // =============================================================
@@ -89,7 +100,7 @@ contract OwlearnEducatorBadge is
         uint256[] memory ids,
         uint256[] memory amounts,
         bytes memory data
-    ) internal override(ERC1155, ERC1155Supply) {
+    ) internal override(ERC1155Upgradeable, ERC1155SupplyUpgradeable) {
         super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
     }
 }
