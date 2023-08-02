@@ -24,9 +24,6 @@ contract OwlearnId is ERC721URIStorage, Ownable, OwlearnIdStorage {
 
     /*///////////////////// Constants //////////////////////////////////*/
 
-    // domain extension ->  .owl
-    string public tld;
-
     uint256 public constant THREE_LETTER_MULTIPLIER = 10;
     uint256 public constant FOUR_LETTER_MULTIPLIER = 5;
     uint256 public constant PRICE_MULTIPLIER = 3;
@@ -39,11 +36,6 @@ contract OwlearnId is ERC721URIStorage, Ownable, OwlearnIdStorage {
     /*///////////////////// Events //////////////////////////////////*/
 
     event OwlIdRegistered(address user, string name, uint tokenId);
-
-    /*/////////////////////// NFT SVG  /////////////////////////////*/
-    string _svgPartOne =
-        '<svg xmlns="http://www.w3.org/2000/svg" width="270" height="270" fill="none"><path fill="url(#B)" d="M0 0h270v270H0z"/><defs><filter id="A" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse" height="270" width="270"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-opacity=".225" width="200%" height="200%"/></filter></defs><path d="M72.863 42.949c-.668-.387-1.426-.59-2.197-.59s-1.529.204-2.197.59l-10.081 6.032-6.85 3.934-10.081 6.032c-.668.387-1.426.59-2.197.59s-1.529-.204-2.197-.59l-8.013-4.721a4.52 4.52 0 0 1-1.589-1.616c-.384-.665-.594-1.418-.608-2.187v-9.31c-.013-.775.185-1.538.572-2.208a4.25 4.25 0 0 1 1.625-1.595l7.884-4.59c.668-.387 1.426-.59 2.197-.59s1.529.204 2.197.59l7.884 4.59a4.52 4.52 0 0 1 1.589 1.616c.384.665.594 1.418.608 2.187v6.032l6.85-4.065v-6.032c.013-.775-.185-1.538-.572-2.208a4.25 4.25 0 0 0-1.625-1.595L41.456 24.59c-.668-.387-1.426-.59-2.197-.59s-1.529.204-2.197.59l-14.864 8.655a4.25 4.25 0 0 0-1.625 1.595c-.387.67-.585 1.434-.572 2.208v17.441c-.013.775.185 1.538.572 2.208a4.25 4.25 0 0 0 1.625 1.595l14.864 8.655c.668.387 1.426.59 2.197.59s1.529-.204 2.197-.59l10.081-5.901 6.85-4.065 10.081-5.901c.668-.387 1.426-.59 2.197-.59s1.529.204 2.197.59l7.884 4.59a4.52 4.52 0 0 1 1.589 1.616c.384.665.594 1.418.608 2.187v9.311c.013.775-.185 1.538-.572 2.208a4.25 4.25 0 0 1-1.625 1.595l-7.884 4.721c-.668.387-1.426.59-2.197.59s-1.529-.204-2.197-.59l-7.884-4.59a4.52 4.52 0 0 1-1.589-1.616c-.385-.665-.594-1.418-.608-2.187v-6.032l-6.85 4.065v6.032c-.013.775.185 1.538.572 2.208a4.25 4.25 0 0 0 1.625 1.595l14.864 8.655c.668.387 1.426.59 2.197.59s1.529-.204 2.197-.59l14.864-8.655c.657-.394 1.204-.95 1.589-1.616s.594-1.418.609-2.187V55.538c.013-.775-.185-1.538-.572-2.208a4.25 4.25 0 0 0-1.625-1.595l-14.993-8.786z" fill="#fff"/><defs><linearGradient id="B" x1="0" y1="0" x2="270" y2="270" gradientUnits="userSpaceOnUse"><stop stop-color="#cb5eee"/><stop offset="1" stop-color="#0cd7e4" stop-opacity=".99"/></linearGradient></defs><text x="32.5" y="231" font-size="27" fill="#fff" filter="url(#A)" font-family="Plus Jakarta Sans,DejaVu Sans,Noto Color Emoji,Apple Color Emoji,sans-serif" font-weight="bold">';
-    string _svgPartTwo = "</text></svg>";
 
     /**
      * @dev The constructor sets NFT Implementation and the TLD
@@ -62,13 +54,13 @@ contract OwlearnId is ERC721URIStorage, Ownable, OwlearnIdStorage {
     /**
      * @dev to get the Price for minting a new domain
      *
-     * @param name domain Name to mint
+     * @param _username domain Name to mint
      * @return amount amount to be paid for minting
      */
-    function price(string calldata name) public pure returns (uint256 amount) {
-        uint256 len = StringUtils.strlen(name);
+    function price(string calldata _username) public pure returns (uint256 amount) {
+        uint256 len = StringUtils.strlen(_username);
 
-        if (len == 0) revert InvalidName(name);
+        if (len == 0) revert InvalidName(_username);
 
         if (len == 3) {
             return THREE_LETTER_MULTIPLIER * 1 ether; // 10 Matic for len 3
@@ -82,30 +74,30 @@ contract OwlearnId is ERC721URIStorage, Ownable, OwlearnIdStorage {
     /**
      * @dev to get the Price for minting a new domain
      * @notice Payable function to send the price for minting the domain
-     * @param name domain Name to mint
+     * @param _username domain Name to mint
      * @return recordID amount to be paid for minting
      */
     function register(
-        string calldata name
+        string calldata _username
     ) public payable returns (uint recordID) {
-        if (domainNames[name].user != address(0)) revert AlreadyRegistered();
+        if (domainNames[_username].user != address(0)) revert AlreadyRegistered();
 
         // fetching the price and check
-        uint256 _price = price(name);
+        uint256 _price = price(_username);
         require(msg.value >= _price, "NOT ENOUGH MATIC PAID");
 
-        string memory finalSvg = _getSVG(name);
+        string memory finalSvg = _getSVG(_username);
 
         uint256 newRecordId = _tokenIds.current();
 
         console.log(
             "Registering %s.%s on the contract with tokenID %d",
-            name,
+            _username,
             tld,
             newRecordId
         );
 
-        string memory finalTokenUri = _getMetadata(name, finalSvg);
+        string memory finalTokenUri = _getMetadata(_username, finalSvg);
 
         console.log(
             "\n--------------------------------------------------------"
@@ -123,19 +115,19 @@ contract OwlearnId is ERC721URIStorage, Ownable, OwlearnIdStorage {
 
         // Prepare the recordData
         Record memory _record = Record({
-            domain: name,
+            domain: _username,
             user: msg.sender,
             tokenId: newRecordId
         });
 
         // Store the Recors in the mapping
-        domainRecords[msg.sender] = name;
-        domainNames[name] = _record;
+        domainRecords[msg.sender] = _username;
+        domainNames[_username] = _record;
 
         // Incrementing the TokenId for NFT
         _tokenIds.increment();
 
-        emit OwlIdRegistered(msg.sender, name, newRecordId);
+        emit OwlIdRegistered(msg.sender, _username, newRecordId);
 
         return newRecordId;
     }
@@ -143,14 +135,14 @@ contract OwlearnId is ERC721URIStorage, Ownable, OwlearnIdStorage {
     /**
      * @dev to get the Price for minting a new domain
      *
-     * @param name domain Name to mint
+     * @param _username domain Name to mint
      * @return finalSvg final SVG of the Custom Domain Image for the NFT
      */
     function _getSVG(
-        string calldata name
+        string calldata _username
     ) internal view returns (string memory finalSvg) {
         // Combine the name passed into the function  with the TLD
-        string memory _name = string(abi.encodePacked(name, ".", tld));
+        string memory _name = string(abi.encodePacked(_username, ".", tld));
 
         // Create the SVG (image) for the NFT with the name
         finalSvg = string(abi.encodePacked(_svgPartOne, _name, _svgPartTwo));
@@ -159,17 +151,17 @@ contract OwlearnId is ERC721URIStorage, Ownable, OwlearnIdStorage {
     /**
      * @dev to get the Price for minting a new domain
      *
-     * @param name domain Name to mint
+     * @param _username domain Name to mint
      * @param finalSvg the Svg string for the NFT image
      * @return finalTokenUri Token URI of the NFT to be minted
      */
     function _getMetadata(
-        string calldata name,
+        string calldata _username,
         string memory finalSvg
     ) internal view returns (string memory finalTokenUri) {
-        uint256 length = StringUtils.strlen(name);
+        uint256 length = StringUtils.strlen(_username);
         string memory strLen = Strings.toString(length);
-        string memory _name = string(abi.encodePacked(name, ".", tld));
+        string memory _name = string(abi.encodePacked(_username, ".", tld));
 
         string memory json = Base64Upgradeable.encode(
             abi.encodePacked(
@@ -192,13 +184,13 @@ contract OwlearnId is ERC721URIStorage, Ownable, OwlearnIdStorage {
     /**
      * @dev get the name record
      *
-     * @param name domain Name to fetch for
+     * @param _username domain Name to fetch for
      * @return Record domain Name record
      */
     function getNameRecord(
-        string calldata name
+        string calldata _username
     ) public view returns (Record memory) {
-        return domainNames[name];
+        return domainNames[_username];
     }
 
     /**
