@@ -10,17 +10,17 @@ import {IOwlearnId} from "../interfaces/IOwlearnId.sol";
 
 import "forge-std/console.sol";
 
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+import {ERC721URIStorageUpgradeable, StringsUpgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721URIStorageUpgradeable.sol";
+import {CountersUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
+import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
 /// @title OwlearnID
 /// @notice A namespace NFT contract that mints unique user handles.
 /// @author Dhruv <contact.dhruvagarwal@gmail.com>
-contract OwlearnId is ERC721URIStorage, Ownable, OwlearnIdStorage {
+contract OwlearnId is ERC721URIStorageUpgradeable, OwnableUpgradeable, OwlearnIdStorage {
     // for tracking of tokenIds
-    using Counters for Counters.Counter;
-    Counters.Counter private _tokenIds;
+    using CountersUpgradeable for CountersUpgradeable.Counter;
+    CountersUpgradeable.Counter private _tokenIds;
 
     /*///////////////////// Constants //////////////////////////////////*/
 
@@ -37,12 +37,24 @@ contract OwlearnId is ERC721URIStorage, Ownable, OwlearnIdStorage {
 
     event OwlIdRegistered(address user, string name, uint tokenId);
 
+    /*///////////////////// Constructor //////////////////////////////////*/
+    /**
+     * @dev Lock implementation contract
+     */
+    constructor() {
+        // disabling initialisation of implementation contract to prevent attacks
+        _disableInitializers();
+    }
+
+    /*======================== Initializer Functions ========================*/
     /**
      * @dev The constructor sets NFT Implementation and the TLD
      *
      * @param _tld the domain name extension
      */
-    constructor(string memory _tld) payable ERC721("Owlearn Id", "OWLID") {
+    function initialize(string memory _tld) external payable initializer {
+        __ERC721_init("Owlearn Id", "OWLID");
+        __Ownable_init();
         tld = _tld;
         console.log("%s name service deployed ", _tld);
     }
@@ -160,7 +172,7 @@ contract OwlearnId is ERC721URIStorage, Ownable, OwlearnIdStorage {
         string memory finalSvg
     ) internal view returns (string memory finalTokenUri) {
         uint256 length = StringUtils.strlen(_username);
-        string memory strLen = Strings.toString(length);
+        string memory strLen = StringsUpgradeable.toString(length);
         string memory _name = string(abi.encodePacked(_username, ".", tld));
 
         string memory json = Base64Upgradeable.encode(
