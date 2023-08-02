@@ -1,29 +1,24 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.12;
 
-import "./Certificates/OwlearnCourseCertificates.sol";
-import "./Resources/OwlearnCourseResources.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+import {OwlearnCourseStorage, OwlearnCourseCerticates, OwlearnCourseResources} from "./OwlearnCourseStorage.sol";
+import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "../interfaces/IMintModule.sol";
 
 /// @title OwlearnCourse
 /// @notice Course Master Contract , Single Point of Entry to create , and manage Course with Resource & Certificates Contract
 /// @author Dhruv <contact.dhruvagarwal@gmail.com>
-contract OwlearnCourse is Ownable {
-    /*======================== Initialised Certificates & Resources contract ========================*/
+contract OwlearnCourse is OwnableUpgradeable, OwlearnCourseStorage {
+    /*///////////////////// Constructor //////////////////////////////////*/
+    /**
+     * @dev Lock implementation contract
+     */
+    constructor() {
+        // disabling initialisation of implementation contract to prevent attacks
+        _disableInitializers();
+    }
 
-    OwlearnCourseCerticates public courseCertificates;
-
-    OwlearnCourseResources public courseResources;
-
-    /*======================== State Variables ========================*/
-
-    address public mintModule;
-    uint public creatorId;
-    uint public courseId;
-
-    /*======================== Constructor Functions ========================*/
-
+    /*======================== Initializer Functions ========================*/
     /**
      * @dev Intialise the course by creating Resource and Certificates Contract
      *
@@ -36,7 +31,7 @@ contract OwlearnCourse is Ownable {
      * @param courseNFTURIs  courseNFTURIs to be minted , containing info about the particular resource
      * @param certificateBaseURI   NFT URI , dynamic , off-chain server link , fetching progree & certificates for a Course Learner
      */
-    constructor(
+    function initialize(
         uint _creatorId,
         uint _courseId,
         string memory courseName,
@@ -45,7 +40,11 @@ contract OwlearnCourse is Ownable {
         string memory courseURI,
         string[] memory courseNFTURIs,
         string memory certificateBaseURI
-    ) {
+    ) external payable initializer {
+        // initialise ownable contract
+        __Ownable_init();
+        // transfer ownership to course creator as the deployer of this contract will be CourseFactory
+        _transferOwnership(courseCreator);
         creatorId = _creatorId;
         courseId = _courseId;
         courseResources = new OwlearnCourseResources(

@@ -34,7 +34,9 @@ contract OwlearnCourseFactory is OwnableUpgradeable, CourseFactoryStorage {
     }
 
     /*======================== Initializer Functions ========================*/
-    function initialize(OwlearnEducatorBadge educatorBadgeNFT) external initializer {
+    function initialize(
+        OwlearnEducatorBadge educatorBadgeNFT
+    ) external initializer {
         __Ownable_init();
         educateBadgeNFT = educatorBadgeNFT;
     }
@@ -76,7 +78,8 @@ contract OwlearnCourseFactory is OwnableUpgradeable, CourseFactoryStorage {
         courseId = totalCourses;
         totalCourses += 1;
         bytes32 salt = keccak256(abi.encodePacked(courseName, courseSymbol));
-        OwlearnCourse _newCourse = new OwlearnCourse{salt: salt}(
+        OwlearnCourse _newCourse = new OwlearnCourse{salt: salt}();
+        _newCourse.initialize(
             creatorId,
             courseId,
             courseName,
