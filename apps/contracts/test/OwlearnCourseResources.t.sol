@@ -3,6 +3,7 @@ pragma solidity ^0.8.13;
 
 import "forge-std/Test.sol";
 import "forge-std/console.sol";
+// import "forge-std/VM.sol";
 
 import "../src/OwlearnCourseResources.sol";
 
@@ -28,7 +29,7 @@ contract OwlearnCourseResourcesScript is Test {
             alice,
             "s",
             nftURIs,
-            msg.sender
+            address(this)
         );
     }
 
@@ -38,17 +39,52 @@ contract OwlearnCourseResourcesScript is Test {
         assertEq(owlearnCourseResources.tokenURI(1), "s2");
     }
 
-    function testCourseMintNewCourseNFTs() public {
-        console.log(owlearnCourseResources.owner());
-        console.log(owlearnCourseResources.owlearnCourse());
-        console.log(msg.sender);
+    // Mint new NFTs for the Course, only callable by Course
+    function testMintNewCourseNFTs() public {
         owlearnCourseResources.mintCourseNFTs(newNFTURIs);
         assertEq(owlearnCourseResources.balanceOf(alice), 4);
         assertEq(owlearnCourseResources.tokenURI(2), "s3");
         assertEq(owlearnCourseResources.tokenURI(3), "s4");
     }
 
-    function testFailMintNewCourseNFTs() public {
+    // Any external call to the function would fail
+    function testFailCourseMintNewCourseNFTs() public {
+        startHoax(alice, 1e18);
         owlearnCourseResources.mintCourseNFTs(newNFTURIs);
+    }
+
+    function testEditCourseNFTs() public {
+        owlearnCourseResources.editCourseNFT(1, "s11");
+        assertEq(owlearnCourseResources.tokenURI(1), "s11");
+    }
+
+    // Direct deletion of NFTs via course would fail
+    function testFailDeleteCourseNFTs() public {
+        owlearnCourseResources.deleteCourseNFT(1);
+        assertEq(owlearnCourseResources.balanceOf(alice), 1);
+        console.log(owlearnCourseResources.tokenURI(1));
+    }
+
+    // First need approval for the NFT to the Course Contract to delete it
+    function testDeleteCourseNFTs() public {
+        vm.startPrank(alice);
+        owlearnCourseResources.approve(address(owlearnCourseResources), 1);
+        owlearnCourseResources.approve(address(this), 1);
+        vm.stopPrank();
+        owlearnCourseResources.deleteCourseNFT(1);
+        assertEq(owlearnCourseResources.balanceOf(alice), 1);
+    }
+
+    function testSetBaseURI() public {
+        startHoax(alice, 1e18);
+        owlearnCourseResources.setBaseURI("s0");
+        assertEq(owlearnCourseResources.baseURI(), "s0");
+    }
+
+    function testSetCourseURI() public {
+        startHoax(alice, 1e18);
+        assertEq(owlearnCourseResources.courseDetailsURI(), "s");
+        owlearnCourseResources.setCourseURI("s00");
+        assertEq(owlearnCourseResources.courseDetailsURI(), "s00");
     }
 }
