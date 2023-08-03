@@ -1,2 +1,8 @@
-@openzeppelin/=lib/openzeppelin-contracts/
-@erc721a/=lib/ERC721A
+erc721a-upgradeable/contracts=lib/ERC721A-Upgradeable/contracts/
+ds-test/=lib/forge-std/lib/ds-test/src/
+erc4626-tests/=lib/openzeppelin-contracts/lib/erc4626-tests/
+forge-std/=lib/forge-std/src/
+@openzeppelin/contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/contracts/
+@openzeppelin/contracts=lib/openzeppelin-contracts/contracts/
+@ensdomains/ens-contracts/=lib/ens-contracts/
+
