@@ -67,7 +67,7 @@ contract OwlearnCourseResources is ERC721A, Ownable {
     /*======================== Modifier Functions ========================*/
 
     modifier onlyCourse() {
-        require(msg.sender == owlearnCourse, "ONLY COURSE CONTRACT");
+        require(_msgSender() == owlearnCourse, "ONLY COURSE CONTRACT");
         _;
     }
 
@@ -111,6 +111,16 @@ contract OwlearnCourseResources is ERC721A, Ownable {
         emit CourseResourceBurned(tokenId);
     }
 
+    /**
+     * @dev  Set a  New Course URI for the course incase any info changes
+     * @dev  Default value set in constructor
+     *
+     * @param _uri New Base URI to be set
+     */
+    function setCourseURI(string memory _uri) external onlyOwner {
+        courseDetailsURI = _uri;
+    }
+
     // =============================================================
     //                           INTERNAL FUNCTIONS
     // =============================================================
@@ -138,12 +148,13 @@ contract OwlearnCourseResources is ERC721A, Ownable {
         address to,
         string[] memory tokenURIs
     ) internal virtual {
+        uint totalTokensBefore = totalSupply();
         uint tokenURILength = tokenURIs.length;
 
         _mint(to, tokenURILength);
 
         for (uint i = 0; i < tokenURILength; i++) {
-            _setTokenURI(i, tokenURIs[i]);
+            _setTokenURI(i + totalTokensBefore, tokenURIs[i]);
         }
 
         emit NewCourseResourceMinted(tokenURILength, tokenURIs);
