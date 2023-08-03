@@ -59,7 +59,7 @@ contract OwlearnCourse is OwnableUpgradeable, OwlearnCourseStorage {
         );
 
         string memory certificateName = string(
-            abi.encodePacked("Certificate Badge for", courseName)
+            abi.encodePacked("Certificate Badge for ", courseName)
         );
         string memory certificateSymbol = string(
             abi.encodePacked("CB_", courseSymbol)
@@ -145,4 +145,5 @@ contract OwlearnCourse is OwnableUpgradeable, OwlearnCourseStorage {
     }
 
     ///@dev All other Certificate functions like Burn or Mint are to be accessed from the main contract
+    ///@dev All other Resource functions like balance and owner are to be accessed from the main contract
 }
