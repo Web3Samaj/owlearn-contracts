@@ -5,10 +5,10 @@ import {OwlearnCourseCerticatesStorage, CountersUpgradeable} from "./OwlearnCour
 import {ERC721Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
-/// @title OwlearnCourseCerticates
+/// @title OwlearnCourseCertificates
 /// @notice ERC721 NFT Contract responsible for course certificates with Dynamic URI
 /// @author Dhruv <contact.dhruvagarwal@gmail.com>
-contract OwlearnCourseCerticates is
+contract OwlearnCourseCertificates is
     ERC721Upgradeable,
     OwnableUpgradeable,
     OwlearnCourseCerticatesStorage
