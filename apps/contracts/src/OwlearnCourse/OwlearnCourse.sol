@@ -64,10 +64,15 @@ contract OwlearnCourse is OwnableUpgradeable, OwlearnCourseStorage {
         string memory certificateSymbol = string(
             abi.encodePacked("CB_", courseSymbol)
         );
+<<<<<<< HEAD:apps/contracts/src/OwlearnCourse/OwlearnCourse.sol
         // deploy certificates
         courseCertificates = new OwlearnCourseCerticates();
         // initialise certificates
         courseCertificates.initialize(
+=======
+
+        courseCertificates = new OwlearnCourseCertificates(
+>>>>>>> d856bbcfddbf5a267351ff21ad9c2e87bcd5ff98:apps/contracts/src/OwlearnCourse.sol
             certificateName,
             certificateSymbol,
             certificateBaseURI,
