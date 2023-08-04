@@ -3,7 +3,7 @@ pragma solidity ^0.8.13;
 
 import "forge-std/Test.sol";
 
-import "../src/OwlearnCourseCertificates.sol";
+import "../src/OwlearnCourse/Certificates/OwlearnCourseCertificates.sol";
 
 contract OwlearnCourseCertificatesScript is Test {
     // manager =  address(0)

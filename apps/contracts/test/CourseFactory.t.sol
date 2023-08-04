@@ -4,9 +4,9 @@ pragma solidity ^0.8.13;
 import "forge-std/Test.sol";
 import "forge-std/console.sol";
 
-import "../src/CourseFactory.sol";
-import "../src/OwlearnEducatorBadge.sol";
-import "../src/OwlearnCourse.sol";
+import "../src/Factory/CourseFactory.sol";
+import "../src/EducatorBadge/OwlearnEducatorBadge.sol";
+import "../src/OwlearnCourse/OwlearnCourse.sol";
 
 contract CourseFactoryScript is Test {
     OwlearnCourseFactory public courseFactory;

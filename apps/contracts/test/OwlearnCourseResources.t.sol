@@ -4,7 +4,7 @@ pragma solidity ^0.8.13;
 import "forge-std/Test.sol";
 import "forge-std/console.sol";
 
-import "../src/OwlearnCourseResources.sol";
+import "../src/OwlearnCourse/Resources/OwlearnCourseResources.sol";
 
 contract OwlearnCourseResourcesScript is Test {
     address public manager = address(0x0);

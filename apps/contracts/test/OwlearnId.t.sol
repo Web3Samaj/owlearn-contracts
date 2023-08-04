@@ -4,7 +4,7 @@ pragma solidity ^0.8.13;
 import "forge-std/Test.sol";
 // import "forge-std/Console.sol";
 
-import "../src/OwlearnId.sol";
+import "../src/OwlearnId/OwlearnId.sol";
 
 contract OwnlearnIdScript is Test {
     OwlearnId public owlearnId;
