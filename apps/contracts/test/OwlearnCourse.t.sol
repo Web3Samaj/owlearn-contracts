@@ -27,7 +27,8 @@ contract OwlearnCourseScript is Test {
         newNFTURIs.push("s3");
         newNFTURIs.push("s4");
 
-        owlearnCourse = new OwlearnCourse(
+        owlearnCourse = new OwlearnCourse();
+        owlearnCourse.initialize(
             1,
             1,
             "Python Beginner",

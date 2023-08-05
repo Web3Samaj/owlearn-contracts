@@ -14,12 +14,8 @@ contract OwlearnCourseCertificatesScript is Test {
     OwlearnCourseCertificates public owlearnCourseCertificates;
 
     function setUp() public {
-        owlearnCourseCertificates = new OwlearnCourseCertificates(
-            "OwlCerti",
-            "OCT",
-            "",
-            alice
-        );
+        owlearnCourseCertificates = new OwlearnCourseCertificates();
+        owlearnCourseCertificates.initialize("OwlCerti", "OCT", "", alice);
         tokenId = owlearnCourseCertificates.safeMint(clay);
     }
 

@@ -3,7 +3,7 @@ pragma solidity ^0.8.12;
 
 import {CountersUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
 
-abstract contract OwlearnCourseCerticatesStorage {
+abstract contract OwlearnCourseCertificatesStorage {
     // =============================================================
     //                           STORAGE
     // =============================================================

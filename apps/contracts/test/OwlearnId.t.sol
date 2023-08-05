@@ -10,7 +10,8 @@ contract OwnlearnIdScript is Test {
     OwlearnId public owlearnId;
 
     function setUp() public {
-        owlearnId = new OwlearnId("owl");
+        owlearnId = new OwlearnId();
+        owlearnId.initialize("owl");
     }
 
     function testRegister() public {

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.12;
 
-import {OwlearnCourseStorage, OwlearnCourseCerticates, OwlearnCourseResources} from "./OwlearnCourseStorage.sol";
+import {OwlearnCourseStorage, OwlearnCourseCertificates, OwlearnCourseResources} from "./OwlearnCourseStorage.sol";
 import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "../interfaces/IMintModule.sol";
 
@@ -65,7 +65,7 @@ contract OwlearnCourse is OwnableUpgradeable, OwlearnCourseStorage {
             abi.encodePacked("CB_", courseSymbol)
         );
         // deploy certificates
-        courseCertificates = new OwlearnCourseCerticates();
+        courseCertificates = new OwlearnCourseCertificates();
         // initialise certificates
         courseCertificates.initialize(
             certificateName,

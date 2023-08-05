@@ -22,7 +22,8 @@ contract OwlearnCourseResourcesScript is Test {
         nftURIs.push("s2");
         newNFTURIs.push("s3");
         newNFTURIs.push("s4");
-        owlearnCourseResources = new OwlearnCourseResources(
+        owlearnCourseResources = new OwlearnCourseResources();
+        owlearnCourseResources.initialize(
             "Python Beginner",
             "PB",
             alice,

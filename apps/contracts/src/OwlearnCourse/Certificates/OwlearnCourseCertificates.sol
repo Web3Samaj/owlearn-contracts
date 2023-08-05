@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.12;
 
-import {OwlearnCourseCerticatesStorage, CountersUpgradeable} from "./OwlearnCourseCerticatesStorage.sol";
+import {OwlearnCourseCertificatesStorage, CountersUpgradeable} from "./OwlearnCourseCerticatesStorage.sol";
 import {ERC721Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
@@ -11,7 +11,7 @@ import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/Own
 contract OwlearnCourseCertificates is
     ERC721Upgradeable,
     OwnableUpgradeable,
-    OwlearnCourseCerticatesStorage
+    OwlearnCourseCertificatesStorage
 {
     using CountersUpgradeable for CountersUpgradeable.Counter;
 

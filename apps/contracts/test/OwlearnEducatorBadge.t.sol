@@ -9,7 +9,8 @@ contract OwlearnEducatorBadgeScript is Test {
     OwlearnEducatorBadge public owlearnEducatorBadge;
 
     function setUp() public {
-        owlearnEducatorBadge = new OwlearnEducatorBadge("");
+        owlearnEducatorBadge = new OwlearnEducatorBadge();
+        owlearnEducatorBadge.initialize("");
     }
 
     function testFailDirectMint() public {

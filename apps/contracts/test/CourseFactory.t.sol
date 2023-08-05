@@ -14,11 +14,11 @@ contract CourseFactoryScript is Test {
     address public alice = address(0x1);
 
     function setUp() public {
-        OwlearnEducatorBadge owlearnEducatorBadge = new OwlearnEducatorBadge(
-            ""
-        );
+        OwlearnEducatorBadge owlearnEducatorBadge = new OwlearnEducatorBadge();
+        owlearnEducatorBadge.initialize("");
         owlearnEducatorBadge.mintEducatorBadges(alice, 1);
-        courseFactory = new OwlearnCourseFactory(owlearnEducatorBadge);
+        courseFactory = new OwlearnCourseFactory();
+        courseFactory.initialize(owlearnEducatorBadge);
     }
 
     function testCreateCourse() public {
