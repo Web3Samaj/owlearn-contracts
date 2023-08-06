@@ -17,7 +17,11 @@ import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/Own
 /// @title OwlearnID
 /// @notice A namespace NFT contract that mints unique user handles.
 /// @author Dhruv <contact.dhruvagarwal@gmail.com>
-contract OwlearnId is ERC721URIStorageUpgradeable, OwnableUpgradeable, OwlearnIdStorage {
+contract OwlearnId is
+    ERC721URIStorageUpgradeable,
+    OwnableUpgradeable,
+    OwlearnIdStorage
+{
     // for tracking of tokenIds
     using CountersUpgradeable for CountersUpgradeable.Counter;
     CountersUpgradeable.Counter private _tokenIds;
@@ -43,7 +47,7 @@ contract OwlearnId is ERC721URIStorageUpgradeable, OwnableUpgradeable, OwlearnId
      */
     constructor() {
         // disabling initialisation of implementation contract to prevent attacks
-        _disableInitializers();
+        // _disableInitializers();
     }
 
     /*======================== Initializer Functions ========================*/
@@ -69,7 +73,9 @@ contract OwlearnId is ERC721URIStorageUpgradeable, OwnableUpgradeable, OwlearnId
      * @param _username domain Name to mint
      * @return amount amount to be paid for minting
      */
-    function price(string calldata _username) public pure returns (uint256 amount) {
+    function price(
+        string calldata _username
+    ) public pure returns (uint256 amount) {
         uint256 len = StringUtils.strlen(_username);
 
         if (len == 0) revert InvalidName(_username);
@@ -92,7 +98,8 @@ contract OwlearnId is ERC721URIStorageUpgradeable, OwnableUpgradeable, OwlearnId
     function register(
         string calldata _username
     ) public payable returns (uint recordID) {
-        if (domainNames[_username].user != address(0)) revert AlreadyRegistered();
+        if (domainNames[_username].user != address(0))
+            revert AlreadyRegistered();
 
         // fetching the price and check
         uint256 _price = price(_username);

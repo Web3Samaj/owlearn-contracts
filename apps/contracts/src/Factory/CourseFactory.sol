@@ -30,7 +30,7 @@ contract OwlearnCourseFactory is OwnableUpgradeable, CourseFactoryStorage {
      */
     constructor() {
         // disabling initialisation of implementation contract to prevent attacks
-        _disableInitializers();
+        // _disableInitializers();
     }
 
     /*======================== Initializer Functions ========================*/

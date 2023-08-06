@@ -21,7 +21,7 @@ contract OwlearnCourseCertificates is
      */
     constructor() {
         // disabling initialisation of implementation contract to prevent attacks
-        _disableInitializers();
+        // _disableInitializers();
     }
 
     /*======================== Initializer Functions ========================*/

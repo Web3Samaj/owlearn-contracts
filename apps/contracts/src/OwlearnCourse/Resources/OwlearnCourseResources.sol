@@ -9,7 +9,11 @@ import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/Own
 /// @title OwlearnCourseResources
 /// @notice ERC721A NFT Contract responsible for course resources
 /// @author Dhruv <contact.dhruvagarwal@gmail.com>
-contract OwlearnCourseResources is ERC721AUpgradeable, OwnableUpgradeable, OwlearnCourseResourcesStorage {
+contract OwlearnCourseResources is
+    ERC721AUpgradeable,
+    OwnableUpgradeable,
+    OwlearnCourseResourcesStorage
+{
     using StringsUpgradeable for uint256;
 
     /*========================  Events ======================== */
@@ -33,7 +37,7 @@ contract OwlearnCourseResources is ERC721AUpgradeable, OwnableUpgradeable, Owlea
      */
     constructor() {
         // disabling initialisation of implementation contract to prevent attacks
-        _disableInitializers();
+        // _disableInitializers();
     }
 
     /*======================== Initializer Functions ========================*/
@@ -56,7 +60,7 @@ contract OwlearnCourseResources is ERC721AUpgradeable, OwnableUpgradeable, Owlea
         address courseAddress
     ) external payable initializer {
         __Ownable_init();
-        __ERC721A_init(courseName, courseSymbol);
+        __ERC721A_init(courseName, courseSymbol); // ---  ERROR : ERC721A__Initializable: contract is not initializing  --- ///
         _transferOwnership(courseCreator);
         courseDetailsURI = courseURI;
         _initialiseCourse(courseCreator, courseNFTURIs);
