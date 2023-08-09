@@ -58,7 +58,7 @@ contract OwlearnCourseResources is
         string memory courseURI,
         string[] memory courseNFTURIs,
         address courseAddress
-    ) external payable initializer {
+    ) external payable initializer initializerERC721A {
         __Ownable_init();
         __ERC721A_init(courseName, courseSymbol); // ---  ERROR : ERC721A__Initializable: contract is not initializing  --- ///
         _transferOwnership(courseCreator);
