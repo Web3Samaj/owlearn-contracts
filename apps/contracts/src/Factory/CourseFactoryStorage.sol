@@ -24,6 +24,7 @@ contract CourseFactoryStorage {
     mapping(uint => address) public getCourse;
     uint public totalCourses = 1;
     address[] public allCourses;
+    address public courseImplementation;
     OwlearnEducatorBadge public educateBadgeNFT;
 
     // adding a gap variable to allow future upgrades
