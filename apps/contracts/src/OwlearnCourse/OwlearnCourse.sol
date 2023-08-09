@@ -131,17 +131,21 @@ contract OwlearnCourse is OwnableUpgradeable, OwlearnCourseStorage {
      * TASK  : Add customization tasks
      */
     function mintCourseCertificate(address to, bytes calldata data) public {
-        IMintModule(mintModule).beforeMint(creatorId, courseId, to, data);
+        if (mintModule != address(0)) {
+            IMintModule(mintModule).beforeMint(creatorId, courseId, to, data);
+        }
 
         uint tokenId = courseCertificates.safeMint(to);
 
-        IMintModule(mintModule).afterMint(
-            creatorId,
-            courseId,
-            to,
-            tokenId,
-            data
-        );
+        if (mintModule != address(0)) {
+            IMintModule(mintModule).afterMint(
+                creatorId,
+                courseId,
+                to,
+                tokenId,
+                data
+            );
+        }
     }
 
     ///@dev All other Certificate functions like Burn or Mint are to be accessed from the main contract
