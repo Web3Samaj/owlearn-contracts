@@ -7,6 +7,8 @@ import "forge-std/console.sol";
 import "../src/Factory/CourseFactory.sol";
 import "../src/EducatorBadge/OwlearnEducatorBadge.sol";
 import "../src/OwlearnCourse/OwlearnCourse.sol";
+import "../src/OwlearnCourse/Certificates/OwlearnCourseCertificates.sol";
+import "../src/OwlearnCourse/Resources/OwlearnCourseResources.sol";
 import "../src/Proxy/CourseProxy.sol";
 
 contract CourseFactoryScript is Test {
@@ -18,10 +20,12 @@ contract CourseFactoryScript is Test {
     function setUp() public {
         OwlearnEducatorBadge owlearnEducatorBadge = new OwlearnEducatorBadge();
         OwlearnCourse owlearnCourse = new OwlearnCourse();
+        OwlearnCourseResources resourceImplementation = new OwlearnCourseResources();
+        OwlearnCourseCertificates certificateImplementation = new OwlearnCourseCertificates();
         owlearnEducatorBadge.initialize("");
         owlearnEducatorBadge.mintEducatorBadges(alice, 1);
         courseFactory = new OwlearnCourseFactory();
-        courseFactory.initialize(owlearnEducatorBadge, address(owlearnCourse));
+        courseFactory.initialize(owlearnEducatorBadge, address(owlearnCourse),address(resourceImplementation), address(certificateImplementation));
     }
 
     function testCreateCourse() public {

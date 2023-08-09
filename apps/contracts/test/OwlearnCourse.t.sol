@@ -26,6 +26,8 @@ contract OwlearnCourseScript is Test {
         nftURIs.push("s2");
         newNFTURIs.push("s3");
         newNFTURIs.push("s4");
+        OwlearnCourseResources resourceImplementation = new OwlearnCourseResources();
+        OwlearnCourseCertificates certificateImplementation = new OwlearnCourseCertificates();
 
         owlearnCourse = new OwlearnCourse();
         owlearnCourse.initialize(
@@ -36,7 +38,9 @@ contract OwlearnCourseScript is Test {
             address(this), // this contract is the Owner, as it is the one which deploys the contracts
             "s",
             nftURIs,
-            "c"
+            "c",
+            address(resourceImplementation),
+            address(certificateImplementation)
         );
         owlearnCourseCertificates = owlearnCourse.courseCertificates();
         owlearnCourseResources = owlearnCourse.courseResources();
