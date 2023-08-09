@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.12;
 
-import {OwlearnCourseStorage, OwlearnCourseCerticates, OwlearnCourseResources} from "./OwlearnCourseStorage.sol";
+import {OwlearnCourseStorage, OwlearnCourseCertificates, OwlearnCourseResources} from "./OwlearnCourseStorage.sol";
 import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "../interfaces/IMintModule.sol";
 
@@ -15,7 +15,7 @@ contract OwlearnCourse is OwnableUpgradeable, OwlearnCourseStorage {
      */
     constructor() {
         // disabling initialisation of implementation contract to prevent attacks
-        _disableInitializers();
+        // _disableInitializers();
     }
 
     /*======================== Initializer Functions ========================*/
@@ -59,13 +59,13 @@ contract OwlearnCourse is OwnableUpgradeable, OwlearnCourseStorage {
         );
 
         string memory certificateName = string(
-            abi.encodePacked("Certificate Badge for", courseName)
+            abi.encodePacked("Certificate Badge for ", courseName)
         );
         string memory certificateSymbol = string(
             abi.encodePacked("CB_", courseSymbol)
         );
         // deploy certificates
-        courseCertificates = new OwlearnCourseCerticates();
+        courseCertificates = new OwlearnCourseCertificates();
         // initialise certificates
         courseCertificates.initialize(
             certificateName,
@@ -131,18 +131,23 @@ contract OwlearnCourse is OwnableUpgradeable, OwlearnCourseStorage {
      * TASK  : Add customization tasks
      */
     function mintCourseCertificate(address to, bytes calldata data) public {
-        IMintModule(mintModule).beforeMint(creatorId, courseId, to, data);
+        if (mintModule != address(0)) {
+            IMintModule(mintModule).beforeMint(creatorId, courseId, to, data);
+        }
 
         uint tokenId = courseCertificates.safeMint(to);
 
-        IMintModule(mintModule).afterMint(
-            creatorId,
-            courseId,
-            to,
-            tokenId,
-            data
-        );
+        if (mintModule != address(0)) {
+            IMintModule(mintModule).afterMint(
+                creatorId,
+                courseId,
+                to,
+                tokenId,
+                data
+            );
+        }
     }
 
     ///@dev All other Certificate functions like Burn or Mint are to be accessed from the main contract
+    ///@dev All other Resource functions like balance and owner are to be accessed from the main contract
 }

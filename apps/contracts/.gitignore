@@ -2,6 +2,7 @@
 cache/
 out/
 artifacts/
+/typechain-types/
 
 # Ignores development broadcast logs
 !/broadcast

@@ -9,7 +9,11 @@ import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/Own
 /// @title OwlearnCourseResources
 /// @notice ERC721A NFT Contract responsible for course resources
 /// @author Dhruv <contact.dhruvagarwal@gmail.com>
-contract OwlearnCourseResources is ERC721AUpgradeable, OwnableUpgradeable, OwlearnCourseResourcesStorage {
+contract OwlearnCourseResources is
+    ERC721AUpgradeable,
+    OwnableUpgradeable,
+    OwlearnCourseResourcesStorage
+{
     using StringsUpgradeable for uint256;
 
     /*========================  Events ======================== */
@@ -33,7 +37,7 @@ contract OwlearnCourseResources is ERC721AUpgradeable, OwnableUpgradeable, Owlea
      */
     constructor() {
         // disabling initialisation of implementation contract to prevent attacks
-        _disableInitializers();
+        // _disableInitializers();
     }
 
     /*======================== Initializer Functions ========================*/
@@ -54,12 +58,12 @@ contract OwlearnCourseResources is ERC721AUpgradeable, OwnableUpgradeable, Owlea
         string memory courseURI,
         string[] memory courseNFTURIs,
         address courseAddress
-    ) external payable initializer {
+    ) external payable initializer initializerERC721A {
         __Ownable_init();
-        __ERC721A_init(courseName, courseSymbol);
+        __ERC721A_init(courseName, courseSymbol); // ---  ERROR : ERC721A__Initializable: contract is not initializing  --- ///
         _transferOwnership(courseCreator);
         courseDetailsURI = courseURI;
-        _initialiseCourse(courseNFTURIs);
+        _initialiseCourse(courseCreator, courseNFTURIs);
         owlearnCourse = courseAddress;
         emit CourseInitialised(courseName, courseSymbol, courseCreator);
     }
@@ -67,7 +71,7 @@ contract OwlearnCourseResources is ERC721AUpgradeable, OwnableUpgradeable, Owlea
     /*======================== Modifier Functions ========================*/
 
     modifier onlyCourse() {
-        require(msg.sender == owlearnCourse, "ONLY COURSE CONTRACT");
+        require(_msgSender() == owlearnCourse, "ONLY COURSE CONTRACT");
         _;
     }
 
@@ -111,6 +115,16 @@ contract OwlearnCourseResources is ERC721AUpgradeable, OwnableUpgradeable, Owlea
         emit CourseResourceBurned(tokenId);
     }
 
+    /**
+     * @dev  Set a  New Course URI for the course incase any info changes
+     * @dev  Default value set in constructor
+     *
+     * @param _uri New Base URI to be set
+     */
+    function setCourseURI(string memory _uri) external onlyOwner {
+        courseDetailsURI = _uri;
+    }
+
     // =============================================================
     //                           INTERNAL FUNCTIONS
     // =============================================================
@@ -120,9 +134,12 @@ contract OwlearnCourseResources is ERC721AUpgradeable, OwnableUpgradeable, Owlea
      *
      * @param courseNFTURIs  courseNFTURIs to be minted , containing info about the particular resource
      */
-    function _initialiseCourse(string[] memory courseNFTURIs) internal {
+    function _initialiseCourse(
+        address courseCreator,
+        string[] memory courseNFTURIs
+    ) internal {
         // mint the initial NFTs
-        _mintandSetURI(msg.sender, courseNFTURIs);
+        _mintandSetURI(courseCreator, courseNFTURIs);
     }
 
     /**
@@ -135,12 +152,13 @@ contract OwlearnCourseResources is ERC721AUpgradeable, OwnableUpgradeable, Owlea
         address to,
         string[] memory tokenURIs
     ) internal virtual {
+        uint totalTokensBefore = totalSupply();
         uint tokenURILength = tokenURIs.length;
 
         _mint(to, tokenURILength);
 
         for (uint i = 0; i < tokenURILength; i++) {
-            _setTokenURI(i, tokenURIs[i]);
+            _setTokenURI(i + totalTokensBefore, tokenURIs[i]);
         }
 
         emit NewCourseResourceMinted(tokenURILength, tokenURIs);

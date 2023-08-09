@@ -1,23 +1,27 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.12;
 
-import {OwlearnCourseCerticatesStorage, CountersUpgradeable} from "./OwlearnCourseCerticatesStorage.sol";
+import {OwlearnCourseCertificatesStorage, CountersUpgradeable} from "./OwlearnCourseCerticatesStorage.sol";
 import {ERC721Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
-/// @title OwlearnCourseCerticates
+/// @title OwlearnCourseCertificates
 /// @notice ERC721 NFT Contract responsible for course certificates with Dynamic URI
 /// @author Dhruv <contact.dhruvagarwal@gmail.com>
-contract OwlearnCourseCerticates is ERC721Upgradeable, OwnableUpgradeable, OwlearnCourseCerticatesStorage {
+contract OwlearnCourseCertificates is
+    ERC721Upgradeable,
+    OwnableUpgradeable,
+    OwlearnCourseCertificatesStorage
+{
     using CountersUpgradeable for CountersUpgradeable.Counter;
-    
+
     /*///////////////////// Constructor //////////////////////////////////*/
     /**
      * @dev Lock implementation contract
      */
     constructor() {
         // disabling initialisation of implementation contract to prevent attacks
-        _disableInitializers();
+        // _disableInitializers();
     }
 
     /*======================== Initializer Functions ========================*/
@@ -34,7 +38,7 @@ contract OwlearnCourseCerticates is ERC721Upgradeable, OwnableUpgradeable, Owlea
         string memory courseCertificateSymbol,
         string memory certificateBaseURI,
         address courseCreator
-    ) external payable initializer  {
+    ) external payable initializer {
         __ERC721_init(courseCertificateName, courseCertificateSymbol);
         __Ownable_init();
         baseURI = certificateBaseURI;

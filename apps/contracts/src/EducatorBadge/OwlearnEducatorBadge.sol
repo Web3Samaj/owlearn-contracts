@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.10;
 
-import {OwnableUpgradeable} from  "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
-import {ERC1155URIStorageUpgradeable} from  "@openzeppelin/contracts-upgradeable/token/ERC1155/extensions/ERC1155URIStorageUpgradeable.sol";
-import {ERC1155BurnableUpgradeable, ERC1155Upgradeable} from  "@openzeppelin/contracts-upgradeable/token/ERC1155/extensions/ERC1155BurnableUpgradeable.sol";
-import {ERC1155SupplyUpgradeable} from  "@openzeppelin/contracts-upgradeable/token/ERC1155/extensions/ERC1155SupplyUpgradeable.sol";
+import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import {ERC1155URIStorageUpgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC1155/extensions/ERC1155URIStorageUpgradeable.sol";
+import {ERC1155BurnableUpgradeable, ERC1155Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC1155/extensions/ERC1155BurnableUpgradeable.sol";
+import {ERC1155SupplyUpgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC1155/extensions/ERC1155SupplyUpgradeable.sol";
 
 /// @title OwlearnEducatorBadge
 /// @notice An ERC1155 Contract as an Educator badge to all the educators on the platform , along with the badge Levels
@@ -22,17 +22,18 @@ contract OwlearnEducatorBadge is
      */
     constructor() {
         // disabling initialisation of implementation contract to prevent attacks
-        _disableInitializers();
+        // _disableInitializers();
     }
 
     /*======================== Initializer Functions ========================*/
-    
+
     /**
      * @dev Intialise the Educator Badge NFT Collections
      *
      * @param token0URI  token URI of the Basic Educator badge id-0
      */
-    function initialize (string memory token0URI) external initializer {
+    function initialize(string memory token0URI) external initializer {
+        __Ownable_init();
         __ERC1155_init("NULL");
         _setURI(1, token0URI);
     }
