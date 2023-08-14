@@ -1,5 +1,11 @@
 # @owlearn/contracts
 
+## 0.2.0
+
+### Minor Changes
+
+- Feature: Made all contracts UUPS upgradeable and added relevant tests to test upgradeability accessc control.
+
 ## 0.1.0
 
 ### Minor Changes
