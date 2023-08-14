@@ -1,7 +1,9 @@
-import { OwlearnId } from "./../typechain-types/src/OwlearnId/OwlearnId";
+import { OwlearnId } from "../typechain-types";
 import { DeployFunction } from "hardhat-deploy/types";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { CONTRACT_NAMES, OwlearnID_Domain_name } from "../config/constants";
+
+const contractName = CONTRACT_NAMES.OwlearnId;
 
 const deployOwlearnId: DeployFunction = async (
   hre: HardhatRuntimeEnvironment
@@ -20,14 +22,14 @@ const deployOwlearnId: DeployFunction = async (
 
   // get contract factory
   const owlearnIdFactory = await ethers.getContractFactory(
-    CONTRACT_NAMES.OwlearnId,
+    contractName,
     deployer
   );
 
   console.log((await ethers.provider.estimateGas({data: owlearnIdFactory.interface.encodeDeploy()})).toString());
 
   console.log(
-    `Deploying ${CONTRACT_NAMES.OwlearnId} on network ${network.name} using address ${deployer.address}`
+    `Deploying ${contractName} on network ${network.name} using address ${deployer.address}`
   );
 
   // deploy
@@ -41,12 +43,12 @@ const deployOwlearnId: DeployFunction = async (
   await owlearnId.deployed();
 
   // Owlearn ID
-  const OwlearnIdArtifact = await getExtendedArtifact(CONTRACT_NAMES.OwlearnId);
-  await save(CONTRACT_NAMES.OwlearnId, {
+  const OwlearnIdArtifact = await getExtendedArtifact(contractName);
+  await save(contractName, {
     ...OwlearnIdArtifact,
     address: owlearnId.address,
   });
-  console.log("OwlearnID Artifacts Saved");
+  console.log(`${contractName} Artifacts Saved`);
 
   // verify contract
   await new Promise((resolve, reject) => {
@@ -71,5 +73,5 @@ const deployOwlearnId: DeployFunction = async (
   });
 };
 
-deployOwlearnId.tags = ["OwlearnId"];
+deployOwlearnId.tags = [contractName];
 export default deployOwlearnId;
