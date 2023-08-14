@@ -24,10 +24,11 @@ export interface OwlearnIdStorageInterface extends utils.Interface {
   functions: {
     "domainNames(string)": FunctionFragment;
     "domainRecords(address)": FunctionFragment;
+    "tld()": FunctionFragment;
   };
 
   getFunction(
-    nameOrSignatureOrTopic: "domainNames" | "domainRecords"
+    nameOrSignatureOrTopic: "domainNames" | "domainRecords" | "tld"
   ): FunctionFragment;
 
   encodeFunctionData(
@@ -38,6 +39,7 @@ export interface OwlearnIdStorageInterface extends utils.Interface {
     functionFragment: "domainRecords",
     values: [PromiseOrValue<string>]
   ): string;
+  encodeFunctionData(functionFragment: "tld", values?: undefined): string;
 
   decodeFunctionResult(
     functionFragment: "domainNames",
@@ -47,6 +49,7 @@ export interface OwlearnIdStorageInterface extends utils.Interface {
     functionFragment: "domainRecords",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "tld", data: BytesLike): Result;
 
   events: {};
 }
@@ -93,6 +96,8 @@ export interface OwlearnIdStorage extends BaseContract {
       arg0: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[string]>;
+
+    tld(overrides?: CallOverrides): Promise<[string]>;
   };
 
   domainNames(
@@ -111,6 +116,8 @@ export interface OwlearnIdStorage extends BaseContract {
     overrides?: CallOverrides
   ): Promise<string>;
 
+  tld(overrides?: CallOverrides): Promise<string>;
+
   callStatic: {
     domainNames(
       arg0: PromiseOrValue<string>,
@@ -127,6 +134,8 @@ export interface OwlearnIdStorage extends BaseContract {
       arg0: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<string>;
+
+    tld(overrides?: CallOverrides): Promise<string>;
   };
 
   filters: {};
@@ -141,6 +150,8 @@ export interface OwlearnIdStorage extends BaseContract {
       arg0: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    tld(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -153,5 +164,7 @@ export interface OwlearnIdStorage extends BaseContract {
       arg0: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
+
+    tld(overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };
 }

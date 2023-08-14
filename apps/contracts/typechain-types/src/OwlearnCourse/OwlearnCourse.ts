@@ -9,6 +9,7 @@ import type {
   CallOverrides,
   ContractTransaction,
   Overrides,
+  PayableOverrides,
   PopulatedTransaction,
   Signer,
   utils,
@@ -35,13 +36,17 @@ export interface OwlearnCourseInterface extends utils.Interface {
     "creatorId()": FunctionFragment;
     "deleteCourseNFT(uint256)": FunctionFragment;
     "editCourseNFT(uint256,string)": FunctionFragment;
+    "initialize(uint256,uint256,string,string,address,string,string[],string,address,address)": FunctionFragment;
     "mintCourseCertificate(address,bytes)": FunctionFragment;
     "mintCourseNFTs(string[])": FunctionFragment;
     "mintModule()": FunctionFragment;
     "owner()": FunctionFragment;
+    "proxiableUUID()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "setAndInitialiseMintModule(address,bytes)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
+    "upgradeTo(address)": FunctionFragment;
+    "upgradeToAndCall(address,bytes)": FunctionFragment;
   };
 
   getFunction(
@@ -52,13 +57,17 @@ export interface OwlearnCourseInterface extends utils.Interface {
       | "creatorId"
       | "deleteCourseNFT"
       | "editCourseNFT"
+      | "initialize"
       | "mintCourseCertificate"
       | "mintCourseNFTs"
       | "mintModule"
       | "owner"
+      | "proxiableUUID"
       | "renounceOwnership"
       | "setAndInitialiseMintModule"
       | "transferOwnership"
+      | "upgradeTo"
+      | "upgradeToAndCall"
   ): FunctionFragment;
 
   encodeFunctionData(
@@ -80,6 +89,21 @@ export interface OwlearnCourseInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
+    functionFragment: "initialize",
+    values: [
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<string>[],
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<string>
+    ]
+  ): string;
+  encodeFunctionData(
     functionFragment: "mintCourseCertificate",
     values: [PromiseOrValue<string>, PromiseOrValue<BytesLike>]
   ): string;
@@ -93,6 +117,10 @@ export interface OwlearnCourseInterface extends utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
+    functionFragment: "proxiableUUID",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "renounceOwnership",
     values?: undefined
   ): string;
@@ -103,6 +131,14 @@ export interface OwlearnCourseInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "transferOwnership",
     values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "upgradeTo",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "upgradeToAndCall",
+    values: [PromiseOrValue<string>, PromiseOrValue<BytesLike>]
   ): string;
 
   decodeFunctionResult(
@@ -123,6 +159,7 @@ export interface OwlearnCourseInterface extends utils.Interface {
     functionFragment: "editCourseNFT",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "mintCourseCertificate",
     data: BytesLike
@@ -133,6 +170,10 @@ export interface OwlearnCourseInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "mintModule", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "proxiableUUID",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
     data: BytesLike
@@ -145,13 +186,54 @@ export interface OwlearnCourseInterface extends utils.Interface {
     functionFragment: "transferOwnership",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "upgradeTo", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "upgradeToAndCall",
+    data: BytesLike
+  ): Result;
 
   events: {
+    "AdminChanged(address,address)": EventFragment;
+    "BeaconUpgraded(address)": EventFragment;
+    "Initialized(uint8)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
+    "Upgraded(address)": EventFragment;
   };
 
+  getEvent(nameOrSignatureOrTopic: "AdminChanged"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "BeaconUpgraded"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Upgraded"): EventFragment;
 }
+
+export interface AdminChangedEventObject {
+  previousAdmin: string;
+  newAdmin: string;
+}
+export type AdminChangedEvent = TypedEvent<
+  [string, string],
+  AdminChangedEventObject
+>;
+
+export type AdminChangedEventFilter = TypedEventFilter<AdminChangedEvent>;
+
+export interface BeaconUpgradedEventObject {
+  beacon: string;
+}
+export type BeaconUpgradedEvent = TypedEvent<
+  [string],
+  BeaconUpgradedEventObject
+>;
+
+export type BeaconUpgradedEventFilter = TypedEventFilter<BeaconUpgradedEvent>;
+
+export interface InitializedEventObject {
+  version: number;
+}
+export type InitializedEvent = TypedEvent<[number], InitializedEventObject>;
+
+export type InitializedEventFilter = TypedEventFilter<InitializedEvent>;
 
 export interface OwnershipTransferredEventObject {
   previousOwner: string;
@@ -164,6 +246,13 @@ export type OwnershipTransferredEvent = TypedEvent<
 
 export type OwnershipTransferredEventFilter =
   TypedEventFilter<OwnershipTransferredEvent>;
+
+export interface UpgradedEventObject {
+  implementation: string;
+}
+export type UpgradedEvent = TypedEvent<[string], UpgradedEventObject>;
+
+export type UpgradedEventFilter = TypedEventFilter<UpgradedEvent>;
 
 export interface OwlearnCourse extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -211,6 +300,20 @@ export interface OwlearnCourse extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    initialize(
+      _creatorId: PromiseOrValue<BigNumberish>,
+      _courseId: PromiseOrValue<BigNumberish>,
+      courseName: PromiseOrValue<string>,
+      courseSymbol: PromiseOrValue<string>,
+      courseCreator: PromiseOrValue<string>,
+      courseURI: PromiseOrValue<string>,
+      courseNFTURIs: PromiseOrValue<string>[],
+      certificateBaseURI: PromiseOrValue<string>,
+      _resourceImplementation: PromiseOrValue<string>,
+      _certificateImplementation: PromiseOrValue<string>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     mintCourseCertificate(
       to: PromiseOrValue<string>,
       data: PromiseOrValue<BytesLike>,
@@ -226,6 +329,8 @@ export interface OwlearnCourse extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
+    proxiableUUID(overrides?: CallOverrides): Promise<[string]>;
+
     renounceOwnership(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
@@ -239,6 +344,17 @@ export interface OwlearnCourse extends BaseContract {
     transferOwnership(
       newOwner: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    upgradeTo(
+      newImplementation: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    upgradeToAndCall(
+      newImplementation: PromiseOrValue<string>,
+      data: PromiseOrValue<BytesLike>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
   };
 
@@ -261,6 +377,20 @@ export interface OwlearnCourse extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  initialize(
+    _creatorId: PromiseOrValue<BigNumberish>,
+    _courseId: PromiseOrValue<BigNumberish>,
+    courseName: PromiseOrValue<string>,
+    courseSymbol: PromiseOrValue<string>,
+    courseCreator: PromiseOrValue<string>,
+    courseURI: PromiseOrValue<string>,
+    courseNFTURIs: PromiseOrValue<string>[],
+    certificateBaseURI: PromiseOrValue<string>,
+    _resourceImplementation: PromiseOrValue<string>,
+    _certificateImplementation: PromiseOrValue<string>,
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   mintCourseCertificate(
     to: PromiseOrValue<string>,
     data: PromiseOrValue<BytesLike>,
@@ -276,6 +406,8 @@ export interface OwlearnCourse extends BaseContract {
 
   owner(overrides?: CallOverrides): Promise<string>;
 
+  proxiableUUID(overrides?: CallOverrides): Promise<string>;
+
   renounceOwnership(
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
@@ -289,6 +421,17 @@ export interface OwlearnCourse extends BaseContract {
   transferOwnership(
     newOwner: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  upgradeTo(
+    newImplementation: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  upgradeToAndCall(
+    newImplementation: PromiseOrValue<string>,
+    data: PromiseOrValue<BytesLike>,
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   callStatic: {
@@ -311,6 +454,20 @@ export interface OwlearnCourse extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    initialize(
+      _creatorId: PromiseOrValue<BigNumberish>,
+      _courseId: PromiseOrValue<BigNumberish>,
+      courseName: PromiseOrValue<string>,
+      courseSymbol: PromiseOrValue<string>,
+      courseCreator: PromiseOrValue<string>,
+      courseURI: PromiseOrValue<string>,
+      courseNFTURIs: PromiseOrValue<string>[],
+      certificateBaseURI: PromiseOrValue<string>,
+      _resourceImplementation: PromiseOrValue<string>,
+      _certificateImplementation: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     mintCourseCertificate(
       to: PromiseOrValue<string>,
       data: PromiseOrValue<BytesLike>,
@@ -326,6 +483,8 @@ export interface OwlearnCourse extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<string>;
 
+    proxiableUUID(overrides?: CallOverrides): Promise<string>;
+
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
     setAndInitialiseMintModule(
@@ -338,9 +497,39 @@ export interface OwlearnCourse extends BaseContract {
       newOwner: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    upgradeTo(
+      newImplementation: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    upgradeToAndCall(
+      newImplementation: PromiseOrValue<string>,
+      data: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<void>;
   };
 
   filters: {
+    "AdminChanged(address,address)"(
+      previousAdmin?: null,
+      newAdmin?: null
+    ): AdminChangedEventFilter;
+    AdminChanged(
+      previousAdmin?: null,
+      newAdmin?: null
+    ): AdminChangedEventFilter;
+
+    "BeaconUpgraded(address)"(
+      beacon?: PromiseOrValue<string> | null
+    ): BeaconUpgradedEventFilter;
+    BeaconUpgraded(
+      beacon?: PromiseOrValue<string> | null
+    ): BeaconUpgradedEventFilter;
+
+    "Initialized(uint8)"(version?: null): InitializedEventFilter;
+    Initialized(version?: null): InitializedEventFilter;
+
     "OwnershipTransferred(address,address)"(
       previousOwner?: PromiseOrValue<string> | null,
       newOwner?: PromiseOrValue<string> | null
@@ -349,6 +538,13 @@ export interface OwlearnCourse extends BaseContract {
       previousOwner?: PromiseOrValue<string> | null,
       newOwner?: PromiseOrValue<string> | null
     ): OwnershipTransferredEventFilter;
+
+    "Upgraded(address)"(
+      implementation?: PromiseOrValue<string> | null
+    ): UpgradedEventFilter;
+    Upgraded(
+      implementation?: PromiseOrValue<string> | null
+    ): UpgradedEventFilter;
   };
 
   estimateGas: {
@@ -371,6 +567,20 @@ export interface OwlearnCourse extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    initialize(
+      _creatorId: PromiseOrValue<BigNumberish>,
+      _courseId: PromiseOrValue<BigNumberish>,
+      courseName: PromiseOrValue<string>,
+      courseSymbol: PromiseOrValue<string>,
+      courseCreator: PromiseOrValue<string>,
+      courseURI: PromiseOrValue<string>,
+      courseNFTURIs: PromiseOrValue<string>[],
+      certificateBaseURI: PromiseOrValue<string>,
+      _resourceImplementation: PromiseOrValue<string>,
+      _certificateImplementation: PromiseOrValue<string>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     mintCourseCertificate(
       to: PromiseOrValue<string>,
       data: PromiseOrValue<BytesLike>,
@@ -386,6 +596,8 @@ export interface OwlearnCourse extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
+    proxiableUUID(overrides?: CallOverrides): Promise<BigNumber>;
+
     renounceOwnership(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
@@ -399,6 +611,17 @@ export interface OwlearnCourse extends BaseContract {
     transferOwnership(
       newOwner: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    upgradeTo(
+      newImplementation: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    upgradeToAndCall(
+      newImplementation: PromiseOrValue<string>,
+      data: PromiseOrValue<BytesLike>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
   };
 
@@ -424,6 +647,20 @@ export interface OwlearnCourse extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
+    initialize(
+      _creatorId: PromiseOrValue<BigNumberish>,
+      _courseId: PromiseOrValue<BigNumberish>,
+      courseName: PromiseOrValue<string>,
+      courseSymbol: PromiseOrValue<string>,
+      courseCreator: PromiseOrValue<string>,
+      courseURI: PromiseOrValue<string>,
+      courseNFTURIs: PromiseOrValue<string>[],
+      certificateBaseURI: PromiseOrValue<string>,
+      _resourceImplementation: PromiseOrValue<string>,
+      _certificateImplementation: PromiseOrValue<string>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
     mintCourseCertificate(
       to: PromiseOrValue<string>,
       data: PromiseOrValue<BytesLike>,
@@ -439,6 +676,8 @@ export interface OwlearnCourse extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    proxiableUUID(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     renounceOwnership(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
@@ -452,6 +691,17 @@ export interface OwlearnCourse extends BaseContract {
     transferOwnership(
       newOwner: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    upgradeTo(
+      newImplementation: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    upgradeToAndCall(
+      newImplementation: PromiseOrValue<string>,
+      data: PromiseOrValue<BytesLike>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
   };
 }

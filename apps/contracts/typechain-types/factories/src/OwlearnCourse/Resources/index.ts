@@ -2,3 +2,4 @@
 /* tslint:disable */
 /* eslint-disable */
 export { OwlearnCourseResources__factory } from "./OwlearnCourseResources__factory";
+export { OwlearnCourseResourcesStorage__factory } from "./OwlearnCourseResourcesStorage__factory";
