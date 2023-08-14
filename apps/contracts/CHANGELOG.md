@@ -1,5 +1,16 @@
 # @owlearn/contracts
 
+## 0.3.0
+
+### Minor Changes
+
+- 1. Add deploy script for OwlearnCourseFactory, OwlearnEducatorBadge, OwlearnCourse, OwlearnCourseCertificates, OwlearnCourseResources and OwlearnId.
+  2. Fix minor issues in upgradeability safety for OwlearnId and OwlearnCourseFactory.
+  3. Installed harhdat-deploy-ethers and prompt for tasks
+  4. Added task to create new Owlearn Course
+  5. Added task to mint Educator badge
+  6. Added task to mint Owlearn ID
+
 ## 0.2.0
 
 ### Minor Changes
