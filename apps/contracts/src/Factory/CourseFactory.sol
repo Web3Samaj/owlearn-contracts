@@ -83,8 +83,8 @@ contract OwlearnCourseFactory is OwnableUpgradeable, CourseFactoryStorage, UUPSU
         string[] memory courseNFTURIs,
         string memory certificateBaseURI
     ) external onlyEducatorBadgeHolder returns (address course, uint courseId) {
-        courseId = totalCourses;
         totalCourses += 1;
+        courseId = totalCourses;
         bytes32 salt = keccak256(abi.encodePacked(courseName, courseSymbol));
         bytes memory initData = abi.encodeWithSelector(OwlearnCourse.initialize.selector, creatorId,
             courseId,
