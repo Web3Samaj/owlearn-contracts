@@ -6,18 +6,23 @@ import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/Own
 import "../interfaces/IMintModule.sol";
 import {CertificateProxy} from "../Proxy/CertificateProxy.sol";
 import {ResourceProxy} from "../Proxy/ResourceProxy.sol";
+import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 /// @title OwlearnCourse
 /// @notice Course Master Contract , Single Point of Entry to create , and manage Course with Resource & Certificates Contract
 /// @author Dhruv <contact.dhruvagarwal@gmail.com>
-contract OwlearnCourse is OwnableUpgradeable, OwlearnCourseStorage {
+contract OwlearnCourse is
+    OwnableUpgradeable,
+    OwlearnCourseStorage,
+    UUPSUpgradeable
+{
     /*///////////////////// Constructor //////////////////////////////////*/
     /**
      * @dev Lock implementation contract
      */
     constructor() {
         // disabling initialisation of implementation contract to prevent attacks
-        // _disableInitializers();
+        _disableInitializers();
     }
 
     /*======================== Initializer Functions ========================*/
@@ -164,6 +169,13 @@ contract OwlearnCourse is OwnableUpgradeable, OwlearnCourseStorage {
             );
         }
     }
+
+    function _authorizeUpgrade(address newImplementation)
+		internal
+		virtual
+		override
+		onlyOwner
+	{}
 
     ///@dev All other Certificate functions like Burn or Mint are to be accessed from the main contract
     ///@dev All other Resource functions like balance and owner are to be accessed from the main contract
