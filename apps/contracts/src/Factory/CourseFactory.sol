@@ -8,12 +8,13 @@ import {CourseFactoryStorage, OwlearnEducatorBadge} from "./CourseFactoryStorage
 
 import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import {CourseProxy} from "../Proxy/CourseProxy.sol";
+import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 /// @title OwlearnCourseFactory
 /// @notice A Factory contract to create a new course with create2 method
 /// @author Dhruv <contact.dhruvagarwal@gmail.com>
 // storage contracts should always be inherited last
-contract OwlearnCourseFactory is OwnableUpgradeable, CourseFactoryStorage {
+contract OwlearnCourseFactory is OwnableUpgradeable, CourseFactoryStorage, UUPSUpgradeable {
     /*///////////////////// Events //////////////////////////////////*/
     event CourseCreated(
         address indexed courseAddress,
@@ -111,4 +112,11 @@ contract OwlearnCourseFactory is OwnableUpgradeable, CourseFactoryStorage {
         );
         return (_newCourse, courseId);
     }
+
+    function _authorizeUpgrade(address newImplementation)
+		internal
+		virtual
+		override
+		onlyOwner
+	{}
 }

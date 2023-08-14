@@ -10,6 +10,7 @@ import "../src/OwlearnCourse/OwlearnCourse.sol";
 import "../src/OwlearnCourse/Certificates/OwlearnCourseCertificates.sol";
 import "../src/OwlearnCourse/Resources/OwlearnCourseResources.sol";
 import "../src/Proxy/CourseProxy.sol";
+import "../src/Proxy/FactoryProxy.sol";
 
 contract CourseFactoryScript is Test {
     OwlearnCourseFactory public courseFactory;
@@ -24,8 +25,9 @@ contract CourseFactoryScript is Test {
         OwlearnCourseCertificates certificateImplementation = new OwlearnCourseCertificates();
         owlearnEducatorBadge.initialize("");
         owlearnEducatorBadge.mintEducatorBadges(alice, 1);
-        courseFactory = new OwlearnCourseFactory();
-        courseFactory.initialize(owlearnEducatorBadge, address(owlearnCourse),address(resourceImplementation), address(certificateImplementation));
+        address courseFactoryImplementation = address(new OwlearnCourseFactory());
+        bytes memory factoryInitCode = abi.encodeWithSelector(OwlearnCourseFactory.initialize.selector, owlearnEducatorBadge, address(owlearnCourse),address(resourceImplementation), address(certificateImplementation));
+        courseFactory = OwlearnCourseFactory(address(new FactoryProxy(courseFactoryImplementation, factoryInitCode)));
     }
 
     function testCreateCourse() public {
@@ -54,7 +56,7 @@ contract CourseFactoryScript is Test {
         startHoax(alice, 1e18);
         nftURIs.push("s1");
         nftURIs.push("s2");
-        (address course, uint courseId) = courseFactory.createCourse(
+        (address course, uint256 courseId) = courseFactory.createCourse(
             1,
             "Python Beginners",
             "PB",
@@ -70,7 +72,7 @@ contract CourseFactoryScript is Test {
     function testFailCreatecourse() public {
         nftURIs.push("s1");
         nftURIs.push("s2");
-        (address course, uint courseId) = courseFactory.createCourse(
+        (address course, uint256 courseId) = courseFactory.createCourse(
             1,
             "Python Beginners",
             "PB",
@@ -78,5 +80,18 @@ contract CourseFactoryScript is Test {
             nftURIs,
             "c"
         );
+    }
+
+    function testUpdradeable() public {
+        address newFactory = address(new OwlearnCourseFactory());
+        courseFactory.upgradeTo(newFactory);
+    }
+
+    function testUpgradeFailOnNonOwner() public {
+        startHoax(alice);
+        // upgrade Factory
+        address newFactory = address(new OwlearnCourseFactory());
+        vm.expectRevert("Ownable: caller is not the owner");
+        courseFactory.upgradeTo(newFactory);
     }
 }
