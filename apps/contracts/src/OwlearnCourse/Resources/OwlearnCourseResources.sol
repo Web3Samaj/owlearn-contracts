@@ -5,6 +5,7 @@ import {ERC721AUpgradeable} from "erc721a-upgradeable/contracts/ERC721AUpgradeab
 import {OwlearnCourseResourcesStorage} from "./OwlearnCourseResourcesStorage.sol";
 import {StringsUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/StringsUpgradeable.sol";
 import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 /// @title OwlearnCourseResources
 /// @notice ERC721A NFT Contract responsible for course resources
@@ -12,7 +13,8 @@ import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/Own
 contract OwlearnCourseResources is
     ERC721AUpgradeable,
     OwnableUpgradeable,
-    OwlearnCourseResourcesStorage
+    OwlearnCourseResourcesStorage,
+    UUPSUpgradeable
 {
     using StringsUpgradeable for uint256;
 
@@ -240,4 +242,11 @@ contract OwlearnCourseResources is
     function setBaseURI(string memory _uri) external onlyOwner {
         baseURI = _uri;
     }
+
+    function _authorizeUpgrade(address newImplementation)
+		internal
+		virtual
+		override
+		onlyOwner
+	{}
 }

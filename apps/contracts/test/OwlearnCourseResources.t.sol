@@ -5,6 +5,7 @@ import "forge-std/Test.sol";
 import "forge-std/console.sol";
 
 import "../src/OwlearnCourse/Resources/OwlearnCourseResources.sol";
+import "../src/Proxy/ResourceProxy.sol";
 
 contract OwlearnCourseResourcesScript is Test {
     address public manager = address(0x0);
@@ -22,15 +23,15 @@ contract OwlearnCourseResourcesScript is Test {
         nftURIs.push("s2");
         newNFTURIs.push("s3");
         newNFTURIs.push("s4");
-        owlearnCourseResources = new OwlearnCourseResources();
-        owlearnCourseResources.initialize(
+        address owlearnCourseResourcesAddress = address(new OwlearnCourseResources());
+        bytes memory initData = abi.encodeWithSelector(owlearnCourseResources.initialize.selector, 
             "Python Beginner",
             "PB",
             alice,
             "s",
             nftURIs,
-            address(this)
-        );
+            address(this));
+        owlearnCourseResources = OwlearnCourseResources(address(new ResourceProxy(owlearnCourseResourcesAddress, initData)));
     }
 
     function testConstructor() public {
@@ -86,5 +87,20 @@ contract OwlearnCourseResourcesScript is Test {
         assertEq(owlearnCourseResources.courseDetailsURI(), "s");
         owlearnCourseResources.setCourseURI("s00");
         assertEq(owlearnCourseResources.courseDetailsURI(), "s00");
+    }
+
+    function testUpdradeable() public {
+        // alice is the owner
+        startHoax(alice);
+        address newOwlearnCourseResources = address(new OwlearnCourseResources());
+        owlearnCourseResources.upgradeTo(newOwlearnCourseResources);
+    }
+
+    function testUpgradeFailOnNonOwner() public {
+        // address(this) is not the owner
+        // upgrade Factory
+        address newOwlearnCourseResources = address(new OwlearnCourseResources());
+        vm.expectRevert("Ownable: caller is not the owner");
+        owlearnCourseResources.upgradeTo(newOwlearnCourseResources);
     }
 }

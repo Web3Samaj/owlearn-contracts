@@ -4,6 +4,7 @@ pragma solidity ^0.8.12;
 import {OwlearnCourseCertificatesStorage, CountersUpgradeable} from "./OwlearnCourseCerticatesStorage.sol";
 import {ERC721Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 /// @title OwlearnCourseCertificates
 /// @notice ERC721 NFT Contract responsible for course certificates with Dynamic URI
@@ -11,7 +12,8 @@ import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/Own
 contract OwlearnCourseCertificates is
     ERC721Upgradeable,
     OwnableUpgradeable,
-    OwlearnCourseCertificatesStorage
+    OwlearnCourseCertificatesStorage,
+    UUPSUpgradeable
 {
     using CountersUpgradeable for CountersUpgradeable.Counter;
 
@@ -133,4 +135,11 @@ contract OwlearnCourseCertificates is
             "The NFT is non transferrable"
         );
     }
+
+    function _authorizeUpgrade(address newImplementation)
+		internal
+		virtual
+		override
+		onlyOwner
+	{}
 }

@@ -13,6 +13,7 @@ import "forge-std/console.sol";
 import {ERC721URIStorageUpgradeable, StringsUpgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721URIStorageUpgradeable.sol";
 import {CountersUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
 import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 /// @title OwlearnID
 /// @notice A namespace NFT contract that mints unique user handles.
@@ -20,7 +21,8 @@ import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/Own
 contract OwlearnId is
     ERC721URIStorageUpgradeable,
     OwnableUpgradeable,
-    OwlearnIdStorage
+    OwlearnIdStorage,
+    UUPSUpgradeable
 {
     // for tracking of tokenIds
     using CountersUpgradeable for CountersUpgradeable.Counter;
@@ -234,4 +236,11 @@ contract OwlearnId is
         (bool success, ) = owner().call{value: amount}("");
         require(success, "Failed to withdraw Matic");
     }
+
+    function _authorizeUpgrade(address newImplementation)
+		internal
+		virtual
+		override
+		onlyOwner
+	{}
 }

@@ -4,18 +4,25 @@ pragma solidity ^0.8.12;
 import {OwlearnCourseStorage, OwlearnCourseCertificates, OwlearnCourseResources} from "./OwlearnCourseStorage.sol";
 import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "../interfaces/IMintModule.sol";
+import {CertificateProxy} from "../Proxy/CertificateProxy.sol";
+import {ResourceProxy} from "../Proxy/ResourceProxy.sol";
+import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 /// @title OwlearnCourse
 /// @notice Course Master Contract , Single Point of Entry to create , and manage Course with Resource & Certificates Contract
 /// @author Dhruv <contact.dhruvagarwal@gmail.com>
-contract OwlearnCourse is OwnableUpgradeable, OwlearnCourseStorage {
+contract OwlearnCourse is
+    OwnableUpgradeable,
+    OwlearnCourseStorage,
+    UUPSUpgradeable
+{
     /*///////////////////// Constructor //////////////////////////////////*/
     /**
      * @dev Lock implementation contract
      */
     constructor() {
         // disabling initialisation of implementation contract to prevent attacks
-        // _disableInitializers();
+        _disableInitializers();
     }
 
     /*======================== Initializer Functions ========================*/
@@ -39,7 +46,9 @@ contract OwlearnCourse is OwnableUpgradeable, OwlearnCourseStorage {
         address courseCreator,
         string memory courseURI,
         string[] memory courseNFTURIs,
-        string memory certificateBaseURI
+        string memory certificateBaseURI,
+        address _resourceImplementation,
+        address _certificateImplementation
     ) external payable initializer {
         // initialise ownable contract
         __Ownable_init();
@@ -47,9 +56,8 @@ contract OwlearnCourse is OwnableUpgradeable, OwlearnCourseStorage {
         _transferOwnership(courseCreator);
         creatorId = _creatorId;
         courseId = _courseId;
-        courseResources = new OwlearnCourseResources();
-        // initialise course resource contract
-        courseResources.initialize(
+        bytes memory resourceInitCode = abi.encodeWithSelector(
+            OwlearnCourseResources.initialize.selector,
             courseName,
             courseSymbol,
             courseCreator,
@@ -57,6 +65,12 @@ contract OwlearnCourse is OwnableUpgradeable, OwlearnCourseStorage {
             courseNFTURIs,
             address(this)
         );
+        courseResources = OwlearnCourseResources(
+            address(
+                new ResourceProxy(_resourceImplementation, resourceInitCode)
+            )
+        );
+        // initialise course resource contract
 
         string memory certificateName = string(
             abi.encodePacked("Certificate Badge for ", courseName)
@@ -64,14 +78,22 @@ contract OwlearnCourse is OwnableUpgradeable, OwlearnCourseStorage {
         string memory certificateSymbol = string(
             abi.encodePacked("CB_", courseSymbol)
         );
-        // deploy certificates
-        courseCertificates = new OwlearnCourseCertificates();
-        // initialise certificates
-        courseCertificates.initialize(
+
+        bytes memory certificateInitCode = abi.encodeWithSelector(
+            OwlearnCourseCertificates.initialize.selector,
             certificateName,
             certificateSymbol,
             certificateBaseURI,
             courseCreator
+        );
+        // deploy and initialize certificates
+        courseCertificates = OwlearnCourseCertificates(
+            address(
+                new CertificateProxy(
+                    _certificateImplementation,
+                    certificateInitCode
+                )
+            )
         );
     }
 
@@ -147,6 +169,13 @@ contract OwlearnCourse is OwnableUpgradeable, OwlearnCourseStorage {
             );
         }
     }
+
+    function _authorizeUpgrade(address newImplementation)
+		internal
+		virtual
+		override
+		onlyOwner
+	{}
 
     ///@dev All other Certificate functions like Burn or Mint are to be accessed from the main contract
     ///@dev All other Resource functions like balance and owner are to be accessed from the main contract

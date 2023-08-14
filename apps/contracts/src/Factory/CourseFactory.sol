@@ -7,12 +7,14 @@ import "../OwlearnCourse/OwlearnCourse.sol";
 import {CourseFactoryStorage, OwlearnEducatorBadge} from "./CourseFactoryStorage.sol";
 
 import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import {CourseProxy} from "../Proxy/CourseProxy.sol";
+import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 /// @title OwlearnCourseFactory
 /// @notice A Factory contract to create a new course with create2 method
 /// @author Dhruv <contact.dhruvagarwal@gmail.com>
 // storage contracts should always be inherited last
-contract OwlearnCourseFactory is OwnableUpgradeable, CourseFactoryStorage {
+contract OwlearnCourseFactory is OwnableUpgradeable, CourseFactoryStorage, UUPSUpgradeable {
     /*///////////////////// Events //////////////////////////////////*/
     event CourseCreated(
         address indexed courseAddress,
@@ -35,10 +37,16 @@ contract OwlearnCourseFactory is OwnableUpgradeable, CourseFactoryStorage {
 
     /*======================== Initializer Functions ========================*/
     function initialize(
-        OwlearnEducatorBadge educatorBadgeNFT
+        OwlearnEducatorBadge educatorBadgeNFT,
+        address _courseImplementation,
+        address _resourceImplementation,
+        address _certificateImplementation
     ) external initializer {
         __Ownable_init();
         educateBadgeNFT = educatorBadgeNFT;
+        courseImplementation = _courseImplementation;
+        resourceImplementation = _resourceImplementation;
+        certificateImplementation = _certificateImplementation;
     }
 
     /*///////////////////// Modifier //////////////////////////////////*/
@@ -78,24 +86,23 @@ contract OwlearnCourseFactory is OwnableUpgradeable, CourseFactoryStorage {
         courseId = totalCourses;
         totalCourses += 1;
         bytes32 salt = keccak256(abi.encodePacked(courseName, courseSymbol));
-        OwlearnCourse _newCourse = new OwlearnCourse{salt: salt}();
-        _newCourse.initialize(
-            creatorId,
+        bytes memory initData = abi.encodeWithSelector(OwlearnCourse.initialize.selector, creatorId,
             courseId,
             courseName,
             courseSymbol,
             msg.sender,
             courseURI,
             courseNFTURIs,
-            certificateBaseURI
-        );
-        // OwlearnCourse _newCourse = _deployContract(bytecode, salt);
+            certificateBaseURI,
+            resourceImplementation,
+            certificateImplementation);
+        address _newCourse = address(new CourseProxy{salt: salt}(courseImplementation, initData));
 
-        getCourse[courseId] = address(_newCourse);
+        getCourse[courseId] = _newCourse;
 
-        allCourses.push(address(_newCourse));
+        allCourses.push(_newCourse);
         emit CourseCreated(
-            address(_newCourse),
+            _newCourse,
             courseName,
             courseSymbol,
             msg.sender,
@@ -103,27 +110,13 @@ contract OwlearnCourseFactory is OwnableUpgradeable, CourseFactoryStorage {
             courseNFTURIs,
             certificateBaseURI
         );
-        return (address(_newCourse), courseId);
+        return (_newCourse, courseId);
     }
 
-    /*///////////////////////////////////////////////////////////////
-                           Internal Functions
-    //////////////////////////////////////////////////////////////*/
-
-    /**
-     * @dev deploy the new Course Contract
-     *
-     * @param bytecode - bytecode of the new Course contract to be deployed
-     * @param salt - Salt for the new Course contract , to add the variation
-     *
-     * @return _newCourse -  the new OwlearnCourse Contract deployed
-     */
-    function _deployContract(
-        bytes memory bytecode,
-        bytes32 salt
-    ) internal returns (OwlearnCourse _newCourse) {
-        assembly {
-            _newCourse := create2(0, add(bytecode, 32), mload(bytecode), salt)
-        }
-    }
+    function _authorizeUpgrade(address newImplementation)
+		internal
+		virtual
+		override
+		onlyOwner
+	{}
 }

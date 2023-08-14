@@ -4,6 +4,7 @@ pragma solidity ^0.8.13;
 import "forge-std/Test.sol";
 import "forge-std/console.sol";
 
+import "../src/Proxy/CourseProxy.sol";
 import "../src/OwlearnCourse/OwlearnCourse.sol";
 import "../src/OwlearnCourse/Resources/OwlearnCourseResources.sol";
 import "../src/OwlearnCourse/Certificates/OwlearnCourseCertificates.sol";
@@ -26,9 +27,11 @@ contract OwlearnCourseScript is Test {
         nftURIs.push("s2");
         newNFTURIs.push("s3");
         newNFTURIs.push("s4");
+        OwlearnCourseResources resourceImplementation = new OwlearnCourseResources();
+        OwlearnCourseCertificates certificateImplementation = new OwlearnCourseCertificates();
 
-        owlearnCourse = new OwlearnCourse();
-        owlearnCourse.initialize(
+        address owlearnCourseImplementation = address(new OwlearnCourse());
+        bytes memory courseInitCode = abi.encodeWithSelector(OwlearnCourse.initialize.selector, 
             1,
             1,
             "Python Beginner",
@@ -36,8 +39,10 @@ contract OwlearnCourseScript is Test {
             address(this), // this contract is the Owner, as it is the one which deploys the contracts
             "s",
             nftURIs,
-            "c"
-        );
+            "c",
+            address(resourceImplementation),
+            address(certificateImplementation));
+        owlearnCourse = OwlearnCourse(address(new CourseProxy(owlearnCourseImplementation, courseInitCode)));
         owlearnCourseCertificates = owlearnCourse.courseCertificates();
         owlearnCourseResources = owlearnCourse.courseResources();
     }
@@ -95,5 +100,37 @@ contract OwlearnCourseScript is Test {
         console.log(owlearnCourseCertificates.symbol());
         console.log(owlearnCourseResources.name());
         console.log(owlearnCourseResources.symbol());
+    }
+
+    function testUpdradeable() public {
+        // upgrade course
+        address newCourse = address(new OwlearnCourse());
+        owlearnCourse.upgradeTo(newCourse);
+
+        // upgrade resources
+        address newResources = address(new OwlearnCourseResources());
+        owlearnCourseResources.upgradeTo(newResources);
+
+        // upgrade certificates
+        address newCertificates = address(new OwlearnCourseCertificates());
+        owlearnCourseCertificates.upgradeTo(newCertificates);
+    }
+
+    function testUpgradeFailOnNonOwner() public {
+        startHoax(alice);
+        // upgrade course
+        address newCourse = address(new OwlearnCourse());
+        vm.expectRevert("Ownable: caller is not the owner");
+        owlearnCourse.upgradeToAndCall(newCourse, "");
+
+        // upgrade resources
+        address newResources = address(new OwlearnCourseResources());
+        vm.expectRevert("Ownable: caller is not the owner");
+        owlearnCourseResources.upgradeToAndCall(newResources, "");
+
+        // upgrade certificates
+        address newCertificates = address(new OwlearnCourseCertificates());
+        vm.expectRevert("Ownable: caller is not the owner");
+        owlearnCourseCertificates.upgradeToAndCall(newCertificates, "");
     }
 }
