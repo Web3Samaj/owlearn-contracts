@@ -8,6 +8,11 @@ import "@openzeppelin/hardhat-upgrades";
 import "hardhat-contract-sizer";
 import "@nomicfoundation/hardhat-foundry";
 import { NetworkUserConfig } from "hardhat/types";
+import "./tasks/CourseFactoryManagement.task";
+import "./tasks/CourseManagement.task";
+import "./tasks/EducatorBadgeManagement.task";
+import "./tasks/OwlearnIdManagement.task";
+import "./tasks/UpgradeabilityManagement.task";
 dotenv.config({ path: "./.env" });
 
 const {
