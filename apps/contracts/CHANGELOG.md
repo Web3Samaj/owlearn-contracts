@@ -1,5 +1,11 @@
 # @owlearn/contracts
 
+## 0.4.0
+
+### Minor Changes
+
+- Deployed Test contracts on mumbai network and verified them.
+
 ## 0.3.0
 
 ### Minor Changes
