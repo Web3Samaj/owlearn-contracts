@@ -22,7 +22,7 @@ contract CourseFactoryStorage {
     }
 
     mapping(uint => address) public getCourse;
-    uint public totalCourses = 1;
+    uint public totalCourses;
     address[] public allCourses;
     address public courseImplementation;
     address public resourceImplementation;
