@@ -54,11 +54,13 @@ export interface OwlearnIdInterface extends utils.Interface {
     "getApproved(uint256)": FunctionFragment;
     "getNameRecord(string)": FunctionFragment;
     "getNameRecordFromAddress(address)": FunctionFragment;
+    "initialize(string)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
     "name()": FunctionFragment;
     "owner()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
     "price(string)": FunctionFragment;
+    "proxiableUUID()": FunctionFragment;
     "register(string)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
@@ -70,6 +72,8 @@ export interface OwlearnIdInterface extends utils.Interface {
     "tokenURI(uint256)": FunctionFragment;
     "transferFrom(address,address,uint256)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
+    "upgradeTo(address)": FunctionFragment;
+    "upgradeToAndCall(address,bytes)": FunctionFragment;
     "withdraw()": FunctionFragment;
   };
 
@@ -85,11 +89,13 @@ export interface OwlearnIdInterface extends utils.Interface {
       | "getApproved"
       | "getNameRecord"
       | "getNameRecordFromAddress"
+      | "initialize"
       | "isApprovedForAll"
       | "name"
       | "owner"
       | "ownerOf"
       | "price"
+      | "proxiableUUID"
       | "register"
       | "renounceOwnership"
       | "safeTransferFrom(address,address,uint256)"
@@ -101,6 +107,8 @@ export interface OwlearnIdInterface extends utils.Interface {
       | "tokenURI"
       | "transferFrom"
       | "transferOwnership"
+      | "upgradeTo"
+      | "upgradeToAndCall"
       | "withdraw"
   ): FunctionFragment;
 
@@ -145,6 +153,10 @@ export interface OwlearnIdInterface extends utils.Interface {
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
+    functionFragment: "initialize",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "isApprovedForAll",
     values: [PromiseOrValue<string>, PromiseOrValue<string>]
   ): string;
@@ -157,6 +169,10 @@ export interface OwlearnIdInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "price",
     values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "proxiableUUID",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "register",
@@ -209,6 +225,14 @@ export interface OwlearnIdInterface extends utils.Interface {
     functionFragment: "transferOwnership",
     values: [PromiseOrValue<string>]
   ): string;
+  encodeFunctionData(
+    functionFragment: "upgradeTo",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "upgradeToAndCall",
+    values: [PromiseOrValue<string>, PromiseOrValue<BytesLike>]
+  ): string;
   encodeFunctionData(functionFragment: "withdraw", values?: undefined): string;
 
   decodeFunctionResult(
@@ -245,6 +269,7 @@ export interface OwlearnIdInterface extends utils.Interface {
     functionFragment: "getNameRecordFromAddress",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "isApprovedForAll",
     data: BytesLike
@@ -253,6 +278,10 @@ export interface OwlearnIdInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "price", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "proxiableUUID",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "register", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
@@ -285,26 +314,50 @@ export interface OwlearnIdInterface extends utils.Interface {
     functionFragment: "transferOwnership",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "upgradeTo", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "upgradeToAndCall",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
 
   events: {
+    "AdminChanged(address,address)": EventFragment;
     "Approval(address,address,uint256)": EventFragment;
     "ApprovalForAll(address,address,bool)": EventFragment;
     "BatchMetadataUpdate(uint256,uint256)": EventFragment;
+    "BeaconUpgraded(address)": EventFragment;
+    "Initialized(uint8)": EventFragment;
     "MetadataUpdate(uint256)": EventFragment;
     "OwlIdRegistered(address,string,uint256)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
+    "Upgraded(address)": EventFragment;
   };
 
+  getEvent(nameOrSignatureOrTopic: "AdminChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "BatchMetadataUpdate"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "BeaconUpgraded"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "MetadataUpdate"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwlIdRegistered"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Upgraded"): EventFragment;
 }
+
+export interface AdminChangedEventObject {
+  previousAdmin: string;
+  newAdmin: string;
+}
+export type AdminChangedEvent = TypedEvent<
+  [string, string],
+  AdminChangedEventObject
+>;
+
+export type AdminChangedEventFilter = TypedEventFilter<AdminChangedEvent>;
 
 export interface ApprovalEventObject {
   owner: string;
@@ -341,6 +394,23 @@ export type BatchMetadataUpdateEvent = TypedEvent<
 
 export type BatchMetadataUpdateEventFilter =
   TypedEventFilter<BatchMetadataUpdateEvent>;
+
+export interface BeaconUpgradedEventObject {
+  beacon: string;
+}
+export type BeaconUpgradedEvent = TypedEvent<
+  [string],
+  BeaconUpgradedEventObject
+>;
+
+export type BeaconUpgradedEventFilter = TypedEventFilter<BeaconUpgradedEvent>;
+
+export interface InitializedEventObject {
+  version: number;
+}
+export type InitializedEvent = TypedEvent<[number], InitializedEventObject>;
+
+export type InitializedEventFilter = TypedEventFilter<InitializedEvent>;
 
 export interface MetadataUpdateEventObject {
   _tokenId: BigNumber;
@@ -387,6 +457,13 @@ export type TransferEvent = TypedEvent<
 >;
 
 export type TransferEventFilter = TypedEventFilter<TransferEvent>;
+
+export interface UpgradedEventObject {
+  implementation: string;
+}
+export type UpgradedEvent = TypedEvent<[string], UpgradedEventObject>;
+
+export type UpgradedEventFilter = TypedEventFilter<UpgradedEvent>;
 
 export interface OwlearnId extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -454,7 +531,7 @@ export interface OwlearnId extends BaseContract {
     ): Promise<[string]>;
 
     getNameRecord(
-      name: PromiseOrValue<string>,
+      _username: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[OwlearnIdStorage.RecordStructOutput]>;
 
@@ -462,6 +539,11 @@ export interface OwlearnId extends BaseContract {
       user: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[string]>;
+
+    initialize(
+      _tld: PromiseOrValue<string>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     isApprovedForAll(
       owner: PromiseOrValue<string>,
@@ -479,12 +561,14 @@ export interface OwlearnId extends BaseContract {
     ): Promise<[string]>;
 
     price(
-      name: PromiseOrValue<string>,
+      _username: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[BigNumber] & { amount: BigNumber }>;
 
+    proxiableUUID(overrides?: CallOverrides): Promise<[string]>;
+
     register(
-      name: PromiseOrValue<string>,
+      _username: PromiseOrValue<string>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -539,6 +623,17 @@ export interface OwlearnId extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    upgradeTo(
+      newImplementation: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    upgradeToAndCall(
+      newImplementation: PromiseOrValue<string>,
+      data: PromiseOrValue<BytesLike>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     withdraw(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
@@ -583,7 +678,7 @@ export interface OwlearnId extends BaseContract {
   ): Promise<string>;
 
   getNameRecord(
-    name: PromiseOrValue<string>,
+    _username: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<OwlearnIdStorage.RecordStructOutput>;
 
@@ -591,6 +686,11 @@ export interface OwlearnId extends BaseContract {
     user: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<string>;
+
+  initialize(
+    _tld: PromiseOrValue<string>,
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   isApprovedForAll(
     owner: PromiseOrValue<string>,
@@ -608,12 +708,14 @@ export interface OwlearnId extends BaseContract {
   ): Promise<string>;
 
   price(
-    name: PromiseOrValue<string>,
+    _username: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
+  proxiableUUID(overrides?: CallOverrides): Promise<string>;
+
   register(
-    name: PromiseOrValue<string>,
+    _username: PromiseOrValue<string>,
     overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -668,6 +770,17 @@ export interface OwlearnId extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  upgradeTo(
+    newImplementation: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  upgradeToAndCall(
+    newImplementation: PromiseOrValue<string>,
+    data: PromiseOrValue<BytesLike>,
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   withdraw(
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
@@ -712,7 +825,7 @@ export interface OwlearnId extends BaseContract {
     ): Promise<string>;
 
     getNameRecord(
-      name: PromiseOrValue<string>,
+      _username: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<OwlearnIdStorage.RecordStructOutput>;
 
@@ -720,6 +833,11 @@ export interface OwlearnId extends BaseContract {
       user: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<string>;
+
+    initialize(
+      _tld: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     isApprovedForAll(
       owner: PromiseOrValue<string>,
@@ -737,12 +855,14 @@ export interface OwlearnId extends BaseContract {
     ): Promise<string>;
 
     price(
-      name: PromiseOrValue<string>,
+      _username: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    proxiableUUID(overrides?: CallOverrides): Promise<string>;
+
     register(
-      name: PromiseOrValue<string>,
+      _username: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -795,10 +915,30 @@ export interface OwlearnId extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    upgradeTo(
+      newImplementation: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    upgradeToAndCall(
+      newImplementation: PromiseOrValue<string>,
+      data: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     withdraw(overrides?: CallOverrides): Promise<void>;
   };
 
   filters: {
+    "AdminChanged(address,address)"(
+      previousAdmin?: null,
+      newAdmin?: null
+    ): AdminChangedEventFilter;
+    AdminChanged(
+      previousAdmin?: null,
+      newAdmin?: null
+    ): AdminChangedEventFilter;
+
     "Approval(address,address,uint256)"(
       owner?: PromiseOrValue<string> | null,
       approved?: PromiseOrValue<string> | null,
@@ -829,6 +969,16 @@ export interface OwlearnId extends BaseContract {
       _fromTokenId?: null,
       _toTokenId?: null
     ): BatchMetadataUpdateEventFilter;
+
+    "BeaconUpgraded(address)"(
+      beacon?: PromiseOrValue<string> | null
+    ): BeaconUpgradedEventFilter;
+    BeaconUpgraded(
+      beacon?: PromiseOrValue<string> | null
+    ): BeaconUpgradedEventFilter;
+
+    "Initialized(uint8)"(version?: null): InitializedEventFilter;
+    Initialized(version?: null): InitializedEventFilter;
 
     "MetadataUpdate(uint256)"(_tokenId?: null): MetadataUpdateEventFilter;
     MetadataUpdate(_tokenId?: null): MetadataUpdateEventFilter;
@@ -863,6 +1013,13 @@ export interface OwlearnId extends BaseContract {
       to?: PromiseOrValue<string> | null,
       tokenId?: PromiseOrValue<BigNumberish> | null
     ): TransferEventFilter;
+
+    "Upgraded(address)"(
+      implementation?: PromiseOrValue<string> | null
+    ): UpgradedEventFilter;
+    Upgraded(
+      implementation?: PromiseOrValue<string> | null
+    ): UpgradedEventFilter;
   };
 
   estimateGas: {
@@ -899,13 +1056,18 @@ export interface OwlearnId extends BaseContract {
     ): Promise<BigNumber>;
 
     getNameRecord(
-      name: PromiseOrValue<string>,
+      _username: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     getNameRecordFromAddress(
       user: PromiseOrValue<string>,
       overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    initialize(
+      _tld: PromiseOrValue<string>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     isApprovedForAll(
@@ -924,12 +1086,14 @@ export interface OwlearnId extends BaseContract {
     ): Promise<BigNumber>;
 
     price(
-      name: PromiseOrValue<string>,
+      _username: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    proxiableUUID(overrides?: CallOverrides): Promise<BigNumber>;
+
     register(
-      name: PromiseOrValue<string>,
+      _username: PromiseOrValue<string>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -984,6 +1148,17 @@ export interface OwlearnId extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    upgradeTo(
+      newImplementation: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    upgradeToAndCall(
+      newImplementation: PromiseOrValue<string>,
+      data: PromiseOrValue<BytesLike>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     withdraw(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
@@ -1027,13 +1202,18 @@ export interface OwlearnId extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     getNameRecord(
-      name: PromiseOrValue<string>,
+      _username: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     getNameRecordFromAddress(
       user: PromiseOrValue<string>,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    initialize(
+      _tld: PromiseOrValue<string>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     isApprovedForAll(
@@ -1052,12 +1232,14 @@ export interface OwlearnId extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     price(
-      name: PromiseOrValue<string>,
+      _username: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    proxiableUUID(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     register(
-      name: PromiseOrValue<string>,
+      _username: PromiseOrValue<string>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1110,6 +1292,17 @@ export interface OwlearnId extends BaseContract {
     transferOwnership(
       newOwner: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    upgradeTo(
+      newImplementation: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    upgradeToAndCall(
+      newImplementation: PromiseOrValue<string>,
+      data: PromiseOrValue<BytesLike>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     withdraw(

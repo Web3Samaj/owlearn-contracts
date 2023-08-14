@@ -2,3 +2,4 @@
 /* tslint:disable */
 /* eslint-disable */
 export type { OwlearnCourseResources } from "./OwlearnCourseResources";
+export type { OwlearnCourseResourcesStorage } from "./OwlearnCourseResourcesStorage";

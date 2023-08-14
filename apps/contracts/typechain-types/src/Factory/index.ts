@@ -3,3 +3,4 @@
 /* eslint-disable */
 import type * as courseFactorySol from "./CourseFactory.sol";
 export type { courseFactorySol };
+export type { CourseFactoryStorage } from "./CourseFactoryStorage";

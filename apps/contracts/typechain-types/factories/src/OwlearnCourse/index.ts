@@ -3,5 +3,5 @@
 /* eslint-disable */
 export * as certificates from "./Certificates";
 export * as resources from "./Resources";
-export { Certificates__factory } from "./Certificates__factory";
 export { OwlearnCourse__factory } from "./OwlearnCourse__factory";
+export { OwlearnCourseStorage__factory } from "./OwlearnCourseStorage__factory";
