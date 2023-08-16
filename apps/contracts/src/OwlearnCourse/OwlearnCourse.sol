@@ -97,7 +97,7 @@ contract OwlearnCourse is
         );
     }
 
-    /*======================== Resource Functions ========================*/
+    /*======================== Module Functions ========================*/
 
     function setAndInitialiseMintModule(
         address _mintModule,
