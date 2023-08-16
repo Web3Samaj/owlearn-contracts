@@ -75,7 +75,7 @@ contract OwlearnCourse is OwnableUpgradeable, OwlearnCourseStorage {
         );
     }
 
-    /*======================== Resource Functions ========================*/
+    /*======================== Module Functions ========================*/
 
     function setAndInitialiseMintModule(
         address _mintModule,
