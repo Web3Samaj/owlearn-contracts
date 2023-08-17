@@ -11,16 +11,16 @@ import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Ini
 /// @notice Add Call restricitions , which contract can actually call these
 /// @notice I have currently added a very dumb approach for the constructor and intialiser , just to add a Course Modifier , it's Okay for a go-to-market for now
 abstract contract OwlearnModuleBase is Initializable, OwlearnModuleBaseStorage {
-    /*======================== Constructor Functions ========================*/
+    // /*======================== Constructor Functions ========================*/
 
-    /**
-     * @dev Intialise the Module with basic contract Data Initialiser
-     *
-     * @param _course  Course Contract address for which the Module is minted for
-     */
-    function initialize(address _course) external initializer {
-        owlearnCourse = _course;
-    }
+    // /**
+    //  * @dev Intialise the Module with basic contract Data Initialiser
+    //  *
+    //  * @param _course  Course Contract address for which the Module is minted for
+    //  */
+    // function initialize(address _course) external initializer {
+    //     owlearnCourse = _course;
+    // }
 
     /*======================== Modifier Functions ========================*/
 
