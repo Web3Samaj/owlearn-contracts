@@ -2,14 +2,15 @@
 pragma solidity ^0.8.12;
 
 import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import {OwlearnModuleRegisteryStorage} from "./OwlearnModuleRegisteryStorage.sol";
 
 /// @title OwlearnModuleRegistery
 /// @notice Module registery responsible for keeping track on whitelisted Modules
 /// @author Dhruv <contact.dhruvagarwal@gmail.com>
-contract OwlearnModuleRegistery is OwnableUpgradeable {
-    /*///////////////////// Mappings //////////////////////////////////*/
-    mapping(address => bool) public getWhitelistedModules;
-
+contract OwlearnModuleRegistery is
+    OwnableUpgradeable,
+    OwlearnModuleRegisteryStorage
+{
     /*///////////////////// Constructor //////////////////////////////////*/
     /**
      * @dev Lock implementation contract
