@@ -9,7 +9,11 @@ import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/Own
 /// @title OwlearnCourseResources
 /// @notice ERC721A NFT Contract responsible for course resources
 /// @author Dhruv <contact.dhruvagarwal@gmail.com>
-contract OwlearnCourseResources is ERC721AUpgradeable, OwnableUpgradeable, OwlearnCourseResourcesStorage {
+contract OwlearnCourseResources is
+    ERC721AUpgradeable,
+    OwnableUpgradeable,
+    OwlearnCourseResourcesStorage
+{
     using StringsUpgradeable for uint256;
 
     /*========================  Events ======================== */
