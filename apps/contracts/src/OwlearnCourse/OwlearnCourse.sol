@@ -59,8 +59,7 @@ contract OwlearnCourse is
         creatorId = _creatorId;
         courseId = _courseId;
         // Module registery
-        _moduleRegistery = OwlearnModuleRegistery(moduleRegisteryAddress);
-
+        moduleRegistery = OwlearnModuleRegistery(moduleRegisteryAddress);
         bytes memory resourceInitCode = abi.encodeWithSelector(
             OwlearnCourseResources.initialize.selector,
             courseName,
@@ -115,7 +114,7 @@ contract OwlearnCourse is
         bytes calldata data
     ) external onlyOwner {
         require(
-            _moduleRegistery.getWhitelistedModules[_mintModule],
+            moduleRegistery.getWhitelistedModules(_mintModule),
             "MODULE NOT WHITELISTED"
         );
         mintModule = _mintModule;

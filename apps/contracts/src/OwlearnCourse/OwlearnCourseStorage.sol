@@ -12,7 +12,7 @@ abstract contract OwlearnCourseStorage {
 
     OwlearnCourseResources public courseResources;
 
-    OwlearnModuleRegistery private _moduleRegistery;
+    OwlearnModuleRegistery public moduleRegistery;
 
     /*======================== State Variables ========================*/
 

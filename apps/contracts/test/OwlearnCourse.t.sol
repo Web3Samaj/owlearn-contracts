@@ -31,7 +31,8 @@ contract OwlearnCourseScript is Test {
         OwlearnCourseCertificates certificateImplementation = new OwlearnCourseCertificates();
 
         address owlearnCourseImplementation = address(new OwlearnCourse());
-        bytes memory courseInitCode = abi.encodeWithSelector(OwlearnCourse.initialize.selector, 
+        bytes memory courseInitCode = abi.encodeWithSelector(
+            OwlearnCourse.initialize.selector,
             1,
             1,
             "Python Beginner",
@@ -41,8 +42,13 @@ contract OwlearnCourseScript is Test {
             nftURIs,
             "c",
             address(resourceImplementation),
-            address(certificateImplementation));
-        owlearnCourse = OwlearnCourse(address(new CourseProxy(owlearnCourseImplementation, courseInitCode)));
+            address(certificateImplementation)
+        );
+        owlearnCourse = OwlearnCourse(
+            address(
+                new CourseProxy(owlearnCourseImplementation, courseInitCode)
+            )
+        );
         owlearnCourseCertificates = owlearnCourse.courseCertificates();
         owlearnCourseResources = owlearnCourse.courseResources();
     }
@@ -133,4 +139,12 @@ contract OwlearnCourseScript is Test {
         vm.expectRevert("Ownable: caller is not the owner");
         owlearnCourseCertificates.upgradeToAndCall(newCertificates, "");
     }
+
+    function testSetModule() public {}
+
+    function testFailSetModuleNonOwner() public {}
+
+    function testFailSetModuleNotWhitelisted() public {}
+
+    function testMintCertificateWithModule() public {}
 }

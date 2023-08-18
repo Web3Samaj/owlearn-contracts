@@ -22,10 +22,10 @@ abstract contract OwlearnModuleBase is Initializable, OwlearnModuleBaseStorage {
 
     /*======================== Modifier Functions ========================*/
 
-    modifier onlyCourse() {
-        require(msg.sender == owlearnCourse, "ONLY COURSE");
-        _;
-    }
+    // modifier onlyCourse() {
+    //     require(msg.sender == owlearnCourse, "ONLY COURSE");
+    //     _;
+    // }
 
     /*======================== External Virtual Functions ========================*/
 
@@ -40,7 +40,7 @@ abstract contract OwlearnModuleBase is Initializable, OwlearnModuleBaseStorage {
         uint creatorId,
         uint courseId,
         bytes calldata data
-    ) external onlyCourse {}
+    ) external {}
 
     /**
      * @dev Hook called before Minting the certificate NFT
@@ -55,7 +55,7 @@ abstract contract OwlearnModuleBase is Initializable, OwlearnModuleBaseStorage {
         uint courseId,
         address recepient,
         bytes calldata data
-    ) external onlyCourse {}
+    ) external {}
 
     /**
      * @dev Hook called After Minting the certificate NFT
@@ -72,5 +72,5 @@ abstract contract OwlearnModuleBase is Initializable, OwlearnModuleBaseStorage {
         address recepient,
         uint certificateTokenId,
         bytes calldata data
-    ) external onlyCourse {}
+    ) external {}
 }

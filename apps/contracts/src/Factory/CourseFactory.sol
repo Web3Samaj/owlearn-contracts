@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.10;
+pragma solidity ^0.8.12;
 
 // Source : https://github.com/Web3Samaj/owlearn-contracts/blob/5-feat-coursefactory/apps/contracts/src/CourseFactory.sol
 
@@ -59,7 +59,7 @@ contract OwlearnCourseFactory is
         courseImplementation = _courseImplementation;
         resourceImplementation = _resourceImplementation;
         certificateImplementation = _certificateImplementation;
-        _moduleRegistery = moduleRegisteryAddress;
+        moduleRegistery = moduleRegisteryAddress;
     }
 
     /*///////////////////// Modifier //////////////////////////////////*/
@@ -111,7 +111,7 @@ contract OwlearnCourseFactory is
             certificateBaseURI,
             resourceImplementation,
             certificateImplementation,
-            _moduleRegistery
+            moduleRegistery
         );
 
         address _newCourse = address(
