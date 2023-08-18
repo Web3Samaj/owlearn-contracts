@@ -56,6 +56,9 @@ contract OwlearnCourseFactory is
     ) external initializer {
         __Ownable_init();
         educateBadgeNFT = educatorBadgeNFT;
+        courseImplementation = _courseImplementation;
+        resourceImplementation = _resourceImplementation;
+        certificateImplementation = _certificateImplementation;
     }
 
     /*///////////////////// Modifier //////////////////////////////////*/
@@ -105,9 +108,14 @@ contract OwlearnCourseFactory is
             courseURI,
             courseNFTURIs,
             certificateBaseURI,
+            resourceImplementation,
+            certificateImplementation,
             _moduleRegistery
         );
-        // OwlearnCourse _newCourse = _deployContract(bytecode, salt);
+
+        address _newCourse = address(
+            new CourseProxy{salt: salt}(courseImplementation, initData)
+        );
 
         getCourse[courseId] = _newCourse;
 
