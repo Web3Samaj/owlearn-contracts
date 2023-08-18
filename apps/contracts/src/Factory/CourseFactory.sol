@@ -59,6 +59,7 @@ contract OwlearnCourseFactory is
         courseImplementation = _courseImplementation;
         resourceImplementation = _resourceImplementation;
         certificateImplementation = _certificateImplementation;
+        _moduleRegistery = moduleRegisteryAddress;
     }
 
     /*///////////////////// Modifier //////////////////////////////////*/
