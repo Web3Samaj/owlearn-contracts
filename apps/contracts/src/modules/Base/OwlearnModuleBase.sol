@@ -7,9 +7,7 @@ import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Ini
 /// @title MintModuleBase
 /// @notice Base Module Contract for Owlearn Mint Module
 /// @author Dhruv <contact.dhruvagarwal@gmail.com>
-/// @notice Need to whitelist Modules
 /// @notice Add Call restricitions , which contract can actually call these
-/// @notice I have currently added a very dumb approach for the constructor and intialiser , just to add a Course Modifier , it's Okay for a go-to-market for now
 abstract contract OwlearnModuleBase is Initializable, OwlearnModuleBaseStorage {
     // /*======================== Constructor Functions ========================*/
 

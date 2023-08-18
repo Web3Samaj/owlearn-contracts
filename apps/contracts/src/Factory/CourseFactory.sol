@@ -40,6 +40,13 @@ contract OwlearnCourseFactory is
     }
 
     /*======================== Initializer Functions ========================*/
+
+    /**
+     * @dev create a new course by deploying a Course Contract
+     *
+     * @param educatorBadgeNFT - Educator Badge NFT contract address
+     * @param moduleRegisteryAddress - Module Whitelisting registery
+     */
     function initialize(
         OwlearnEducatorBadge educatorBadgeNFT,
         address _courseImplementation,

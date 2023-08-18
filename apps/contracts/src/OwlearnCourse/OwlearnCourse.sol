@@ -104,6 +104,12 @@ contract OwlearnCourse is
 
     /*======================== Module Functions ========================*/
 
+    /**
+     * @dev Set a new mint Module & Initilaise it from the mint module contract
+     *
+     * @param _mintModule  mint Module address to be set
+     * @param data User data containing extra info to the mintModule Initialise functions
+     */
     function setAndInitialiseMintModule(
         address _mintModule,
         bytes calldata data
@@ -120,6 +126,9 @@ contract OwlearnCourse is
         );
     }
 
+    /**
+     * @dev disable the mint module by reassigning it to address(0)
+     */
     function disableModule() external onlyOwner {
         mintModule = address(0);
     }
@@ -161,7 +170,6 @@ contract OwlearnCourse is
     /**
      * @dev  Mint a Course Certificate NFT
      *
-     * Add restrictions using modules
      * TASK  : Add customization tasks
      */
     function mintCourseCertificate(
