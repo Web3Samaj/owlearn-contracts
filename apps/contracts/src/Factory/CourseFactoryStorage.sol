@@ -28,6 +28,7 @@ contract CourseFactoryStorage {
     address public resourceImplementation;
     address public certificateImplementation;
     OwlearnEducatorBadge public educateBadgeNFT;
+    address private _moduleRegistery;
 
     // adding a gap variable to allow future upgrades
     uint256[50] private __gap;

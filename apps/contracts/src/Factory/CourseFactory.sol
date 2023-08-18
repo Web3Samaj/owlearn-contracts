@@ -8,13 +8,17 @@ import {CourseFactoryStorage, OwlearnEducatorBadge} from "./CourseFactoryStorage
 
 import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import {CourseProxy} from "../Proxy/CourseProxy.sol";
-import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 /// @title OwlearnCourseFactory
 /// @notice A Factory contract to create a new course with create2 method
 /// @author Dhruv <contact.dhruvagarwal@gmail.com>
 // storage contracts should always be inherited last
-contract OwlearnCourseFactory is OwnableUpgradeable, CourseFactoryStorage, UUPSUpgradeable {
+contract OwlearnCourseFactory is
+    OwnableUpgradeable,
+    CourseFactoryStorage,
+    UUPSUpgradeable
+{
     /*///////////////////// Events //////////////////////////////////*/
     event CourseCreated(
         address indexed courseAddress,
@@ -40,13 +44,15 @@ contract OwlearnCourseFactory is OwnableUpgradeable, CourseFactoryStorage, UUPSU
         OwlearnEducatorBadge educatorBadgeNFT,
         address _courseImplementation,
         address _resourceImplementation,
-        address _certificateImplementation
+        address _certificateImplementation,
+        address moduleRegisteryAddress
     ) external initializer {
         __Ownable_init();
         educateBadgeNFT = educatorBadgeNFT;
         courseImplementation = _courseImplementation;
         resourceImplementation = _resourceImplementation;
         certificateImplementation = _certificateImplementation;
+        _moduleRegistery = moduleRegisteryAddress;
     }
 
     /*///////////////////// Modifier //////////////////////////////////*/
@@ -86,17 +92,18 @@ contract OwlearnCourseFactory is OwnableUpgradeable, CourseFactoryStorage, UUPSU
         totalCourses += 1;
         courseId = totalCourses;
         bytes32 salt = keccak256(abi.encodePacked(courseName, courseSymbol));
-        bytes memory initData = abi.encodeWithSelector(OwlearnCourse.initialize.selector, creatorId,
+        bytes memory initData = abi.encodeWithSelector(
+            OwlearnCourse.initialize.selector,
+            creatorId,
             courseId,
             courseName,
             courseSymbol,
             msg.sender,
             courseURI,
             courseNFTURIs,
-            certificateBaseURI,
-            resourceImplementation,
-            certificateImplementation);
-        address _newCourse = address(new CourseProxy{salt: salt}(courseImplementation, initData));
+            certificateBaseURI
+        );
+        // OwlearnCourse _newCourse = _deployContract(bytecode, salt);
 
         getCourse[courseId] = _newCourse;
 
@@ -113,10 +120,7 @@ contract OwlearnCourseFactory is OwnableUpgradeable, CourseFactoryStorage, UUPSU
         return (_newCourse, courseId);
     }
 
-    function _authorizeUpgrade(address newImplementation)
-		internal
-		virtual
-		override
-		onlyOwner
-	{}
+    function _authorizeUpgrade(
+        address newImplementation
+    ) internal virtual override onlyOwner {}
 }
