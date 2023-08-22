@@ -31,7 +31,7 @@ interface IMintModule {
         uint courseId,
         address user,
         bytes calldata data
-    ) external;
+    ) external payable;
 
     /**
      * @dev Hook called After Minting the certificate NFT

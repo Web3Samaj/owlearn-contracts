@@ -174,9 +174,14 @@ contract OwlearnCourse is
     function mintCourseCertificate(
         address to,
         bytes calldata data
-    ) public returns (uint tokenId) {
+    ) public payable returns (uint tokenId) {
         if (mintModule != address(0)) {
-            IMintModule(mintModule).beforeMint(creatorId, courseId, to, data);
+            IMintModule(mintModule).beforeMint{value: msg.value}(
+                creatorId,
+                courseId,
+                to,
+                data
+            );
         }
 
         tokenId = courseCertificates.safeMint(to);

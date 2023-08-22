@@ -62,15 +62,26 @@ contract FeeModule is OwlearnModuleBase {
         uint courseId,
         address user,
         bytes calldata data
-    ) external override onlyCourses(courseId) {
+    ) external payable override onlyCourses(courseId) {
         address courseAddress = msg.sender;
         FeeData memory feeData = _feeData[courseAddress];
 
-        IERC20(feeData.currency).safeTransferFrom(
-            user,
-            feeData.recepient,
-            feeData.amount
-        );
+        // If Native currency , then transferred via Call
+        if (feeData.currency == address(0)) {
+            require(msg.value == feeData.amount, "INVALID AMOUNT SENT");
+            (bool success, ) = feeData.recepient.call{value: feeData.amount}(
+                ""
+            );
+            require(success, "TRANSFER FAILED");
+        } else {
+            // Otherwise it will be ERC20 tokens
+            IERC20(feeData.currency).safeTransferFrom(
+                user,
+                feeData.recepient,
+                feeData.amount
+            );
+        }
+
         // Need to add the treasury transfer if present including a Method to store treasury info
     }
 
