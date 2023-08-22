@@ -23,13 +23,13 @@ interface IMintModule {
      *
      * @param creatorId  Course Creator Id
      * @param courseId  Course ID for which the module is being used
-     * @param recepient  Recepeint of the NFT Certificate Mint
+     * @param user  Recepeint of the NFT Certificate Mint
      * @param data External Data  , sent by the USER during the mint Call
      */
     function beforeMint(
         uint creatorId,
         uint courseId,
-        address recepient,
+        address user,
         bytes calldata data
     ) external;
 
