@@ -17,7 +17,7 @@ contract OwlearnModuleRegistery is
      */
     constructor() {
         // disabling initialisation of implementation contract to prevent attacks
-        _disableInitializers();
+        // _disableInitializers();
     }
 
     /*///////////////////// Public functions //////////////////////////////////*/

@@ -9,23 +9,13 @@ import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Ini
 /// @author Dhruv <contact.dhruvagarwal@gmail.com>
 /// @notice Add Call restricitions , which contract can actually call these
 abstract contract OwlearnModuleBase is Initializable, OwlearnModuleBaseStorage {
-    // /*======================== Constructor Functions ========================*/
-
-    // /**
-    //  * @dev Intialise the Module with basic contract Data Initialiser
-    //  *
-    //  * @param _course  Course Contract address for which the Module is minted for
-    //  */
-    // function initialize(address _course) external initializer {
-    //     owlearnCourse = _course;
-    // }
+    /*======================== Constructor Functions ========================*/
+    /// Constructor can be used to set few variables at the time of deploy
 
     /*======================== Modifier Functions ========================*/
-
-    // modifier onlyCourse() {
-    //     require(msg.sender == owlearnCourse, "ONLY COURSE");
-    //     _;
-    // }
+    /// It is upto the User to add modifier to their modules , as they have the freedom to modify it according to them
+    /// But the modules can't be controlled by any entity
+    /// The modules will be audited by the Owlearn Protocol before allowed in the whitelist
 
     /*======================== External Virtual Functions ========================*/
 

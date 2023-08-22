@@ -8,6 +8,7 @@ import "../src/Proxy/CourseProxy.sol";
 import "../src/OwlearnCourse/OwlearnCourse.sol";
 import "../src/OwlearnCourse/Resources/OwlearnCourseResources.sol";
 import "../src/OwlearnCourse/Certificates/OwlearnCourseCertificates.sol";
+import "../src/modules/Registery/OwlearnModuleRegistery.sol";
 
 contract OwlearnCourseScript is Test {
     address public manager = address(0x0);
@@ -15,6 +16,7 @@ contract OwlearnCourseScript is Test {
     address public alice = address(0x1);
     address public john = address(0x2);
     address public clay = address(0x3);
+    address public module = address(0x5);
     OwlearnCourse public owlearnCourse;
     OwlearnCourseCertificates public owlearnCourseCertificates;
     OwlearnCourseResources public owlearnCourseResources;
@@ -29,6 +31,9 @@ contract OwlearnCourseScript is Test {
         newNFTURIs.push("s4");
         OwlearnCourseResources resourceImplementation = new OwlearnCourseResources();
         OwlearnCourseCertificates certificateImplementation = new OwlearnCourseCertificates();
+        OwlearnModuleRegistery moduleRegistery = new OwlearnModuleRegistery();
+        moduleRegistery.initialise();
+        moduleRegistery.whitelistModule(module);
 
         address owlearnCourseImplementation = address(new OwlearnCourse());
         bytes memory courseInitCode = abi.encodeWithSelector(
@@ -42,7 +47,8 @@ contract OwlearnCourseScript is Test {
             nftURIs,
             "c",
             address(resourceImplementation),
-            address(certificateImplementation)
+            address(certificateImplementation),
+            moduleRegistery
         );
         owlearnCourse = OwlearnCourse(
             address(
@@ -140,11 +146,22 @@ contract OwlearnCourseScript is Test {
         owlearnCourseCertificates.upgradeToAndCall(newCertificates, "");
     }
 
-    function testSetModule() public {}
+    function testSetModule() public {
+        bytes memory data;
+        owlearnCourse.setAndInitialiseMintModule(module, data);
+    }
 
-    function testFailSetModuleNonOwner() public {}
+    function testFailSetModuleNonOwner() public {
+        startHoax(alice);
+        bytes memory data;
+        owlearnCourse.setAndInitialiseMintModule(module, data);
+    }
 
-    function testFailSetModuleNotWhitelisted() public {}
+    function testFailSetModuleNotWhitelisted() public {
+        address extraModule = address(0x6);
+        bytes memory data;
+        owlearnCourse.setAndInitialiseMintModule(extraModule, data);
+    }
 
     function testMintCertificateWithModule() public {}
 }
