@@ -4,11 +4,16 @@ pragma solidity ^0.8.13;
 import "forge-std/Test.sol";
 import "forge-std/console.sol";
 
+import "../src/Factory/CourseFactory.sol";
+import "../src/Proxy/FactoryProxy.sol";
 import "../src/Proxy/CourseProxy.sol";
 import "../src/OwlearnCourse/OwlearnCourse.sol";
+import "../src/EducatorBadge/OwlearnEducatorBadge.sol";
+import "../src/Factory/CourseFactory.sol";
 import "../src/OwlearnCourse/Resources/OwlearnCourseResources.sol";
 import "../src/OwlearnCourse/Certificates/OwlearnCourseCertificates.sol";
 import "../src/modules/Registery/OwlearnModuleRegistery.sol";
+import "../src/modules/ModuleExample/FeeModule.sol";
 
 contract OwlearnCourseScript is Test {
     address public manager = address(0x0);
@@ -16,7 +21,7 @@ contract OwlearnCourseScript is Test {
     address public alice = address(0x1);
     address public john = address(0x2);
     address public clay = address(0x3);
-    address public module = address(0x5);
+    address public module;
     OwlearnCourse public owlearnCourse;
     OwlearnCourseCertificates public owlearnCourseCertificates;
     OwlearnCourseResources public owlearnCourseResources;
@@ -31,11 +36,43 @@ contract OwlearnCourseScript is Test {
         newNFTURIs.push("s4");
         OwlearnCourseResources resourceImplementation = new OwlearnCourseResources();
         OwlearnCourseCertificates certificateImplementation = new OwlearnCourseCertificates();
-        OwlearnModuleRegistery moduleRegistery = new OwlearnModuleRegistery();
-        moduleRegistery.initialise();
-        moduleRegistery.whitelistModule(module);
-
         address owlearnCourseImplementation = address(new OwlearnCourse());
+        OwlearnEducatorBadge owlearnEducatorBadge = new OwlearnEducatorBadge();
+        OwlearnCourseFactory courseFactoryImplementation = new OwlearnCourseFactory();
+
+        // deploy the registery
+        OwlearnModuleRegistery moduleRegistery = new OwlearnModuleRegistery();
+        // Initialise
+        moduleRegistery.initialise();
+
+        // setup factory for ModuleBase
+
+        bytes memory factoryInitCode = abi.encodeWithSelector(
+            OwlearnCourseFactory.initialize.selector,
+            owlearnEducatorBadge,
+            address(owlearnCourse),
+            address(resourceImplementation),
+            address(certificateImplementation),
+            address(moduleRegistery)
+        );
+
+        OwlearnCourseFactory courseFactory = OwlearnCourseFactory(
+            address(
+                new FactoryProxy(
+                    address(courseFactoryImplementation),
+                    factoryInitCode
+                )
+            )
+        );
+
+        // Deploying the Module
+        FeeModule feeModule = new FeeModule(address(courseFactory));
+        module = address(feeModule);
+
+        // then the module is whitelisted
+        moduleRegistery.whitelistModule(address(feeModule));
+
+        // deploy the course
         bytes memory courseInitCode = abi.encodeWithSelector(
             OwlearnCourse.initialize.selector,
             1,
