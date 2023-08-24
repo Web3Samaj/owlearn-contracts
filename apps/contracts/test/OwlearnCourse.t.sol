@@ -13,7 +13,7 @@ import "../src/Factory/CourseFactory.sol";
 import "../src/OwlearnCourse/Resources/OwlearnCourseResources.sol";
 import "../src/OwlearnCourse/Certificates/OwlearnCourseCertificates.sol";
 import "../src/modules/Registery/OwlearnModuleRegistery.sol";
-import "../src/modules/ModuleExample/FeeModule.sol";
+import "../src/modules/ModuleExample/FreeModule.sol";
 
 contract OwlearnCourseScript is Test {
     address public manager = address(0x0);
@@ -66,11 +66,11 @@ contract OwlearnCourseScript is Test {
         );
 
         // Deploying the Module
-        FeeModule feeModule = new FeeModule(address(courseFactory));
-        module = address(feeModule);
+        FreeModule freeModule = new FreeModule(address(courseFactory));
+        module = address(freeModule);
 
         // then the module is whitelisted
-        moduleRegistery.whitelistModule(address(feeModule));
+        moduleRegistery.whitelistModule(address(freeModule));
 
         // deploy the course
         bytes memory courseInitCode = abi.encodeWithSelector(
