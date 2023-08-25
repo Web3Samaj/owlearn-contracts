@@ -12,6 +12,7 @@ import "../src/OwlearnCourse/Certificates/OwlearnCourseCertificates.sol";
 import "../src/OwlearnCourse/Resources/OwlearnCourseResources.sol";
 import "../src/Proxy/CourseProxy.sol";
 import "../src/Proxy/FactoryProxy.sol";
+import "../src/Implementation/ImplementationRegistery.sol";
 
 contract CourseFactoryScript is Test {
     OwlearnCourseFactory public courseFactory;
@@ -26,6 +27,7 @@ contract CourseFactoryScript is Test {
         OwlearnCourseResources resourceImplementation = new OwlearnCourseResources();
         OwlearnCourseCertificates certificateImplementation = new OwlearnCourseCertificates();
         OwlearnModuleRegistery moduleRegistery = new OwlearnModuleRegistery();
+        ImplementationRegistery implRegistery = new ImplementationRegistery();
 
         owlearnEducatorBadge.initialize("");
         owlearnEducatorBadge.mintEducatorBadges(alice, 1);
@@ -38,7 +40,8 @@ contract CourseFactoryScript is Test {
             address(owlearnCourse),
             address(resourceImplementation),
             address(certificateImplementation),
-            address(moduleRegistery)
+            address(moduleRegistery),
+            address(implRegistery)
         );
 
         courseFactory = OwlearnCourseFactory(
