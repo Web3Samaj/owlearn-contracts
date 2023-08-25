@@ -133,7 +133,42 @@ contract OwlearnCourseFactory is
         return (_newCourse, courseId);
     }
 
+    /**
+     * @dev function to control or authorize the Upgrade
+     *
+     * @param newImplementation - New Implementation address for the course Factory
+     */
     function _authorizeUpgrade(
         address newImplementation
     ) internal virtual override onlyOwner {}
+
+    function updateEducatorBadge(
+        OwlearnEducatorBadge educatorBadgeNFT
+    ) external onlyOwner {
+        educateBadgeNFT = educatorBadgeNFT;
+    }
+
+    function updateResourceImpl(
+        address _resourceImplementation
+    ) external onlyOwner {
+        resourceImplementation = _resourceImplementation;
+    }
+
+    function updateCertificateImpl(
+        address _certificateImplementation
+    ) external onlyOwner {
+        certificateImplementation = _certificateImplementation;
+    }
+
+    function updateCourseImpl(
+        address _courseImplementation
+    ) external onlyOwner {
+        courseImplementation = _courseImplementation;
+    }
+
+    function updateModuleRegistery(
+        address moduleRegisteryAddress
+    ) external onlyOwner {
+        moduleRegistery = moduleRegisteryAddress;
+    }
 }
