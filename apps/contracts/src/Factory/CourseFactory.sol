@@ -142,30 +142,55 @@ contract OwlearnCourseFactory is
         address newImplementation
     ) internal virtual override onlyOwner {}
 
+    /**
+     * @dev Update the Educator Badge In Case needed
+     *
+     * @param educatorBadgeNFT - new Educator Badge NFT instance
+     */
     function updateEducatorBadge(
         OwlearnEducatorBadge educatorBadgeNFT
     ) external onlyOwner {
         educateBadgeNFT = educatorBadgeNFT;
     }
 
+    /**
+     * @dev Update the New Owlearn Resource Implementation
+     *
+     * @param _resourceImplementation - new updated resource Implementation
+     */
     function updateResourceImpl(
         address _resourceImplementation
     ) external onlyOwner {
         resourceImplementation = _resourceImplementation;
     }
 
+    /**
+     * @dev Update the New Owlearn Certificate Implementation
+     *
+     * @param _certificateImplementation - new updated certificate Implementation
+     */
     function updateCertificateImpl(
         address _certificateImplementation
     ) external onlyOwner {
         certificateImplementation = _certificateImplementation;
     }
 
+    /**
+     * @dev Update the New Owlearn Course Implementation
+     *
+     * @param _courseImplementation - new updated course Implementation
+     */
     function updateCourseImpl(
         address _courseImplementation
     ) external onlyOwner {
         courseImplementation = _courseImplementation;
     }
 
+    /**
+     * @dev Update the New Module Registery
+     *
+     * @param moduleRegisteryAddress - new module registery address
+     */
     function updateModuleRegistery(
         address moduleRegisteryAddress
     ) external onlyOwner {
