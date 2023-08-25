@@ -52,7 +52,8 @@ contract OwlearnCourseFactory is
         address _courseImplementation,
         address _resourceImplementation,
         address _certificateImplementation,
-        address moduleRegisteryAddress
+        address moduleRegisteryAddress,
+        address implRegisteryAddress
     ) external initializer {
         __Ownable_init();
         educateBadgeNFT = educatorBadgeNFT;
@@ -60,6 +61,7 @@ contract OwlearnCourseFactory is
         resourceImplementation = _resourceImplementation;
         certificateImplementation = _certificateImplementation;
         moduleRegistery = moduleRegisteryAddress;
+        implementationRegistery = implRegisteryAddress;
     }
 
     /*///////////////////// Modifier //////////////////////////////////*/
@@ -111,7 +113,8 @@ contract OwlearnCourseFactory is
             certificateBaseURI,
             resourceImplementation,
             certificateImplementation,
-            moduleRegistery
+            moduleRegistery,
+            implementationRegistery
         );
 
         address _newCourse = address(
@@ -195,5 +198,16 @@ contract OwlearnCourseFactory is
         address moduleRegisteryAddress
     ) external onlyOwner {
         moduleRegistery = moduleRegisteryAddress;
+    }
+
+    /**
+     * @dev Update the New Implm Registery
+     *
+     * @param implRegisteryAddress - new Implm registery address
+     */
+    function updateImplmentationRegistery(
+        address implRegisteryAddress
+    ) external onlyOwner {
+        implementationRegistery = implRegisteryAddress;
     }
 }

@@ -6,6 +6,7 @@ import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/Own
 import "../interfaces/IMintModule.sol";
 import {CertificateProxy} from "../Proxy/CertificateProxy.sol";
 import {ResourceProxy} from "../Proxy/ResourceProxy.sol";
+import {ImplementationRegistery} from "../Implementation/ImplementationRegistery.sol";
 import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 /// @title OwlearnCourse
@@ -23,6 +24,14 @@ contract OwlearnCourse is
     constructor() {
         // disabling initialisation of implementation contract to prevent attacks
         _disableInitializers();
+    }
+
+    modifier onlyApprovedImplementation(address newImplementation) {
+        require(
+            implRegistery.getWhitelistedCourseImplementation(newImplementation),
+            "IMPLEMENETATION NOT APPROVED"
+        );
+        _;
     }
 
     /*======================== Initializer Functions ========================*/
@@ -50,7 +59,8 @@ contract OwlearnCourse is
         string memory certificateBaseURI,
         address _resourceImplementation,
         address _certificateImplementation,
-        address moduleRegisteryAddress
+        address moduleRegisteryAddress,
+        address implmRegisteryAddress
     ) external payable initializer {
         // initialise ownable contract
         __Ownable_init();
@@ -60,6 +70,8 @@ contract OwlearnCourse is
         courseId = _courseId;
         // Module registery
         moduleRegistery = OwlearnModuleRegistery(moduleRegisteryAddress);
+        implRegistery = ImplementationRegistery(implmRegisteryAddress);
+
         bytes memory resourceInitCode = abi.encodeWithSelector(
             OwlearnCourseResources.initialize.selector,
             courseName,
@@ -67,7 +79,8 @@ contract OwlearnCourse is
             courseCreator,
             courseURI,
             courseNFTURIs,
-            address(this)
+            address(this),
+            implmRegisteryAddress
         );
         courseResources = OwlearnCourseResources(
             address(
@@ -88,7 +101,8 @@ contract OwlearnCourse is
             certificateName,
             certificateSymbol,
             certificateBaseURI,
-            courseCreator
+            courseCreator,
+            implmRegisteryAddress
         );
         // deploy and initialize certificates
         courseCertificates = OwlearnCourseCertificates(
@@ -200,7 +214,13 @@ contract OwlearnCourse is
 
     function _authorizeUpgrade(
         address newImplementation
-    ) internal virtual override onlyOwner {}
+    )
+        internal
+        virtual
+        override
+        onlyApprovedImplementation(newImplementation)
+        onlyOwner
+    {}
 
     ///@dev All other Certificate functions like Burn or Mint are to be accessed from the main contract
     ///@dev All other Resource functions like balance and owner are to be accessed from the main contract

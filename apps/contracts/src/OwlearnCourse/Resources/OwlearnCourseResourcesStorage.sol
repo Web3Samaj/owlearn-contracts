@@ -1,10 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.12;
 
+import {ImplementationRegistery} from "../../Implementation/ImplementationRegistery.sol";
+
 abstract contract OwlearnCourseResourcesStorage {
     // =============================================================
     //                           STORAGE
     // =============================================================
+    ImplementationRegistery public implRegistery;
 
     string public courseDetailsURI;
     address public owlearnCourse;

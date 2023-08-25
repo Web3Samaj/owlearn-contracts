@@ -5,6 +5,7 @@ import {OwlearnCourseCertificatesStorage, CountersUpgradeable} from "./OwlearnCo
 import {ERC721Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {ImplementationRegistery} from "../../Implementation/ImplementationRegistery.sol";
 
 /// @title OwlearnCourseCertificates
 /// @notice ERC721 NFT Contract responsible for course certificates with Dynamic URI
@@ -39,18 +40,29 @@ contract OwlearnCourseCertificates is
         string memory courseCertificateName,
         string memory courseCertificateSymbol,
         string memory certificateBaseURI,
-        address courseCreator
+        address courseCreator,
+        address implmRegisteryAddress
     ) external payable initializer {
         __ERC721_init(courseCertificateName, courseCertificateSymbol);
         __Ownable_init();
         baseURI = certificateBaseURI;
         manager = msg.sender;
         _transferOwnership(courseCreator);
+        implRegistery = ImplementationRegistery(implmRegisteryAddress);
     }
 
     /*======================== Modifier Functions ========================*/
     modifier onlyManager() {
         require(msg.sender == manager, "ONLY MANAGER AUTHORISED");
+        _;
+    }
+    modifier onlyApprovedImplementation(address newImplementation) {
+        require(
+            implRegistery.getWhitelistedCertificateImplementation(
+                newImplementation
+            ),
+            "IMPLEMENETATION NOT APPROVED"
+        );
         _;
     }
 
@@ -136,10 +148,13 @@ contract OwlearnCourseCertificates is
         );
     }
 
-    function _authorizeUpgrade(address newImplementation)
-		internal
-		virtual
-		override
-		onlyOwner
-	{}
+    function _authorizeUpgrade(
+        address newImplementation
+    )
+        internal
+        virtual
+        override
+        onlyApprovedImplementation(newImplementation)
+        onlyOwner
+    {}
 }
