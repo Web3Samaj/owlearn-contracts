@@ -26,6 +26,7 @@ contract OwlearnCourse is
         _disableInitializers();
     }
 
+    /*======================== Modifier Functions ========================*/
     modifier onlyApprovedImplementation(address newImplementation) {
         require(
             implRegistery.getWhitelistedCourseImplementation(newImplementation),
@@ -47,6 +48,7 @@ contract OwlearnCourse is
      * @param courseNFTURIs  courseNFTURIs to be minted , containing info about the particular resource
      * @param certificateBaseURI   NFT URI , dynamic , off-chain server link , fetching progree & certificates for a Course Learner
      * @param moduleRegisteryAddress Module Registery for the Owlearn Protocol , only set by courseFactory
+     * @param implmRegisteryAddress implm Registery for the Owlearn Protocol , only set by courseFactory
      */
     function initialize(
         uint _creatorId,

@@ -53,6 +53,7 @@ contract OwlearnCourseResources is
      * @param courseURI  courseURI , containing any extra course Info , not to be stored on-chain
      * @param courseNFTURIs  courseNFTURIs to be minted , containing info about the particular resource
      * @param courseAddress Owlearn Course Main Contract, just to add the the onlyCourse Modifier
+     * @param implmRegisteryAddress implm Registery for the Owlearn Protocol , only set by courseFactory
      */
     function initialize(
         string memory courseName,

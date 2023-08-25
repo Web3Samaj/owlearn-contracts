@@ -35,6 +35,7 @@ contract OwlearnCourseCertificates is
      * @param courseCertificateSymbol  Symbol of the Course Certificate, will be the symbol of NFT Collection
      * @param certificateBaseURI  NFT URI , dynamic , off-chain server link , fetching progree & certificates for a Course Learner
      * @param courseCreator  creator of the Course , who will also control the Collection
+     * @param implmRegisteryAddress implm Registery for the Owlearn Protocol , only set by courseFactory
      */
     function initialize(
         string memory courseCertificateName,

@@ -46,6 +46,10 @@ contract OwlearnCourseFactory is
      *
      * @param educatorBadgeNFT - Educator Badge NFT contract address
      * @param moduleRegisteryAddress - Module Whitelisting registery
+     * @param implRegisteryAddress - Implementation Whitelisting registery
+     * @param _courseImplementation -  Course Implementation
+     * @param _resourceImplementation -  Resource Implementation
+     * @param _certificateImplementation -  Certificate Implementation
      */
     function initialize(
         OwlearnEducatorBadge educatorBadgeNFT,
