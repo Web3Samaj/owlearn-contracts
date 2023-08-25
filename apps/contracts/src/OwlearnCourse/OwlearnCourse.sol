@@ -176,6 +176,7 @@ contract OwlearnCourse is
         bytes calldata data
     ) public payable returns (uint tokenId) {
         if (mintModule != address(0)) {
+            // Need to approve the Tokens to this mintModule
             IMintModule(mintModule).beforeMint{value: msg.value}(
                 creatorId,
                 courseId,

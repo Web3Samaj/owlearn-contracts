@@ -5,15 +5,15 @@ import {OwlearnModuleBase} from "../Base/OwlearnModuleBase.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
-struct FeeData {
-    address currency;
-    uint256 amount;
-    address recepient;
-    uint creatorId;
-    uint courseId;
-}
-
 contract FeeModule is OwlearnModuleBase {
+    struct FeeData {
+        address currency;
+        uint256 amount;
+        address recepient;
+        uint creatorId;
+        uint courseId;
+    }
+
     using SafeERC20 for IERC20;
 
     mapping(address => FeeData) internal _feeData;
@@ -101,4 +101,8 @@ contract FeeModule is OwlearnModuleBase {
         uint certificateTokenId,
         bytes calldata data
     ) external override onlyCourses(courseId) {}
+
+    function getFeeData(address course) public view returns (FeeData memory) {
+        return _feeData[course];
+    }
 }
