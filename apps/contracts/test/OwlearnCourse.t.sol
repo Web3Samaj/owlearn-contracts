@@ -14,6 +14,7 @@ import "../src/OwlearnCourse/Resources/OwlearnCourseResources.sol";
 import "../src/OwlearnCourse/Certificates/OwlearnCourseCertificates.sol";
 import "../src/modules/Registery/OwlearnModuleRegistery.sol";
 import "../src/modules/ModuleExample/FreeModule.sol";
+import "../src/Implementation/ImplementationRegistery.sol";
 
 contract OwlearnCourseScript is Test {
     address public manager = address(0x0);
@@ -25,6 +26,7 @@ contract OwlearnCourseScript is Test {
     OwlearnCourse public owlearnCourse;
     OwlearnCourseCertificates public owlearnCourseCertificates;
     OwlearnCourseResources public owlearnCourseResources;
+    ImplementationRegistery public implRegistery;
 
     string[] public nftURIs;
     string[] public newNFTURIs;
@@ -39,6 +41,8 @@ contract OwlearnCourseScript is Test {
         address owlearnCourseImplementation = address(new OwlearnCourse());
         OwlearnEducatorBadge owlearnEducatorBadge = new OwlearnEducatorBadge();
         OwlearnCourseFactory courseFactoryImplementation = new OwlearnCourseFactory();
+        implRegistery = new ImplementationRegistery();
+        implRegistery.initialise();
 
         // deploy the registery
         OwlearnModuleRegistery moduleRegistery = new OwlearnModuleRegistery();
@@ -53,7 +57,8 @@ contract OwlearnCourseScript is Test {
             address(owlearnCourse),
             address(resourceImplementation),
             address(certificateImplementation),
-            address(moduleRegistery)
+            address(moduleRegistery),
+            address(implRegistery)
         );
 
         OwlearnCourseFactory courseFactory = OwlearnCourseFactory(
@@ -85,7 +90,8 @@ contract OwlearnCourseScript is Test {
             "c",
             address(resourceImplementation),
             address(certificateImplementation),
-            moduleRegistery
+            moduleRegistery,
+            address(implRegistery)
         );
         owlearnCourse = OwlearnCourse(
             address(
@@ -151,35 +157,67 @@ contract OwlearnCourseScript is Test {
         console.log(owlearnCourseResources.symbol());
     }
 
+    // update
     function testUpdradeable() public {
         // upgrade course
         address newCourse = address(new OwlearnCourse());
+        implRegistery.whitelistCourseImplm(newCourse);
         owlearnCourse.upgradeTo(newCourse);
 
         // upgrade resources
         address newResources = address(new OwlearnCourseResources());
+        implRegistery.whitelistResourceImplm(newResources);
         owlearnCourseResources.upgradeTo(newResources);
 
         // upgrade certificates
         address newCertificates = address(new OwlearnCourseCertificates());
+        implRegistery.whitelistCertificateImplm(newCertificates);
         owlearnCourseCertificates.upgradeTo(newCertificates);
     }
 
-    function testUpgradeFailOnNonOwner() public {
-        startHoax(alice);
+    // update
+    function testFailUpgradeOnNonOwner() public {
         // upgrade course
         address newCourse = address(new OwlearnCourse());
-        vm.expectRevert("Ownable: caller is not the owner");
-        owlearnCourse.upgradeToAndCall(newCourse, "");
+        implRegistery.whitelistCourseImplm(newCourse);
 
         // upgrade resources
         address newResources = address(new OwlearnCourseResources());
-        vm.expectRevert("Ownable: caller is not the owner");
-        owlearnCourseResources.upgradeToAndCall(newResources, "");
+        implRegistery.whitelistResourceImplm(newResources);
 
         // upgrade certificates
         address newCertificates = address(new OwlearnCourseCertificates());
-        vm.expectRevert("Ownable: caller is not the owner");
+        implRegistery.whitelistResourceImplm(newCertificates);
+
+        startHoax(alice);
+        // vm.expectRevert("Ownable: caller is not the owner");
+        owlearnCourse.upgradeToAndCall(newCourse, "");
+
+        // vm.expectRevert("Ownable: caller is not the owner");
+        owlearnCourseResources.upgradeToAndCall(newResources, "");
+
+        // vm.expectRevert("Ownable: caller is not the owner");
+        owlearnCourseCertificates.upgradeToAndCall(newCertificates, "");
+    }
+
+    // update
+    function testFailUpgradeOnNonApproved() public {
+        // upgrade course
+        address newCourse = address(new OwlearnCourse());
+
+        // upgrade resources
+        address newResources = address(new OwlearnCourseResources());
+
+        // upgrade certificates
+        address newCertificates = address(new OwlearnCourseCertificates());
+
+        // vm.expectRevert("Ownable: caller is not the owner");
+        owlearnCourse.upgradeToAndCall(newCourse, "");
+
+        // vm.expectRevert("Ownable: caller is not the owner");
+        owlearnCourseResources.upgradeToAndCall(newResources, "");
+
+        // vm.expectRevert("Ownable: caller is not the owner");
         owlearnCourseCertificates.upgradeToAndCall(newCertificates, "");
     }
 
@@ -199,6 +237,4 @@ contract OwlearnCourseScript is Test {
         bytes memory data;
         owlearnCourse.setAndInitialiseMintModule(extraModule, data);
     }
-
-    function testMintCertificateWithModule() public {}
 }

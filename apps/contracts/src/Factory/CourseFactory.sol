@@ -46,13 +46,18 @@ contract OwlearnCourseFactory is
      *
      * @param educatorBadgeNFT - Educator Badge NFT contract address
      * @param moduleRegisteryAddress - Module Whitelisting registery
+     * @param implRegisteryAddress - Implementation Whitelisting registery
+     * @param _courseImplementation -  Course Implementation
+     * @param _resourceImplementation -  Resource Implementation
+     * @param _certificateImplementation -  Certificate Implementation
      */
     function initialize(
         OwlearnEducatorBadge educatorBadgeNFT,
         address _courseImplementation,
         address _resourceImplementation,
         address _certificateImplementation,
-        address moduleRegisteryAddress
+        address moduleRegisteryAddress,
+        address implRegisteryAddress
     ) external initializer {
         __Ownable_init();
         educateBadgeNFT = educatorBadgeNFT;
@@ -60,6 +65,7 @@ contract OwlearnCourseFactory is
         resourceImplementation = _resourceImplementation;
         certificateImplementation = _certificateImplementation;
         moduleRegistery = moduleRegisteryAddress;
+        implementationRegistery = implRegisteryAddress;
     }
 
     /*///////////////////// Modifier //////////////////////////////////*/
@@ -111,7 +117,8 @@ contract OwlearnCourseFactory is
             certificateBaseURI,
             resourceImplementation,
             certificateImplementation,
-            moduleRegistery
+            moduleRegistery,
+            implementationRegistery
         );
 
         address _newCourse = address(
@@ -133,7 +140,78 @@ contract OwlearnCourseFactory is
         return (_newCourse, courseId);
     }
 
+    /**
+     * @dev function to control or authorize the Upgrade
+     *
+     * @param newImplementation - New Implementation address for the course Factory
+     */
     function _authorizeUpgrade(
         address newImplementation
     ) internal virtual override onlyOwner {}
+
+    /**
+     * @dev Update the Educator Badge In Case needed
+     *
+     * @param educatorBadgeNFT - new Educator Badge NFT instance
+     */
+    function updateEducatorBadge(
+        OwlearnEducatorBadge educatorBadgeNFT
+    ) external onlyOwner {
+        educateBadgeNFT = educatorBadgeNFT;
+    }
+
+    /**
+     * @dev Update the New Owlearn Resource Implementation
+     *
+     * @param _resourceImplementation - new updated resource Implementation
+     */
+    function updateResourceImpl(
+        address _resourceImplementation
+    ) external onlyOwner {
+        resourceImplementation = _resourceImplementation;
+    }
+
+    /**
+     * @dev Update the New Owlearn Certificate Implementation
+     *
+     * @param _certificateImplementation - new updated certificate Implementation
+     */
+    function updateCertificateImpl(
+        address _certificateImplementation
+    ) external onlyOwner {
+        certificateImplementation = _certificateImplementation;
+    }
+
+    /**
+     * @dev Update the New Owlearn Course Implementation
+     *
+     * @param _courseImplementation - new updated course Implementation
+     */
+    function updateCourseImpl(
+        address _courseImplementation
+    ) external onlyOwner {
+        courseImplementation = _courseImplementation;
+    }
+
+    /**
+     * @dev Update the New Module Registery
+     *
+     * @param moduleRegisteryAddress - new module registery address
+     */
+    function updateModuleRegistery(
+        address moduleRegisteryAddress
+    ) external onlyOwner {
+        moduleRegistery = moduleRegisteryAddress;
+    }
+
+    /**
+     * @dev Update the New Implm Registery
+     *
+     * @param implRegisteryAddress - new Implm registery address
+     */
+    function updateImplmentationRegistery(
+        address implRegisteryAddress
+    ) external onlyOwner {
+        implementationRegistery = implRegisteryAddress;
+    }
 }

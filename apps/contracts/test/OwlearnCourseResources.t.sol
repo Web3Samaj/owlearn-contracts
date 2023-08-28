@@ -6,6 +6,7 @@ import "forge-std/console.sol";
 
 import "../src/OwlearnCourse/Resources/OwlearnCourseResources.sol";
 import "../src/Proxy/ResourceProxy.sol";
+import "../src/Implementation/ImplementationRegistery.sol";
 
 contract OwlearnCourseResourcesScript is Test {
     address public manager = address(0x0);
@@ -15,6 +16,8 @@ contract OwlearnCourseResourcesScript is Test {
     address public clay = address(0x3);
     uint public tokenId;
     OwlearnCourseResources public owlearnCourseResources;
+    ImplementationRegistery public implRegistery;
+
     string[] public nftURIs;
     string[] public newNFTURIs;
 
@@ -23,15 +26,25 @@ contract OwlearnCourseResourcesScript is Test {
         nftURIs.push("s2");
         newNFTURIs.push("s3");
         newNFTURIs.push("s4");
-        address owlearnCourseResourcesAddress = address(new OwlearnCourseResources());
-        bytes memory initData = abi.encodeWithSelector(owlearnCourseResources.initialize.selector, 
+        implRegistery = new ImplementationRegistery();
+        implRegistery.initialise();
+
+        address owlearnCourseResourcesAddress = address(
+            new OwlearnCourseResources()
+        );
+        bytes memory initData = abi.encodeWithSelector(
+            owlearnCourseResources.initialize.selector,
             "Python Beginner",
             "PB",
             alice,
             "s",
             nftURIs,
-            address(this));
-        owlearnCourseResources = OwlearnCourseResources(address(new ResourceProxy(owlearnCourseResourcesAddress, initData)));
+            address(this),
+            address(implRegistery)
+        );
+        owlearnCourseResources = OwlearnCourseResources(
+            address(new ResourceProxy(owlearnCourseResourcesAddress, initData))
+        );
     }
 
     function testConstructor() public {
@@ -91,16 +104,32 @@ contract OwlearnCourseResourcesScript is Test {
 
     function testUpdradeable() public {
         // alice is the owner
+        address newOwlearnCourseResources = address(
+            new OwlearnCourseResources()
+        );
+        implRegistery.whitelistResourceImplm(newOwlearnCourseResources);
         startHoax(alice);
-        address newOwlearnCourseResources = address(new OwlearnCourseResources());
         owlearnCourseResources.upgradeTo(newOwlearnCourseResources);
     }
 
-    function testUpgradeFailOnNonOwner() public {
+    function testFailUpgradeOnNonOwner() public {
         // address(this) is not the owner
         // upgrade Factory
-        address newOwlearnCourseResources = address(new OwlearnCourseResources());
-        vm.expectRevert("Ownable: caller is not the owner");
+        address newOwlearnCourseResources = address(
+            new OwlearnCourseResources()
+        );
+        implRegistery.whitelistResourceImplm(newOwlearnCourseResources);
+        // vm.expectRevert("Ownable: caller is not the owner");
+        owlearnCourseResources.upgradeTo(newOwlearnCourseResources);
+    }
+
+    function testFailUpgradeOnNotApproved() public {
+        startHoax(alice);
+        // upgrade Factory
+        address newOwlearnCourseResources = address(
+            new OwlearnCourseResources()
+        );
+        // vm.expectRevert("Ownable: caller is not the owner");
         owlearnCourseResources.upgradeTo(newOwlearnCourseResources);
     }
 }

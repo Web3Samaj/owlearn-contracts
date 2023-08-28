@@ -6,6 +6,7 @@ import {OwlearnCourseResourcesStorage} from "./OwlearnCourseResourcesStorage.sol
 import {StringsUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/StringsUpgradeable.sol";
 import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {ImplementationRegistery} from "../../Implementation/ImplementationRegistery.sol";
 
 /// @title OwlearnCourseResources
 /// @notice ERC721A NFT Contract responsible for course resources
@@ -52,6 +53,7 @@ contract OwlearnCourseResources is
      * @param courseURI  courseURI , containing any extra course Info , not to be stored on-chain
      * @param courseNFTURIs  courseNFTURIs to be minted , containing info about the particular resource
      * @param courseAddress Owlearn Course Main Contract, just to add the the onlyCourse Modifier
+     * @param implmRegisteryAddress implm Registery for the Owlearn Protocol , only set by courseFactory
      */
     function initialize(
         string memory courseName,
@@ -59,7 +61,8 @@ contract OwlearnCourseResources is
         address courseCreator,
         string memory courseURI,
         string[] memory courseNFTURIs,
-        address courseAddress
+        address courseAddress,
+        address implmRegisteryAddress
     ) external payable initializer initializerERC721A {
         __Ownable_init();
         __ERC721A_init(courseName, courseSymbol); // ---  ERROR : ERC721A__Initializable: contract is not initializing  --- ///
@@ -67,6 +70,7 @@ contract OwlearnCourseResources is
         courseDetailsURI = courseURI;
         _initialiseCourse(courseCreator, courseNFTURIs);
         owlearnCourse = courseAddress;
+        implRegistery = ImplementationRegistery(implmRegisteryAddress);
         emit CourseInitialised(courseName, courseSymbol, courseCreator);
     }
 
@@ -74,6 +78,16 @@ contract OwlearnCourseResources is
 
     modifier onlyCourse() {
         require(_msgSender() == owlearnCourse, "ONLY COURSE CONTRACT");
+        _;
+    }
+
+    modifier onlyApprovedImplementation(address newImplementation) {
+        require(
+            implRegistery.getWhitelistedResourceImplementation(
+                newImplementation
+            ),
+            "IMPLEMENETATION NOT APPROVED"
+        );
         _;
     }
 
@@ -245,5 +259,11 @@ contract OwlearnCourseResources is
 
     function _authorizeUpgrade(
         address newImplementation
-    ) internal virtual override onlyOwner {}
+    )
+        internal
+        virtual
+        override
+        onlyApprovedImplementation(newImplementation)
+        onlyOwner
+    {}
 }

@@ -2,12 +2,14 @@
 pragma solidity ^0.8.12;
 
 import {CountersUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
+import {ImplementationRegistery} from "../../Implementation/ImplementationRegistery.sol";
 
 abstract contract OwlearnCourseCertificatesStorage {
     // =============================================================
     //                           STORAGE
     // =============================================================
     CountersUpgradeable.Counter internal _tokenIdCounter;
+    ImplementationRegistery public implRegistery;
 
     string public baseURI;
 

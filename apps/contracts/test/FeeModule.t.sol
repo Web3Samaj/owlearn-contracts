@@ -13,6 +13,7 @@ import "../src/Factory/CourseFactory.sol";
 import "../src/Proxy/FactoryProxy.sol";
 import "../src/extras/FeeToken.sol";
 import "../src/modules/ModuleExample/FeeModule.sol";
+import "../src/Implementation/ImplementationRegistery.sol";
 
 contract FeeModuleScript is Test {
     string[] public nftURIs;
@@ -29,6 +30,9 @@ contract FeeModuleScript is Test {
         // setup registery
         OwlearnModuleRegistery moduleRegistery = new OwlearnModuleRegistery();
         moduleRegistery.initialise();
+
+        ImplementationRegistery implRegistery = new ImplementationRegistery();
+        implRegistery.initialise();
 
         // setup factory
         OwlearnEducatorBadge owlearnEducatorBadge = new OwlearnEducatorBadge();
@@ -48,7 +52,8 @@ contract FeeModuleScript is Test {
             address(owlearnCourseImplementation),
             address(resourceImplementation),
             address(certificateImplementation),
-            address(moduleRegistery)
+            address(moduleRegistery),
+            address(implRegistery)
         );
 
         courseFactory = OwlearnCourseFactory(

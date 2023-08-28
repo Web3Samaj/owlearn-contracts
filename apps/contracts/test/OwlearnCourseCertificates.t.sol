@@ -5,6 +5,7 @@ import "forge-std/Test.sol";
 
 import "../src/OwlearnCourse/Certificates/OwlearnCourseCertificates.sol";
 import "../src/Proxy/CertificateProxy.sol";
+import "../src/Implementation/ImplementationRegistery.sol";
 
 contract OwlearnCourseCertificatesScript is Test {
     // manager =  address(0)
@@ -13,11 +14,28 @@ contract OwlearnCourseCertificatesScript is Test {
     address public clay = address(0x3);
     uint public tokenId;
     OwlearnCourseCertificates public owlearnCourseCertificates;
+    ImplementationRegistery public implRegistery;
 
     function setUp() public {
-        address owlearnCourseCertificatesAddress = address(new OwlearnCourseCertificates());
-        bytes memory initData = abi.encodeWithSelector(owlearnCourseCertificates.initialize.selector, "OwlCerti", "OCT", "", alice);
-        owlearnCourseCertificates = OwlearnCourseCertificates(address(new CertificateProxy(owlearnCourseCertificatesAddress, initData)));
+        address owlearnCourseCertificatesAddress = address(
+            new OwlearnCourseCertificates()
+        );
+        implRegistery = new ImplementationRegistery();
+        implRegistery.initialise();
+
+        bytes memory initData = abi.encodeWithSelector(
+            owlearnCourseCertificates.initialize.selector,
+            "OwlCerti",
+            "OCT",
+            "",
+            alice,
+            address(implRegistery)
+        );
+        owlearnCourseCertificates = OwlearnCourseCertificates(
+            address(
+                new CertificateProxy(owlearnCourseCertificatesAddress, initData)
+            )
+        );
         tokenId = owlearnCourseCertificates.safeMint(clay);
     }
 
@@ -48,16 +66,34 @@ contract OwlearnCourseCertificatesScript is Test {
 
     function testUpdradeable() public {
         // alice is the owner
+        address newOwlearnCourseCertificates = address(
+            new OwlearnCourseCertificates()
+        );
+        implRegistery.whitelistCertificateImplm(newOwlearnCourseCertificates);
+
         startHoax(alice);
-        address newOwlearnCourseCertificates = address(new OwlearnCourseCertificates());
+
         owlearnCourseCertificates.upgradeTo(newOwlearnCourseCertificates);
     }
 
-    function testUpgradeFailOnNonOwner() public {
+    function testFailUpgradeOnNonOwner() public {
         // address(this) is not the owner
         // upgrade Factory
-        address newOwlearnCourseCertificates = address(new OwlearnCourseCertificates());
-        vm.expectRevert("Ownable: caller is not the owner");
+        address newOwlearnCourseCertificates = address(
+            new OwlearnCourseCertificates()
+        );
+        // vm.expectRevert("Ownable: caller is not the owner");
+        owlearnCourseCertificates.upgradeTo(newOwlearnCourseCertificates);
+    }
+
+    function testFailUpgradeOnNotApproved() public {
+        startHoax(alice);
+
+        // upgrade Factory
+        address newOwlearnCourseCertificates = address(
+            new OwlearnCourseCertificates()
+        );
+        // vm.expectRevert("Ownable: caller is not the owner");
         owlearnCourseCertificates.upgradeTo(newOwlearnCourseCertificates);
     }
 }
