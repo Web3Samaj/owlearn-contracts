@@ -6,6 +6,7 @@ import "forge-std/console.sol";
 
 import "../src/Factory/CourseFactory.sol";
 import "../src/EducatorBadge/OwlearnEducatorBadge.sol";
+import "../src/modules/Registery/OwlearnModuleRegistery.sol";
 import "../src/OwlearnCourse/OwlearnCourse.sol";
 import "../src/OwlearnCourse/Certificates/OwlearnCourseCertificates.sol";
 import "../src/OwlearnCourse/Resources/OwlearnCourseResources.sol";
@@ -17,17 +18,34 @@ contract CourseFactoryScript is Test {
     string[] public nftURIs;
     // owner =  alice
     address public alice = address(0x1);
+    address public module = address(0x5);
 
     function setUp() public {
         OwlearnEducatorBadge owlearnEducatorBadge = new OwlearnEducatorBadge();
         OwlearnCourse owlearnCourse = new OwlearnCourse();
         OwlearnCourseResources resourceImplementation = new OwlearnCourseResources();
         OwlearnCourseCertificates certificateImplementation = new OwlearnCourseCertificates();
+        OwlearnModuleRegistery moduleRegistery = new OwlearnModuleRegistery();
+
         owlearnEducatorBadge.initialize("");
         owlearnEducatorBadge.mintEducatorBadges(alice, 1);
-        address courseFactoryImplementation = address(new OwlearnCourseFactory());
-        bytes memory factoryInitCode = abi.encodeWithSelector(OwlearnCourseFactory.initialize.selector, owlearnEducatorBadge, address(owlearnCourse),address(resourceImplementation), address(certificateImplementation));
-        courseFactory = OwlearnCourseFactory(address(new FactoryProxy(courseFactoryImplementation, factoryInitCode)));
+        address courseFactoryImplementation = address(
+            new OwlearnCourseFactory()
+        );
+        bytes memory factoryInitCode = abi.encodeWithSelector(
+            OwlearnCourseFactory.initialize.selector,
+            owlearnEducatorBadge,
+            address(owlearnCourse),
+            address(resourceImplementation),
+            address(certificateImplementation),
+            address(moduleRegistery)
+        );
+
+        courseFactory = OwlearnCourseFactory(
+            address(
+                new FactoryProxy(courseFactoryImplementation, factoryInitCode)
+            )
+        );
     }
 
     function testCreateCourse() public {

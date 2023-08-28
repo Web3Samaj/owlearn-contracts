@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.12;
 
-import {OwlearnCourseStorage, OwlearnCourseCertificates, OwlearnCourseResources} from "./OwlearnCourseStorage.sol";
+import {OwlearnCourseStorage, OwlearnCourseCertificates, OwlearnCourseResources, OwlearnModuleRegistery} from "./OwlearnCourseStorage.sol";
 import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "../interfaces/IMintModule.sol";
 import {CertificateProxy} from "../Proxy/CertificateProxy.sol";
@@ -37,6 +37,7 @@ contract OwlearnCourse is
      * @param courseURI  courseURI , containing any extra course Info , not to be stored on-chain
      * @param courseNFTURIs  courseNFTURIs to be minted , containing info about the particular resource
      * @param certificateBaseURI   NFT URI , dynamic , off-chain server link , fetching progree & certificates for a Course Learner
+     * @param moduleRegisteryAddress Module Registery for the Owlearn Protocol , only set by courseFactory
      */
     function initialize(
         uint _creatorId,
@@ -48,7 +49,8 @@ contract OwlearnCourse is
         string[] memory courseNFTURIs,
         string memory certificateBaseURI,
         address _resourceImplementation,
-        address _certificateImplementation
+        address _certificateImplementation,
+        address moduleRegisteryAddress
     ) external payable initializer {
         // initialise ownable contract
         __Ownable_init();
@@ -56,6 +58,8 @@ contract OwlearnCourse is
         _transferOwnership(courseCreator);
         creatorId = _creatorId;
         courseId = _courseId;
+        // Module registery
+        moduleRegistery = OwlearnModuleRegistery(moduleRegisteryAddress);
         bytes memory resourceInitCode = abi.encodeWithSelector(
             OwlearnCourseResources.initialize.selector,
             courseName,
@@ -97,19 +101,35 @@ contract OwlearnCourse is
         );
     }
 
-    /*======================== Resource Functions ========================*/
+    /*======================== Module Functions ========================*/
 
+    /**
+     * @dev Set a new mint Module & Initilaise it from the mint module contract
+     *
+     * @param _mintModule  mint Module address to be set
+     * @param data User data containing extra info to the mintModule Initialise functions
+     */
     function setAndInitialiseMintModule(
         address _mintModule,
         bytes calldata data
-    ) public onlyOwner {
-        // Need to add a whitelist module check here
+    ) external onlyOwner {
+        require(
+            moduleRegistery.getWhitelistedModules(_mintModule),
+            "MODULE NOT WHITELISTED"
+        );
         mintModule = _mintModule;
         IMintModule(_mintModule).initialiseMintModule(
             creatorId,
             courseId,
             data
         );
+    }
+
+    /**
+     * @dev disable the mint module by reassigning it to address(0)
+     */
+    function disableModule() external onlyOwner {
+        mintModule = address(0);
     }
 
     /*======================== Resource Functions ========================*/
@@ -149,15 +169,23 @@ contract OwlearnCourse is
     /**
      * @dev  Mint a Course Certificate NFT
      *
-     * Add restrictions using modules
      * TASK  : Add customization tasks
      */
-    function mintCourseCertificate(address to, bytes calldata data) public {
+    function mintCourseCertificate(
+        address to,
+        bytes calldata data
+    ) public payable returns (uint tokenId) {
         if (mintModule != address(0)) {
-            IMintModule(mintModule).beforeMint(creatorId, courseId, to, data);
+            // Need to approve the Tokens to this mintModule
+            IMintModule(mintModule).beforeMint{value: msg.value}(
+                creatorId,
+                courseId,
+                to,
+                data
+            );
         }
 
-        uint tokenId = courseCertificates.safeMint(to);
+        tokenId = courseCertificates.safeMint(to);
 
         if (mintModule != address(0)) {
             IMintModule(mintModule).afterMint(
@@ -170,12 +198,9 @@ contract OwlearnCourse is
         }
     }
 
-    function _authorizeUpgrade(address newImplementation)
-		internal
-		virtual
-		override
-		onlyOwner
-	{}
+    function _authorizeUpgrade(
+        address newImplementation
+    ) internal virtual override onlyOwner {}
 
     ///@dev All other Certificate functions like Burn or Mint are to be accessed from the main contract
     ///@dev All other Resource functions like balance and owner are to be accessed from the main contract

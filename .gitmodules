@@ -5,7 +5,7 @@
 	branch = v4.2.3
 [submodule "apps/contracts/lib/openzeppelin-contracts-upgradeable"]
 	path = apps/contracts/lib/openzeppelin-contracts-upgradeable
-	url = https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable
+	url = https://github.com/openzeppelin/openzeppelin-contracts-upgradeable
 [submodule "apps/contracts/lib/ens-contracts"]
 	path = apps/contracts/lib/ens-contracts
 	url = https://github.com/ensdomains/ens-contracts

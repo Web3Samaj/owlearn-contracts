@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.10;
+pragma solidity ^0.8.12;
 
 // Source : https://github.com/Web3Samaj/owlearn-contracts/blob/5-feat-coursefactory/apps/contracts/src/CourseFactory.sol
 
@@ -8,13 +8,17 @@ import {CourseFactoryStorage, OwlearnEducatorBadge} from "./CourseFactoryStorage
 
 import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import {CourseProxy} from "../Proxy/CourseProxy.sol";
-import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 /// @title OwlearnCourseFactory
 /// @notice A Factory contract to create a new course with create2 method
 /// @author Dhruv <contact.dhruvagarwal@gmail.com>
 // storage contracts should always be inherited last
-contract OwlearnCourseFactory is OwnableUpgradeable, CourseFactoryStorage, UUPSUpgradeable {
+contract OwlearnCourseFactory is
+    OwnableUpgradeable,
+    CourseFactoryStorage,
+    UUPSUpgradeable
+{
     /*///////////////////// Events //////////////////////////////////*/
     event CourseCreated(
         address indexed courseAddress,
@@ -36,17 +40,26 @@ contract OwlearnCourseFactory is OwnableUpgradeable, CourseFactoryStorage, UUPSU
     }
 
     /*======================== Initializer Functions ========================*/
+
+    /**
+     * @dev create a new course by deploying a Course Contract
+     *
+     * @param educatorBadgeNFT - Educator Badge NFT contract address
+     * @param moduleRegisteryAddress - Module Whitelisting registery
+     */
     function initialize(
         OwlearnEducatorBadge educatorBadgeNFT,
         address _courseImplementation,
         address _resourceImplementation,
-        address _certificateImplementation
+        address _certificateImplementation,
+        address moduleRegisteryAddress
     ) external initializer {
         __Ownable_init();
         educateBadgeNFT = educatorBadgeNFT;
         courseImplementation = _courseImplementation;
         resourceImplementation = _resourceImplementation;
         certificateImplementation = _certificateImplementation;
+        moduleRegistery = moduleRegisteryAddress;
     }
 
     /*///////////////////// Modifier //////////////////////////////////*/
@@ -86,7 +99,9 @@ contract OwlearnCourseFactory is OwnableUpgradeable, CourseFactoryStorage, UUPSU
         totalCourses += 1;
         courseId = totalCourses;
         bytes32 salt = keccak256(abi.encodePacked(courseName, courseSymbol));
-        bytes memory initData = abi.encodeWithSelector(OwlearnCourse.initialize.selector, creatorId,
+        bytes memory initData = abi.encodeWithSelector(
+            OwlearnCourse.initialize.selector,
+            creatorId,
             courseId,
             courseName,
             courseSymbol,
@@ -95,8 +110,13 @@ contract OwlearnCourseFactory is OwnableUpgradeable, CourseFactoryStorage, UUPSU
             courseNFTURIs,
             certificateBaseURI,
             resourceImplementation,
-            certificateImplementation);
-        address _newCourse = address(new CourseProxy{salt: salt}(courseImplementation, initData));
+            certificateImplementation,
+            moduleRegistery
+        );
+
+        address _newCourse = address(
+            new CourseProxy{salt: salt}(courseImplementation, initData)
+        );
 
         getCourse[courseId] = _newCourse;
 
@@ -113,10 +133,7 @@ contract OwlearnCourseFactory is OwnableUpgradeable, CourseFactoryStorage, UUPSU
         return (_newCourse, courseId);
     }
 
-    function _authorizeUpgrade(address newImplementation)
-		internal
-		virtual
-		override
-		onlyOwner
-	{}
+    function _authorizeUpgrade(
+        address newImplementation
+    ) internal virtual override onlyOwner {}
 }

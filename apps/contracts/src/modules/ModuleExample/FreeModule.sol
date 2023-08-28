@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.12;
 
-/// @title IMintModule
-/// @notice Interface for creating a new Mint Module for Owlearn Courses
-/// @author Dhruv <contact.dhruvagarwal@gmail.com>
-interface IMintModule {
+import {OwlearnModuleBase} from "../Base/OwlearnModuleBase.sol";
+
+contract FreeModule is OwlearnModuleBase {
+    constructor(address factory) OwlearnModuleBase(factory) {}
+
     /**
      * @dev for initialising the actual Owlearn Course Data for this contract
      *
@@ -16,14 +17,14 @@ interface IMintModule {
         uint creatorId,
         uint courseId,
         bytes calldata data
-    ) external;
+    ) external override {}
 
     /**
      * @dev Hook called before Minting the certificate NFT
      *
      * @param creatorId  Course Creator Id
      * @param courseId  Course ID for which the module is being used
-     * @param user  Recepeint of the NFT Certificate Mint
+     * @param user User minting the certificate
      * @param data External Data  , sent by the USER during the mint Call
      */
     function beforeMint(
@@ -31,7 +32,9 @@ interface IMintModule {
         uint courseId,
         address user,
         bytes calldata data
-    ) external payable;
+    ) external payable override {
+        // Need to add the treasury transfer if present including a Method to store treasury info
+    }
 
     /**
      * @dev Hook called After Minting the certificate NFT
@@ -48,5 +51,5 @@ interface IMintModule {
         address recepient,
         uint certificateTokenId,
         bytes calldata data
-    ) external;
+    ) external override {}
 }

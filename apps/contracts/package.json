@@ -17,6 +17,7 @@
     "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers@0.3.0-beta.13",
     "@nomiclabs/hardhat-etherscan": "^3.0.0",
     "@openzeppelin/contracts": "^4.9.1",
+    "@openzeppelin/contracts-upgradeable": "^4.9.3",
     "@openzeppelin/hardhat-upgrades": "^1.27.0",
     "@owlearn/utils": "workspace:^",
     "@typechain/ethers-v5": "^10.1.0",

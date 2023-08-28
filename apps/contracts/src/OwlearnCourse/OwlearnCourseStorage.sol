@@ -3,6 +3,7 @@ pragma solidity ^0.8.12;
 
 import {OwlearnCourseCertificates} from "./Certificates/OwlearnCourseCertificates.sol";
 import {OwlearnCourseResources} from "./Resources/OwlearnCourseResources.sol";
+import {OwlearnModuleRegistery} from "../modules/Registery/OwlearnModuleRegistery.sol";
 
 abstract contract OwlearnCourseStorage {
     /*======================== Initialised Certificates & Resources contract ========================*/
@@ -10,6 +11,8 @@ abstract contract OwlearnCourseStorage {
     OwlearnCourseCertificates public courseCertificates;
 
     OwlearnCourseResources public courseResources;
+
+    OwlearnModuleRegistery public moduleRegistery;
 
     /*======================== State Variables ========================*/
 
