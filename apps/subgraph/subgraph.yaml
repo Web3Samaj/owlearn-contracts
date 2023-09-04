@@ -1,0 +1,61 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: OwlearnCourseFactory
+    network: mumbai
+    source:
+      address: "0xd3C4D22b90Ac6229F32AD99fd824dB16151e1A1D"
+      abi: OwlearnCourseFactory
+      startBlock: 38991812
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - AdminChanged
+        - BeaconUpgraded
+        - Upgraded
+      abis:
+        - name: OwlearnCourseFactory
+          file: ./abis/OwlearnCourseFactory.json
+      eventHandlers:
+        - event: AdminChanged(address,address)
+          handler: handleAdminChanged
+        - event: BeaconUpgraded(indexed address)
+          handler: handleBeaconUpgraded
+        - event: Upgraded(indexed address)
+          handler: handleUpgraded
+      file: ./src/owlearn-course-factory.ts
+templates:
+  - name: OwlearnCourse
+    kind: ethereum/contract
+    network: mumbai
+    source:
+      abi: OwlearnCourse
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - OwlearnCourseAdminChanged
+        - OwlearnCourseBeaconUpgraded
+        - Initialized
+        - OwnershipTransferred
+        - OwlearnCourseUpgraded
+      abis:
+        - name: OwlearnCourse
+          file: ./abis/OwlearnCourse.json
+      eventHandlers:
+        - event: AdminChanged(address,address)
+          handler: handleAdminChanged
+        - event: BeaconUpgraded(indexed address)
+          handler: handleBeaconUpgraded
+        - event: Initialized(uint8)
+          handler: handleInitialized
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: Upgraded(indexed address)
+          handler: handleUpgraded
+      file: ./src/owlearn-course.ts
