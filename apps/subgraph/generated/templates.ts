@@ -6,6 +6,34 @@ import {
   DataSourceContext
 } from "@graphprotocol/graph-ts";
 
+export class OwlearnCourseResources extends DataSourceTemplate {
+  static create(address: Address): void {
+    DataSourceTemplate.create("OwlearnCourseResources", [address.toHex()]);
+  }
+
+  static createWithContext(address: Address, context: DataSourceContext): void {
+    DataSourceTemplate.createWithContext(
+      "OwlearnCourseResources",
+      [address.toHex()],
+      context
+    );
+  }
+}
+
+export class OwlearnCourseCertificates extends DataSourceTemplate {
+  static create(address: Address): void {
+    DataSourceTemplate.create("OwlearnCourseCertificates", [address.toHex()]);
+  }
+
+  static createWithContext(address: Address, context: DataSourceContext): void {
+    DataSourceTemplate.createWithContext(
+      "OwlearnCourseCertificates",
+      [address.toHex()],
+      context
+    );
+  }
+}
+
 export class OwlearnCourse extends DataSourceTemplate {
   static create(address: Address): void {
     DataSourceTemplate.create("OwlearnCourse", [address.toHex()]);

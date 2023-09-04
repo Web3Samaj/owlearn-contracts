@@ -12,6 +12,9 @@
     },
     "OwlearnCourseCertificates": {
       "address": "0x15490C19BD78A4E9A24FbB88c6B9fA82e00893e3"
+    },
+    "OwlearnCourseResources": {
+      "address": "0x4132f806cF5Ea0F00adD160606DD353978610066"
     }
   }
 }
