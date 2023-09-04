@@ -5,6 +5,26 @@ type ExampleEntity @entity {
   newAdmin: Bytes! # address
 }
 
+## Contains the Course Data , like Course info , lectures & all, with the Educator Reference
+type Course @entity {
+  id: Bytes!
+}
+
+## Contains the resource (video) info seperately
+type Resources @entity {
+  id: Bytes!
+}
+
+## Contains the Educators info , their courses Reference directly
+type Educator @entity {
+  id: Bytes!
+}
+
+## Contains the User data , name , username , owlId and the courses involved with certificates
+type User @entity {
+  id: Bytes!
+}
+
 type OwlearnCourseAdminChanged @entity(immutable: true) {
   id: Bytes!
   previousAdmin: Bytes! # address
