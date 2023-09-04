@@ -20,7 +20,7 @@ abstract contract OwlearnIdStorage {
     // address => recordId
     mapping(address => string) public domainRecords;
 
-    // tokenId (recordId) => record
+    // tokenId (name) => record
     mapping(string => Record) public domainNames;
 
     // domain extension ->  .owl
