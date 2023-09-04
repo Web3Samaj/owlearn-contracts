@@ -8,9 +8,9 @@ import {
 } from "matchstick-as/assembly/index"
 import { Address, BigInt } from "@graphprotocol/graph-ts"
 import { AdminChanged } from "../generated/schema"
-import { AdminChanged as AdminChangedEvent } from "../generated/Contract/Contract"
-import { handleAdminChanged } from "../src/contract"
-import { createAdminChangedEvent } from "./contract-utils"
+import { AdminChanged as AdminChangedEvent } from "../generated/OwlearnCourseCertificates/OwlearnCourseCertificates"
+import { handleAdminChanged } from "../src/owlearn-course-certificates"
+import { createAdminChangedEvent } from "./owlearn-course-certificates-utils"
 
 // Tests structure (matchstick-as >=0.5.0)
 // https://thegraph.com/docs/en/developer/matchstick/#tests-structure-0-5-0

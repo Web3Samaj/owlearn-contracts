@@ -29,6 +29,47 @@ dataSources:
           handler: handleUpgraded
       file: ./src/owlearn-course-factory.ts
 templates:
+  - kind: ethereum
+    name: OwlearnCourseCertificates
+    network: mumbai
+    source:
+      address: "0x15490C19BD78A4E9A24FbB88c6B9fA82e00893e3"
+      abi: OwlearnCourseCertificates
+      startBlock: 38991800
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - OwlearnCourseCertificatesAdminChanged
+        - Approval
+        - ApprovalForAll
+        - OwlearnCourseCertificatesBeaconUpgraded
+        - OwlearnCourseCertificatesInitialized
+        - OwlearnCourseCertificatesOwnershipTransferred
+        - Transfer
+        - OwlearnCourseCertificatesUpgraded
+      abis:
+        - name: OwlearnCourseCertificates
+          file: ./abis/OwlearnCourseCertificates.json
+      eventHandlers:
+        - event: AdminChanged(address,address)
+          handler: handleAdminChanged
+        - event: Approval(indexed address,indexed address,indexed uint256)
+          handler: handleApproval
+        - event: ApprovalForAll(indexed address,indexed address,bool)
+          handler: handleApprovalForAll
+        - event: BeaconUpgraded(indexed address)
+          handler: handleBeaconUpgraded
+        - event: Initialized(uint8)
+          handler: handleInitialized
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+        - event: Upgraded(indexed address)
+          handler: handleUpgraded
+      file: ./src/owlearn-course-certificates.ts
   - name: OwlearnCourse
     kind: ethereum/contract
     network: mumbai

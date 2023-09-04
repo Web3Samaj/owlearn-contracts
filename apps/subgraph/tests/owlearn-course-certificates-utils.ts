@@ -9,7 +9,7 @@ import {
   OwnershipTransferred,
   Transfer,
   Upgraded
-} from "../generated/Contract/Contract"
+} from "../generated/OwlearnCourseCertificates/OwlearnCourseCertificates"
 
 export function createAdminChangedEvent(
   previousAdmin: Address,

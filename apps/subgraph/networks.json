@@ -5,10 +5,13 @@
       "startBlock": 38991812
     },
     "Contract": {
-      "address": "0xcDD6bC76b68700a1A7900E5CFF90697fD44e6904"
+      "address": "0x15490C19BD78A4E9A24FbB88c6B9fA82e00893e3"
     },
     "OwlearnCourse": {
       "address": "0x488B22De46Fa5AC74baC755c4143133127E0f540"
+    },
+    "OwlearnCourseCertificates": {
+      "address": "0x15490C19BD78A4E9A24FbB88c6B9fA82e00893e3"
     }
   }
 }
