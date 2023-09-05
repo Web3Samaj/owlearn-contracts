@@ -18,6 +18,18 @@ contract OwlearnCourse is
     UUPSUpgradeable
 {
     /*///////////////////// Constructor //////////////////////////////////*/
+    event CourseInitialised(
+        address indexed course,
+        address indexed resource,
+        address indexed certificates
+    );
+    event MintModuleInitialised(
+        address indexed course,
+        address indexed moduleAddress
+    );
+    event MintModuleDisabled(address indexed course);
+
+    /*///////////////////// Constructor //////////////////////////////////*/
     /**
      * @dev Lock implementation contract
      */
@@ -115,6 +127,12 @@ contract OwlearnCourse is
                 )
             )
         );
+
+        emit CourseInitialised(
+            address(this),
+            address(courseResources),
+            address(courseCertificates)
+        );
     }
 
     /*======================== Module Functions ========================*/
@@ -139,6 +157,7 @@ contract OwlearnCourse is
             courseId,
             data
         );
+        emit MintModuleInitialised(address(this), _mintModule);
     }
 
     /**
@@ -146,6 +165,7 @@ contract OwlearnCourse is
      */
     function disableModule() external onlyOwner {
         mintModule = address(0);
+        emit MintModuleDisabled(address(this));
     }
 
     /*======================== Resource Functions ========================*/

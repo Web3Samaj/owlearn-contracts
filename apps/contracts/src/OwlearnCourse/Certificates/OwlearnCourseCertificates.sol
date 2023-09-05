@@ -18,6 +18,15 @@ contract OwlearnCourseCertificates is
 {
     using CountersUpgradeable for CountersUpgradeable.Counter;
 
+    event CourseCertificateIntialised(
+        string courseCertificateName,
+        string courseCertificateSymbol,
+        string certificateBaseURI
+    );
+    event CertificateURIUpdated(string newBaseURI);
+    event CertificateMinted(address to, uint tokenID);
+    event CertificateBurned(uint tokenId);
+
     /*///////////////////// Constructor //////////////////////////////////*/
     /**
      * @dev Lock implementation contract
@@ -50,6 +59,11 @@ contract OwlearnCourseCertificates is
         manager = msg.sender;
         _transferOwnership(courseCreator);
         implRegistery = ImplementationRegistery(implmRegisteryAddress);
+        emit CourseCertificateIntialised(
+            courseCertificateName,
+            courseCertificateSymbol,
+            certificateBaseURI
+        );
     }
 
     /*======================== Modifier Functions ========================*/
@@ -77,6 +91,7 @@ contract OwlearnCourseCertificates is
      */
     function setBaseURI(string memory newURI) external onlyOwner {
         baseURI = newURI;
+        emit CertificateURIUpdated(newURI);
     }
 
     /**
@@ -93,7 +108,7 @@ contract OwlearnCourseCertificates is
         // token Id Starts from 1
         uint256 tokenId = _tokenIdCounter.current();
         _safeMint(to, tokenId);
-
+        emit CertificateMinted(to, tokenId);
         return tokenId;
     }
 
@@ -108,6 +123,7 @@ contract OwlearnCourseCertificates is
             "ERC721: caller is not token owner or approved"
         );
         _burn(tokenId);
+        emit CertificateBurned(tokenId);
     }
 
     /**
@@ -117,6 +133,7 @@ contract OwlearnCourseCertificates is
      */
     function revoke(uint256 tokenId) external onlyOwner {
         _burn(tokenId);
+        emit CertificateBurned(tokenId);
     }
 
     // =============================================================

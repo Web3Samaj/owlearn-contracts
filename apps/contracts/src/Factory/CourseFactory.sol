@@ -21,6 +21,8 @@ contract OwlearnCourseFactory is
 {
     /*///////////////////// Events //////////////////////////////////*/
     event CourseCreated(
+        uint creatorId,
+        uint courseId,
         address indexed courseAddress,
         string courseName,
         string courseSymbol,
@@ -129,6 +131,8 @@ contract OwlearnCourseFactory is
 
         allCourses.push(_newCourse);
         emit CourseCreated(
+            creatorId,
+            courseId,
             _newCourse,
             courseName,
             courseSymbol,

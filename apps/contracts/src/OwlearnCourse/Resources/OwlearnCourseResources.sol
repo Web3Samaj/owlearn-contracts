@@ -21,8 +21,7 @@ contract OwlearnCourseResources is
 
     /*========================  Events ======================== */
 
-    event MetadataUpdate(uint tokenId, string tokenURI);
-    event CourseInitialised(
+    event CourseResourceInitialised(
         string courseName,
         string courseSymbol,
         address creator
@@ -33,6 +32,7 @@ contract OwlearnCourseResources is
     );
     event CourseResourceBurned(uint tokenId);
     event CourseResourceUpdated(uint tokenId, string newResourceURI);
+    event CourseURIUpdated(string newCourseURI);
 
     /*///////////////////// Constructor //////////////////////////////////*/
     /**
@@ -71,7 +71,7 @@ contract OwlearnCourseResources is
         _initialiseCourse(courseCreator, courseNFTURIs);
         owlearnCourse = courseAddress;
         implRegistery = ImplementationRegistery(implmRegisteryAddress);
-        emit CourseInitialised(courseName, courseSymbol, courseCreator);
+        emit CourseResourceInitialised(courseName, courseSymbol, courseCreator);
     }
 
     /*======================== Modifier Functions ========================*/
@@ -139,6 +139,7 @@ contract OwlearnCourseResources is
      */
     function setCourseURI(string memory _uri) external onlyOwner {
         courseDetailsURI = _uri;
+        emit CourseURIUpdated(_uri);
     }
 
     // =============================================================
@@ -206,8 +207,6 @@ contract OwlearnCourseResources is
     ) internal virtual {
         require(_exists(tokenId), "URI set of nonexistent token");
         _tokenURIs[tokenId] = _tokenURI;
-
-        emit MetadataUpdate(tokenId, _tokenURI);
     }
 
     /**
