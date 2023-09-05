@@ -29,7 +29,7 @@ contract CourseFactoryScript is Test {
         OwlearnModuleRegistery moduleRegistery = new OwlearnModuleRegistery();
         ImplementationRegistery implRegistery = new ImplementationRegistery();
 
-        owlearnEducatorBadge.initialize("");
+        owlearnEducatorBadge.initialize("", address(0));
         owlearnEducatorBadge.mintEducatorBadges(alice, 1);
         address courseFactoryImplementation = address(
             new OwlearnCourseFactory()

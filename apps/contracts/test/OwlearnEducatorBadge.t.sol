@@ -49,15 +49,19 @@ contract OwlearnEducatorBadgeScript is Test {
         address alice = address(0x1);
         owlearnEducatorBadge.mintEducatorBadges(alice, 1);
 
-        startHoax(alice, 1e18);
-        uint owlId = owlearnID.register("Alice");
+        startHoax(alice, 10e18);
+        uint amount = owlearnID.price("Alice");
+
+        uint owlId = owlearnID.register{value: amount}("Alice");
         owlearnEducatorBadge.registerAsEducator(owlId);
     }
 
     function testFailRegisterOnNoBadge() public {
         address alice = address(0x1);
-        startHoax(alice, 1e18);
-        uint owlId = owlearnID.register("Alice");
+        startHoax(alice, 10e18);
+        uint amount = owlearnID.price("Alice");
+
+        uint owlId = owlearnID.register{value: amount}("Alice");
         owlearnEducatorBadge.registerAsEducator(owlId);
     }
 
@@ -65,16 +69,17 @@ contract OwlearnEducatorBadgeScript is Test {
         address alice = address(0x1);
         owlearnEducatorBadge.mintEducatorBadges(alice, 1);
 
-        startHoax(alice, 1e18);
-        uint owlId = owlearnID.register("Alice");
+        startHoax(alice, 10e18);
+        uint amount = owlearnID.price("Alice");
 
-        startHoax(bob, 1e18);
+        uint owlId = owlearnID.register{value: amount}("Alice");
+        startHoax(bob, 10e18);
         owlearnEducatorBadge.registerAsEducator(owlId);
     }
 
     function testFailExternalURISet() public {
         address alice = address(0x1);
-        startHoax(alice, 1e18);
+        startHoax(alice, 10e18);
 
         owlearnEducatorBadge.setURI(2, "");
     }
