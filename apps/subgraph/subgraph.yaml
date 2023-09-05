@@ -26,7 +26,7 @@ dataSources:
             CourseCreated(uint256,uint256,indexed address,string,string,indexed
             address,string,string[],string)
           handler: handleCourseCreated
-      file: ./src/owlearn-course-factory.ts
+      file: ./src/mappings/owlearn-course-factory.ts
   - kind: ethereum
     name: OwlearnId
     network: mumbai
@@ -48,7 +48,7 @@ dataSources:
           handler: handleOwlIdRegistered
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
-      file: ./src/owlearn-id.ts
+      file: ./src/mappings/owlearn-id.ts
   - kind: ethereum
     name: OwlearnEducatorBadge
     network: mumbai
@@ -73,7 +73,7 @@ dataSources:
           handler: handleTransferBatch
         - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
           handler: handleTransferSingle
-      file: ./src/owlearn-educator-badge.ts
+      file: ./src/mappings/owlearn-educator-badge.ts
 templates:
   - kind: ethereum
     name: OwlearnCourse
@@ -99,7 +99,7 @@ templates:
           handler: handleMintModuleDisabled
         - event: MintModuleInitialised(indexed address,indexed address)
           handler: handleMintModuleInitialised
-      file: ./src/owlearn-course.ts
+      file: ./src/mappings/owlearn-course.ts
   - kind: ethereum
     name: OwlearnCourseCertificates
     network: mumbai
@@ -127,7 +127,7 @@ templates:
           handler: handleCourseCertificateIntialised
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
-      file: ./src/owlearn-course-certificates.ts
+      file: ./src/mappings/owlearn-course-certificates.ts
   - kind: ethereum
     name: OwlearnCourseResource
     network: mumbai
@@ -157,4 +157,40 @@ templates:
           handler: handleNewCourseResourceMinted
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
-      file: ./src/owlearn-course-resource.ts
+      file: ./src/mappings/owlearn-course-resource.ts
+  # - kind: file/ipfs
+  #   name: CourseMetadata
+  #   mapping:
+  #     apiVersion: 0.0.7
+  #     language: wasm/assemblyscript
+  #     file: ./src/mappings/ipfs-mapping.ts
+  #     handler: handleCourseMetadata
+  #     entities:
+  #       - CourseMetadata
+  #     abis:
+  #       - name: OwlearnCourse
+  #         file: ./abis/OwlearnCourse.json
+  # - kind: file/ipfs
+  #   name: ResourceMetadata
+  #   mapping:
+  #     apiVersion: 0.0.7
+  #     language: wasm/assemblyscript
+  #     file: ./src/mappings/ipfs-mapping.ts
+  #     handler: handleResourceMetadata
+  #     entities:
+  #       - ResourceMetadata
+  #     abis:
+  #       - name: OwlearnCourseResource
+  #         file: ./abis/OwlearnCourseResource.json
+  # - kind: file/ipfs
+  #   name: CertificateMetadata
+  #   mapping:
+  #     apiVersion: 0.0.7
+  #     language: wasm/assemblyscript
+  #     file: ./src/mappings/ipfs-mapping.ts
+  #     handler: handleCertificateMetadata
+  #     entities:
+  #       - CertificateMetadata
+  #     abis:
+  #       - name: OwlearnCourseCertificates
+  #         file: ./abis/OwlearnCourseCertificates.json

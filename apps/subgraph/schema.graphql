@@ -52,3 +52,15 @@ type User @entity {
   username: String!
   enrolledCourses: [Course!]
 }
+
+# type CourseMetadata @entity {
+#   id: Bytes!
+# }
+
+# type ResourceMetadata @entity {
+#   id: Bytes!
+# }
+
+# type CertificateMetadata @entity {
+#   id: Bytes!
+# }
