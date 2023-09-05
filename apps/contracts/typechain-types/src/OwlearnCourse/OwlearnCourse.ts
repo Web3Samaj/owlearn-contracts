@@ -35,11 +35,14 @@ export interface OwlearnCourseInterface extends utils.Interface {
     "courseResources()": FunctionFragment;
     "creatorId()": FunctionFragment;
     "deleteCourseNFT(uint256)": FunctionFragment;
+    "disableModule()": FunctionFragment;
     "editCourseNFT(uint256,string)": FunctionFragment;
-    "initialize(uint256,uint256,string,string,address,string,string[],string,address,address)": FunctionFragment;
+    "implRegistery()": FunctionFragment;
+    "initialize(uint256,uint256,string,string,address,string,string[],string,address,address,address,address)": FunctionFragment;
     "mintCourseCertificate(address,bytes)": FunctionFragment;
     "mintCourseNFTs(string[])": FunctionFragment;
     "mintModule()": FunctionFragment;
+    "moduleRegistery()": FunctionFragment;
     "owner()": FunctionFragment;
     "proxiableUUID()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
@@ -56,11 +59,14 @@ export interface OwlearnCourseInterface extends utils.Interface {
       | "courseResources"
       | "creatorId"
       | "deleteCourseNFT"
+      | "disableModule"
       | "editCourseNFT"
+      | "implRegistery"
       | "initialize"
       | "mintCourseCertificate"
       | "mintCourseNFTs"
       | "mintModule"
+      | "moduleRegistery"
       | "owner"
       | "proxiableUUID"
       | "renounceOwnership"
@@ -85,8 +91,16 @@ export interface OwlearnCourseInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
+    functionFragment: "disableModule",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "editCourseNFT",
     values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "implRegistery",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "initialize",
@@ -98,6 +112,8 @@ export interface OwlearnCourseInterface extends utils.Interface {
       PromiseOrValue<string>,
       PromiseOrValue<string>,
       PromiseOrValue<string>[],
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
       PromiseOrValue<string>,
       PromiseOrValue<string>,
       PromiseOrValue<string>
@@ -113,6 +129,10 @@ export interface OwlearnCourseInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "mintModule",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "moduleRegistery",
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
@@ -156,7 +176,15 @@ export interface OwlearnCourseInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "disableModule",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "editCourseNFT",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "implRegistery",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
@@ -169,6 +197,10 @@ export interface OwlearnCourseInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "mintModule", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "moduleRegistery",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "proxiableUUID",
@@ -195,14 +227,20 @@ export interface OwlearnCourseInterface extends utils.Interface {
   events: {
     "AdminChanged(address,address)": EventFragment;
     "BeaconUpgraded(address)": EventFragment;
+    "CourseInitialised(address,address,address)": EventFragment;
     "Initialized(uint8)": EventFragment;
+    "MintModuleDisabled(address)": EventFragment;
+    "MintModuleInitialised(address,address)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "Upgraded(address)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "AdminChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "BeaconUpgraded"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "CourseInitialised"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "MintModuleDisabled"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "MintModuleInitialised"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Upgraded"): EventFragment;
 }
@@ -228,12 +266,48 @@ export type BeaconUpgradedEvent = TypedEvent<
 
 export type BeaconUpgradedEventFilter = TypedEventFilter<BeaconUpgradedEvent>;
 
+export interface CourseInitialisedEventObject {
+  course: string;
+  resource: string;
+  certificates: string;
+}
+export type CourseInitialisedEvent = TypedEvent<
+  [string, string, string],
+  CourseInitialisedEventObject
+>;
+
+export type CourseInitialisedEventFilter =
+  TypedEventFilter<CourseInitialisedEvent>;
+
 export interface InitializedEventObject {
   version: number;
 }
 export type InitializedEvent = TypedEvent<[number], InitializedEventObject>;
 
 export type InitializedEventFilter = TypedEventFilter<InitializedEvent>;
+
+export interface MintModuleDisabledEventObject {
+  course: string;
+}
+export type MintModuleDisabledEvent = TypedEvent<
+  [string],
+  MintModuleDisabledEventObject
+>;
+
+export type MintModuleDisabledEventFilter =
+  TypedEventFilter<MintModuleDisabledEvent>;
+
+export interface MintModuleInitialisedEventObject {
+  course: string;
+  moduleAddress: string;
+}
+export type MintModuleInitialisedEvent = TypedEvent<
+  [string, string],
+  MintModuleInitialisedEventObject
+>;
+
+export type MintModuleInitialisedEventFilter =
+  TypedEventFilter<MintModuleInitialisedEvent>;
 
 export interface OwnershipTransferredEventObject {
   previousOwner: string;
@@ -294,11 +368,17 @@ export interface OwlearnCourse extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    disableModule(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     editCourseNFT(
       tokenId: PromiseOrValue<BigNumberish>,
       newNFTURI: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
+
+    implRegistery(overrides?: CallOverrides): Promise<[string]>;
 
     initialize(
       _creatorId: PromiseOrValue<BigNumberish>,
@@ -311,13 +391,15 @@ export interface OwlearnCourse extends BaseContract {
       certificateBaseURI: PromiseOrValue<string>,
       _resourceImplementation: PromiseOrValue<string>,
       _certificateImplementation: PromiseOrValue<string>,
+      moduleRegisteryAddress: PromiseOrValue<string>,
+      implmRegisteryAddress: PromiseOrValue<string>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     mintCourseCertificate(
       to: PromiseOrValue<string>,
       data: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     mintCourseNFTs(
@@ -326,6 +408,8 @@ export interface OwlearnCourse extends BaseContract {
     ): Promise<ContractTransaction>;
 
     mintModule(overrides?: CallOverrides): Promise<[string]>;
+
+    moduleRegistery(overrides?: CallOverrides): Promise<[string]>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
@@ -371,11 +455,17 @@ export interface OwlearnCourse extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  disableModule(
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   editCourseNFT(
     tokenId: PromiseOrValue<BigNumberish>,
     newNFTURI: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
+
+  implRegistery(overrides?: CallOverrides): Promise<string>;
 
   initialize(
     _creatorId: PromiseOrValue<BigNumberish>,
@@ -388,13 +478,15 @@ export interface OwlearnCourse extends BaseContract {
     certificateBaseURI: PromiseOrValue<string>,
     _resourceImplementation: PromiseOrValue<string>,
     _certificateImplementation: PromiseOrValue<string>,
+    moduleRegisteryAddress: PromiseOrValue<string>,
+    implmRegisteryAddress: PromiseOrValue<string>,
     overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   mintCourseCertificate(
     to: PromiseOrValue<string>,
     data: PromiseOrValue<BytesLike>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   mintCourseNFTs(
@@ -403,6 +495,8 @@ export interface OwlearnCourse extends BaseContract {
   ): Promise<ContractTransaction>;
 
   mintModule(overrides?: CallOverrides): Promise<string>;
+
+  moduleRegistery(overrides?: CallOverrides): Promise<string>;
 
   owner(overrides?: CallOverrides): Promise<string>;
 
@@ -448,11 +542,15 @@ export interface OwlearnCourse extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    disableModule(overrides?: CallOverrides): Promise<void>;
+
     editCourseNFT(
       tokenId: PromiseOrValue<BigNumberish>,
       newNFTURI: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    implRegistery(overrides?: CallOverrides): Promise<string>;
 
     initialize(
       _creatorId: PromiseOrValue<BigNumberish>,
@@ -465,6 +563,8 @@ export interface OwlearnCourse extends BaseContract {
       certificateBaseURI: PromiseOrValue<string>,
       _resourceImplementation: PromiseOrValue<string>,
       _certificateImplementation: PromiseOrValue<string>,
+      moduleRegisteryAddress: PromiseOrValue<string>,
+      implmRegisteryAddress: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -472,7 +572,7 @@ export interface OwlearnCourse extends BaseContract {
       to: PromiseOrValue<string>,
       data: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<BigNumber>;
 
     mintCourseNFTs(
       courseNFTURIs: PromiseOrValue<string>[],
@@ -480,6 +580,8 @@ export interface OwlearnCourse extends BaseContract {
     ): Promise<void>;
 
     mintModule(overrides?: CallOverrides): Promise<string>;
+
+    moduleRegistery(overrides?: CallOverrides): Promise<string>;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
@@ -527,8 +629,35 @@ export interface OwlearnCourse extends BaseContract {
       beacon?: PromiseOrValue<string> | null
     ): BeaconUpgradedEventFilter;
 
+    "CourseInitialised(address,address,address)"(
+      course?: PromiseOrValue<string> | null,
+      resource?: PromiseOrValue<string> | null,
+      certificates?: PromiseOrValue<string> | null
+    ): CourseInitialisedEventFilter;
+    CourseInitialised(
+      course?: PromiseOrValue<string> | null,
+      resource?: PromiseOrValue<string> | null,
+      certificates?: PromiseOrValue<string> | null
+    ): CourseInitialisedEventFilter;
+
     "Initialized(uint8)"(version?: null): InitializedEventFilter;
     Initialized(version?: null): InitializedEventFilter;
+
+    "MintModuleDisabled(address)"(
+      course?: PromiseOrValue<string> | null
+    ): MintModuleDisabledEventFilter;
+    MintModuleDisabled(
+      course?: PromiseOrValue<string> | null
+    ): MintModuleDisabledEventFilter;
+
+    "MintModuleInitialised(address,address)"(
+      course?: PromiseOrValue<string> | null,
+      moduleAddress?: PromiseOrValue<string> | null
+    ): MintModuleInitialisedEventFilter;
+    MintModuleInitialised(
+      course?: PromiseOrValue<string> | null,
+      moduleAddress?: PromiseOrValue<string> | null
+    ): MintModuleInitialisedEventFilter;
 
     "OwnershipTransferred(address,address)"(
       previousOwner?: PromiseOrValue<string> | null,
@@ -561,11 +690,17 @@ export interface OwlearnCourse extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    disableModule(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     editCourseNFT(
       tokenId: PromiseOrValue<BigNumberish>,
       newNFTURI: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
+
+    implRegistery(overrides?: CallOverrides): Promise<BigNumber>;
 
     initialize(
       _creatorId: PromiseOrValue<BigNumberish>,
@@ -578,13 +713,15 @@ export interface OwlearnCourse extends BaseContract {
       certificateBaseURI: PromiseOrValue<string>,
       _resourceImplementation: PromiseOrValue<string>,
       _certificateImplementation: PromiseOrValue<string>,
+      moduleRegisteryAddress: PromiseOrValue<string>,
+      implmRegisteryAddress: PromiseOrValue<string>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     mintCourseCertificate(
       to: PromiseOrValue<string>,
       data: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     mintCourseNFTs(
@@ -593,6 +730,8 @@ export interface OwlearnCourse extends BaseContract {
     ): Promise<BigNumber>;
 
     mintModule(overrides?: CallOverrides): Promise<BigNumber>;
+
+    moduleRegistery(overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -641,11 +780,17 @@ export interface OwlearnCourse extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
+    disableModule(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
     editCourseNFT(
       tokenId: PromiseOrValue<BigNumberish>,
       newNFTURI: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
+
+    implRegistery(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     initialize(
       _creatorId: PromiseOrValue<BigNumberish>,
@@ -658,13 +803,15 @@ export interface OwlearnCourse extends BaseContract {
       certificateBaseURI: PromiseOrValue<string>,
       _resourceImplementation: PromiseOrValue<string>,
       _certificateImplementation: PromiseOrValue<string>,
+      moduleRegisteryAddress: PromiseOrValue<string>,
+      implmRegisteryAddress: PromiseOrValue<string>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     mintCourseCertificate(
       to: PromiseOrValue<string>,
       data: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     mintCourseNFTs(
@@ -673,6 +820,8 @@ export interface OwlearnCourse extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     mintModule(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    moduleRegistery(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 

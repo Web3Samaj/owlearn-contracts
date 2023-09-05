@@ -3,6 +3,7 @@
 /* eslint-disable */
 export * as educatorBadge from "./EducatorBadge";
 export * as factory from "./Factory";
+export * as implementation from "./Implementation";
 export * as owlearnCourse from "./OwlearnCourse";
 export * as owlearnId from "./OwlearnId";
 export * as proxy from "./Proxy";

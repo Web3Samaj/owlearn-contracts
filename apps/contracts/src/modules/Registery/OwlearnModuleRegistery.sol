@@ -3,13 +3,15 @@ pragma solidity ^0.8.12;
 
 import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import {OwlearnModuleRegisteryStorage} from "./OwlearnModuleRegisteryStorage.sol";
+import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 /// @title OwlearnModuleRegistery
 /// @notice Module registery responsible for keeping track on whitelisted Modules
 /// @author Dhruv <contact.dhruvagarwal@gmail.com>
 contract OwlearnModuleRegistery is
     OwnableUpgradeable,
-    OwlearnModuleRegisteryStorage
+    OwlearnModuleRegisteryStorage,
+    UUPSUpgradeable
 {
     /*///////////////////// Constructor //////////////////////////////////*/
     /**
@@ -50,4 +52,8 @@ contract OwlearnModuleRegistery is
     function disableModule(address _moduleAddress) public onlyOwner {
         getWhitelistedModules[_moduleAddress] = false;
     }
+
+    function _authorizeUpgrade(
+        address newImplementation
+    ) internal virtual override onlyOwner {}
 }

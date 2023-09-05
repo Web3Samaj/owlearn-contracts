@@ -1,6 +1,6 @@
 // Educator Badge ID of the creator
 // 1 - Basic
-// 2- more elit badges to come
+// 2-  more elit badges to come
 export const creatorId = 1;
 
 // Name of the course
@@ -17,4 +17,3 @@ export const courseNFTURIs = ["ipfs://resource1"];
 
 // a base URI which contains details and metadata for certifcates
 export const certificateBaseURI = "ipfs://certificates";
-

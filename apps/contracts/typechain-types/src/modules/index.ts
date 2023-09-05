@@ -3,3 +3,7 @@
 /* eslint-disable */
 import type * as base from "./Base";
 export type { base };
+import type * as moduleExample from "./ModuleExample";
+export type { moduleExample };
+import type * as registery from "./Registery";
+export type { registery };

@@ -37,7 +37,8 @@ export interface OwlearnCourseResourcesInterface extends utils.Interface {
     "deleteCourseNFT(uint256)": FunctionFragment;
     "editCourseNFT(uint256,string)": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
-    "initialize(string,string,address,string,string[],address)": FunctionFragment;
+    "implRegistery()": FunctionFragment;
+    "initialize(string,string,address,string,string[],address,address)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
     "mintCourseNFTs(string[])": FunctionFragment;
     "name()": FunctionFragment;
@@ -70,6 +71,7 @@ export interface OwlearnCourseResourcesInterface extends utils.Interface {
       | "deleteCourseNFT"
       | "editCourseNFT"
       | "getApproved"
+      | "implRegistery"
       | "initialize"
       | "isApprovedForAll"
       | "mintCourseNFTs"
@@ -120,6 +122,10 @@ export interface OwlearnCourseResourcesInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
+    functionFragment: "implRegistery",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "initialize",
     values: [
       PromiseOrValue<string>,
@@ -127,6 +133,7 @@ export interface OwlearnCourseResourcesInterface extends utils.Interface {
       PromiseOrValue<string>,
       PromiseOrValue<string>,
       PromiseOrValue<string>[],
+      PromiseOrValue<string>,
       PromiseOrValue<string>
     ]
   ): string;
@@ -238,6 +245,10 @@ export interface OwlearnCourseResourcesInterface extends utils.Interface {
     functionFragment: "getApproved",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "implRegistery",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "isApprovedForAll",
@@ -309,11 +320,11 @@ export interface OwlearnCourseResourcesInterface extends utils.Interface {
     "ApprovalForAll(address,address,bool)": EventFragment;
     "BeaconUpgraded(address)": EventFragment;
     "ConsecutiveTransfer(uint256,uint256,address,address)": EventFragment;
-    "CourseInitialised(string,string,address)": EventFragment;
     "CourseResourceBurned(uint256)": EventFragment;
+    "CourseResourceInitialised(string,string,address)": EventFragment;
     "CourseResourceUpdated(uint256,string)": EventFragment;
+    "CourseURIUpdated(string)": EventFragment;
     "Initialized(uint8)": EventFragment;
-    "MetadataUpdate(uint256,string)": EventFragment;
     "NewCourseResourceMinted(uint256,string[])": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
@@ -325,11 +336,11 @@ export interface OwlearnCourseResourcesInterface extends utils.Interface {
   getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "BeaconUpgraded"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ConsecutiveTransfer"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "CourseInitialised"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "CourseResourceBurned"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "CourseResourceInitialised"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "CourseResourceUpdated"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "CourseURIUpdated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "MetadataUpdate"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "NewCourseResourceMinted"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
@@ -395,19 +406,6 @@ export type ConsecutiveTransferEvent = TypedEvent<
 export type ConsecutiveTransferEventFilter =
   TypedEventFilter<ConsecutiveTransferEvent>;
 
-export interface CourseInitialisedEventObject {
-  courseName: string;
-  courseSymbol: string;
-  creator: string;
-}
-export type CourseInitialisedEvent = TypedEvent<
-  [string, string, string],
-  CourseInitialisedEventObject
->;
-
-export type CourseInitialisedEventFilter =
-  TypedEventFilter<CourseInitialisedEvent>;
-
 export interface CourseResourceBurnedEventObject {
   tokenId: BigNumber;
 }
@@ -418,6 +416,19 @@ export type CourseResourceBurnedEvent = TypedEvent<
 
 export type CourseResourceBurnedEventFilter =
   TypedEventFilter<CourseResourceBurnedEvent>;
+
+export interface CourseResourceInitialisedEventObject {
+  courseName: string;
+  courseSymbol: string;
+  creator: string;
+}
+export type CourseResourceInitialisedEvent = TypedEvent<
+  [string, string, string],
+  CourseResourceInitialisedEventObject
+>;
+
+export type CourseResourceInitialisedEventFilter =
+  TypedEventFilter<CourseResourceInitialisedEvent>;
 
 export interface CourseResourceUpdatedEventObject {
   tokenId: BigNumber;
@@ -431,23 +442,23 @@ export type CourseResourceUpdatedEvent = TypedEvent<
 export type CourseResourceUpdatedEventFilter =
   TypedEventFilter<CourseResourceUpdatedEvent>;
 
+export interface CourseURIUpdatedEventObject {
+  newCourseURI: string;
+}
+export type CourseURIUpdatedEvent = TypedEvent<
+  [string],
+  CourseURIUpdatedEventObject
+>;
+
+export type CourseURIUpdatedEventFilter =
+  TypedEventFilter<CourseURIUpdatedEvent>;
+
 export interface InitializedEventObject {
   version: number;
 }
 export type InitializedEvent = TypedEvent<[number], InitializedEventObject>;
 
 export type InitializedEventFilter = TypedEventFilter<InitializedEvent>;
-
-export interface MetadataUpdateEventObject {
-  tokenId: BigNumber;
-  tokenURI: string;
-}
-export type MetadataUpdateEvent = TypedEvent<
-  [BigNumber, string],
-  MetadataUpdateEventObject
->;
-
-export type MetadataUpdateEventFilter = TypedEventFilter<MetadataUpdateEvent>;
 
 export interface NewCourseResourceMintedEventObject {
   totalResourceMinted: BigNumber;
@@ -550,6 +561,8 @@ export interface OwlearnCourseResources extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string]>;
 
+    implRegistery(overrides?: CallOverrides): Promise<[string]>;
+
     initialize(
       courseName: PromiseOrValue<string>,
       courseSymbol: PromiseOrValue<string>,
@@ -557,6 +570,7 @@ export interface OwlearnCourseResources extends BaseContract {
       courseURI: PromiseOrValue<string>,
       courseNFTURIs: PromiseOrValue<string>[],
       courseAddress: PromiseOrValue<string>,
+      implmRegisteryAddress: PromiseOrValue<string>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -688,6 +702,8 @@ export interface OwlearnCourseResources extends BaseContract {
     overrides?: CallOverrides
   ): Promise<string>;
 
+  implRegistery(overrides?: CallOverrides): Promise<string>;
+
   initialize(
     courseName: PromiseOrValue<string>,
     courseSymbol: PromiseOrValue<string>,
@@ -695,6 +711,7 @@ export interface OwlearnCourseResources extends BaseContract {
     courseURI: PromiseOrValue<string>,
     courseNFTURIs: PromiseOrValue<string>[],
     courseAddress: PromiseOrValue<string>,
+    implmRegisteryAddress: PromiseOrValue<string>,
     overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -826,6 +843,8 @@ export interface OwlearnCourseResources extends BaseContract {
       overrides?: CallOverrides
     ): Promise<string>;
 
+    implRegistery(overrides?: CallOverrides): Promise<string>;
+
     initialize(
       courseName: PromiseOrValue<string>,
       courseSymbol: PromiseOrValue<string>,
@@ -833,6 +852,7 @@ export interface OwlearnCourseResources extends BaseContract {
       courseURI: PromiseOrValue<string>,
       courseNFTURIs: PromiseOrValue<string>[],
       courseAddress: PromiseOrValue<string>,
+      implmRegisteryAddress: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -983,21 +1003,21 @@ export interface OwlearnCourseResources extends BaseContract {
       to?: PromiseOrValue<string> | null
     ): ConsecutiveTransferEventFilter;
 
-    "CourseInitialised(string,string,address)"(
-      courseName?: null,
-      courseSymbol?: null,
-      creator?: null
-    ): CourseInitialisedEventFilter;
-    CourseInitialised(
-      courseName?: null,
-      courseSymbol?: null,
-      creator?: null
-    ): CourseInitialisedEventFilter;
-
     "CourseResourceBurned(uint256)"(
       tokenId?: null
     ): CourseResourceBurnedEventFilter;
     CourseResourceBurned(tokenId?: null): CourseResourceBurnedEventFilter;
+
+    "CourseResourceInitialised(string,string,address)"(
+      courseName?: null,
+      courseSymbol?: null,
+      creator?: null
+    ): CourseResourceInitialisedEventFilter;
+    CourseResourceInitialised(
+      courseName?: null,
+      courseSymbol?: null,
+      creator?: null
+    ): CourseResourceInitialisedEventFilter;
 
     "CourseResourceUpdated(uint256,string)"(
       tokenId?: null,
@@ -1008,14 +1028,13 @@ export interface OwlearnCourseResources extends BaseContract {
       newResourceURI?: null
     ): CourseResourceUpdatedEventFilter;
 
+    "CourseURIUpdated(string)"(
+      newCourseURI?: null
+    ): CourseURIUpdatedEventFilter;
+    CourseURIUpdated(newCourseURI?: null): CourseURIUpdatedEventFilter;
+
     "Initialized(uint8)"(version?: null): InitializedEventFilter;
     Initialized(version?: null): InitializedEventFilter;
-
-    "MetadataUpdate(uint256,string)"(
-      tokenId?: null,
-      tokenURI?: null
-    ): MetadataUpdateEventFilter;
-    MetadataUpdate(tokenId?: null, tokenURI?: null): MetadataUpdateEventFilter;
 
     "NewCourseResourceMinted(uint256,string[])"(
       totalResourceMinted?: null,
@@ -1086,6 +1105,8 @@ export interface OwlearnCourseResources extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    implRegistery(overrides?: CallOverrides): Promise<BigNumber>;
+
     initialize(
       courseName: PromiseOrValue<string>,
       courseSymbol: PromiseOrValue<string>,
@@ -1093,6 +1114,7 @@ export interface OwlearnCourseResources extends BaseContract {
       courseURI: PromiseOrValue<string>,
       courseNFTURIs: PromiseOrValue<string>[],
       courseAddress: PromiseOrValue<string>,
+      implmRegisteryAddress: PromiseOrValue<string>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -1225,6 +1247,8 @@ export interface OwlearnCourseResources extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    implRegistery(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     initialize(
       courseName: PromiseOrValue<string>,
       courseSymbol: PromiseOrValue<string>,
@@ -1232,6 +1256,7 @@ export interface OwlearnCourseResources extends BaseContract {
       courseURI: PromiseOrValue<string>,
       courseNFTURIs: PromiseOrValue<string>[],
       courseAddress: PromiseOrValue<string>,
+      implmRegisteryAddress: PromiseOrValue<string>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

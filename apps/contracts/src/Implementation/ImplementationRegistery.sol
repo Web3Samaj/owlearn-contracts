@@ -3,14 +3,17 @@ pragma solidity ^0.8.12;
 
 import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import {ImplementationRegisteryStorage} from "./ImplementationRegisteryStorage.sol";
+import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 /// @title ImplementationRegistery
 /// @notice Implementation registery responsible for keeping track on whitelisted Contract implementations
 /// @author Dhruv <contact.dhruvagarwal@gmail.com>
 contract ImplementationRegistery is
     OwnableUpgradeable,
-    ImplementationRegisteryStorage /*///////////////////// Constructor //////////////////////////////////*/
+    ImplementationRegisteryStorage,
+    UUPSUpgradeable
 {
+    /*///////////////////// Constructor //////////////////////////////////*/
     /**
      * @dev Lock implementation contract
      */
@@ -99,4 +102,8 @@ contract ImplementationRegistery is
             _certificateImplAddress
         ] = false;
     }
+
+    function _authorizeUpgrade(
+        address newImplementation
+    ) internal virtual override onlyOwner {}
 }
