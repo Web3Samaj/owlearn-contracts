@@ -3,17 +3,11 @@
     "OwlearnCourseFactory": {
       "address": "0xA8c18a59d51Bc87A9Cc4b15274c5E055C891ce20"
     },
-    "OwlearnCourse": {
-      "address": "0xE6d530b8A8B7a354C8057921eEa1fDe5DA12DF7A"
-    },
-    "OwlearnCourseCertificates": {
-      "address": "0xb98Bd951352a2301E2F53e364a2CC0E3aD830a8c"
-    },
-    "OwlearnCourseResource": {
-      "address": "0xf203d2Cd2107e89abcC0d522Cd3B3Dc15D95EcE6"
-    },
     "OwlearnEducatorBadge": {
-      "address": "0x2F7Fcd95BC7479a2A642bbFa63546874cC51cB0a"
+      "address": "0x67ef530a7E7C3755Ea9323663d7c178d7300DE27"
+    },
+    "OwlearnId": {
+      "address": "0x2250F8D3202EbB641197A1451C68eF673E8d553f"
     }
   }
 }
