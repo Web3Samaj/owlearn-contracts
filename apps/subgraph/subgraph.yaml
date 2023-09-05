@@ -17,6 +17,7 @@ dataSources:
         - Course
         - Resource
         - Educator
+        - Certificate
       abis:
         - name: OwlearnCourseFactory
           file: ./abis/OwlearnCourseFactory.json
@@ -87,6 +88,7 @@ templates:
         - Course
         - Resource
         - Educator
+        - Certificate
       abis:
         - name: OwlearnCourse
           file: ./abis/OwlearnCourse.json
@@ -110,6 +112,7 @@ templates:
       entities:
         - Course
         - User
+        - Certificate
       abis:
         - name: OwlearnCourseCertificates
           file: ./abis/OwlearnCourseCertificates.json
