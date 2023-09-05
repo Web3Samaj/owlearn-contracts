@@ -124,30 +124,38 @@ export class Course extends Entity {
     this.set("courseURI", Value.fromString(value));
   }
 
-  get resourceAddress(): Bytes {
+  get resourceAddress(): Bytes | null {
     let value = this.get("resourceAddress");
     if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
+      return null;
     } else {
       return value.toBytes();
     }
   }
 
-  set resourceAddress(value: Bytes) {
-    this.set("resourceAddress", Value.fromBytes(value));
+  set resourceAddress(value: Bytes | null) {
+    if (!value) {
+      this.unset("resourceAddress");
+    } else {
+      this.set("resourceAddress", Value.fromBytes(<Bytes>value));
+    }
   }
 
-  get certificateAddress(): Bytes {
+  get certificateAddress(): Bytes | null {
     let value = this.get("certificateAddress");
     if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
+      return null;
     } else {
       return value.toBytes();
     }
   }
 
-  set certificateAddress(value: Bytes) {
-    this.set("certificateAddress", Value.fromBytes(value));
+  set certificateAddress(value: Bytes | null) {
+    if (!value) {
+      this.unset("certificateAddress");
+    } else {
+      this.set("certificateAddress", Value.fromBytes(<Bytes>value));
+    }
   }
 
   get resources(): Array<Bytes> | null {
@@ -255,30 +263,38 @@ export class Resource extends Entity {
     this.set("course", Value.fromBytes(value));
   }
 
-  get resourceURI(): string {
+  get resourceURI(): string | null {
     let value = this.get("resourceURI");
     if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
+      return null;
     } else {
       return value.toString();
     }
   }
 
-  set resourceURI(value: string) {
-    this.set("resourceURI", Value.fromString(value));
+  set resourceURI(value: string | null) {
+    if (!value) {
+      this.unset("resourceURI");
+    } else {
+      this.set("resourceURI", Value.fromString(<string>value));
+    }
   }
 
-  get resourceId(): BigInt {
+  get resourceId(): BigInt | null {
     let value = this.get("resourceId");
     if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
+      return null;
     } else {
       return value.toBigInt();
     }
   }
 
-  set resourceId(value: BigInt) {
-    this.set("resourceId", Value.fromBigInt(value));
+  set resourceId(value: BigInt | null) {
+    if (!value) {
+      this.unset("resourceId");
+    } else {
+      this.set("resourceId", Value.fromBigInt(<BigInt>value));
+    }
   }
 }
 
@@ -319,6 +335,19 @@ export class Certificate extends Entity {
     this.set("id", Value.fromBytes(value));
   }
 
+  get course(): Bytes {
+    let value = this.get("course");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set course(value: Bytes) {
+    this.set("course", Value.fromBytes(value));
+  }
+
   get certificateAddress(): Bytes {
     let value = this.get("certificateAddress");
     if (!value || value.kind == ValueKind.NULL) {
@@ -332,43 +361,55 @@ export class Certificate extends Entity {
     this.set("certificateAddress", Value.fromBytes(value));
   }
 
-  get certificateBaseURI(): string {
+  get certificateBaseURI(): string | null {
     let value = this.get("certificateBaseURI");
     if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
+      return null;
     } else {
       return value.toString();
     }
   }
 
-  set certificateBaseURI(value: string) {
-    this.set("certificateBaseURI", Value.fromString(value));
+  set certificateBaseURI(value: string | null) {
+    if (!value) {
+      this.unset("certificateBaseURI");
+    } else {
+      this.set("certificateBaseURI", Value.fromString(<string>value));
+    }
   }
 
-  get certificateName(): string {
+  get certificateName(): string | null {
     let value = this.get("certificateName");
     if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
+      return null;
     } else {
       return value.toString();
     }
   }
 
-  set certificateName(value: string) {
-    this.set("certificateName", Value.fromString(value));
+  set certificateName(value: string | null) {
+    if (!value) {
+      this.unset("certificateName");
+    } else {
+      this.set("certificateName", Value.fromString(<string>value));
+    }
   }
 
-  get certificateSymbol(): string {
+  get certificateSymbol(): string | null {
     let value = this.get("certificateSymbol");
     if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
+      return null;
     } else {
       return value.toString();
     }
   }
 
-  set certificateSymbol(value: string) {
-    this.set("certificateSymbol", Value.fromString(value));
+  set certificateSymbol(value: string | null) {
+    if (!value) {
+      this.unset("certificateSymbol");
+    } else {
+      this.set("certificateSymbol", Value.fromString(<string>value));
+    }
   }
 
   get enrolledUsers(): Array<Bytes> | null {

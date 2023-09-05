@@ -3,7 +3,12 @@ import {
   MintModuleDisabled as MintModuleDisabledEvent,
   MintModuleInitialised as MintModuleInitialisedEvent,
 } from "../../generated/templates/OwlearnCourse/OwlearnCourse";
-import { Course, Educator } from "../../generated/schema";
+import {
+  Course,
+  Educator,
+  Certificate,
+  Resource,
+} from "../../generated/schema";
 import {
   OwlearnCourseCertificates,
   OwlearnCourseResource,
@@ -18,7 +23,12 @@ export function handleCourseInitialised(event: CourseInitialisedEvent): void {
   entity.certificateAddress = event.params.certificates;
   entity.certificate = event.params.certificates;
   OwlearnCourseCertificates.create(event.params.resource);
+  let certificate = new Certificate(event.params.certificates);
+  certificate.certificateAddress = event.params.certificates;
+  certificate.course = entity.id;
   OwlearnCourseResource.create(event.params.certificates);
+
+  certificate.save();
   entity.save();
 }
 

@@ -20,17 +20,18 @@ type Course @entity {
 type Resource @entity {
   id: Bytes! ## resourceID
   course: Course!
-  resourceURI: String!
-  resourceId: BigInt!
+  resourceURI: String
+  resourceId: BigInt
   ## We might also index the IPFS data and then store here
 }
 
 type Certificate @entity {
   id: Bytes! ## Certificate Address
+  course: Course!
   certificateAddress: Bytes!
-  certificateBaseURI: String!
-  certificateName: String!
-  certificateSymbol: String!
+  certificateBaseURI: String
+  certificateName: String
+  certificateSymbol: String
   enrolledUsers: [User!] ## User record added once the NFT is minted
   ## Possible Certificate Data Indexing , with IPFS
 }
