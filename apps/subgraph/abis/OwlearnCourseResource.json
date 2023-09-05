@@ -147,6 +147,19 @@
     "inputs": [
       {
         "indexed": false,
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
+    ],
+    "name": "CourseResourceBurned",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
         "internalType": "string",
         "name": "courseName",
         "type": "string"
@@ -164,20 +177,7 @@
         "type": "address"
       }
     ],
-    "name": "CourseInitialised",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "CourseResourceBurned",
+    "name": "CourseResourceInitialised",
     "type": "event"
   },
   {
@@ -204,12 +204,12 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "uint8",
-        "name": "version",
-        "type": "uint8"
+        "internalType": "string",
+        "name": "newCourseURI",
+        "type": "string"
       }
     ],
-    "name": "Initialized",
+    "name": "CourseURIUpdated",
     "type": "event"
   },
   {
@@ -217,18 +217,12 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "string",
-        "name": "tokenURI",
-        "type": "string"
+        "internalType": "uint8",
+        "name": "version",
+        "type": "uint8"
       }
     ],
-    "name": "MetadataUpdate",
+    "name": "Initialized",
     "type": "event"
   },
   {
@@ -369,6 +363,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "implRegistery",
+    "outputs": [
+      {
+        "internalType": "contract ImplementationRegistery",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       { "internalType": "string", "name": "courseName", "type": "string" },
       { "internalType": "string", "name": "courseSymbol", "type": "string" },
@@ -379,7 +386,12 @@
         "name": "courseNFTURIs",
         "type": "string[]"
       },
-      { "internalType": "address", "name": "courseAddress", "type": "address" }
+      { "internalType": "address", "name": "courseAddress", "type": "address" },
+      {
+        "internalType": "address",
+        "name": "implmRegisteryAddress",
+        "type": "address"
+      }
     ],
     "name": "initialize",
     "outputs": [],

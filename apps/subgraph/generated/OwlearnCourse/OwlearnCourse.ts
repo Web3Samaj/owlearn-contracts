@@ -50,6 +50,32 @@ export class BeaconUpgraded__Params {
   }
 }
 
+export class CourseInitialised extends ethereum.Event {
+  get params(): CourseInitialised__Params {
+    return new CourseInitialised__Params(this);
+  }
+}
+
+export class CourseInitialised__Params {
+  _event: CourseInitialised;
+
+  constructor(event: CourseInitialised) {
+    this._event = event;
+  }
+
+  get course(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get resource(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+
+  get certificates(): Address {
+    return this._event.parameters[2].value.toAddress();
+  }
+}
+
 export class Initialized extends ethereum.Event {
   get params(): Initialized__Params {
     return new Initialized__Params(this);
@@ -65,6 +91,46 @@ export class Initialized__Params {
 
   get version(): i32 {
     return this._event.parameters[0].value.toI32();
+  }
+}
+
+export class MintModuleDisabled extends ethereum.Event {
+  get params(): MintModuleDisabled__Params {
+    return new MintModuleDisabled__Params(this);
+  }
+}
+
+export class MintModuleDisabled__Params {
+  _event: MintModuleDisabled;
+
+  constructor(event: MintModuleDisabled) {
+    this._event = event;
+  }
+
+  get course(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+}
+
+export class MintModuleInitialised extends ethereum.Event {
+  get params(): MintModuleInitialised__Params {
+    return new MintModuleInitialised__Params(this);
+  }
+}
+
+export class MintModuleInitialised__Params {
+  _event: MintModuleInitialised;
+
+  constructor(event: MintModuleInitialised) {
+    this._event = event;
+  }
+
+  get course(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get moduleAddress(): Address {
+    return this._event.parameters[1].value.toAddress();
   }
 }
 
@@ -189,6 +255,25 @@ export class OwlearnCourse extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
+  implRegistery(): Address {
+    let result = super.call("implRegistery", "implRegistery():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_implRegistery(): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "implRegistery",
+      "implRegistery():(address)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
   mintModule(): Address {
     let result = super.call("mintModule", "mintModule():(address)", []);
 
@@ -197,6 +282,29 @@ export class OwlearnCourse extends ethereum.SmartContract {
 
   try_mintModule(): ethereum.CallResult<Address> {
     let result = super.tryCall("mintModule", "mintModule():(address)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
+  moduleRegistery(): Address {
+    let result = super.call(
+      "moduleRegistery",
+      "moduleRegistery():(address)",
+      []
+    );
+
+    return result[0].toAddress();
+  }
+
+  try_moduleRegistery(): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "moduleRegistery",
+      "moduleRegistery():(address)",
+      []
+    );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -295,6 +403,32 @@ export class DeleteCourseNFTCall__Outputs {
   }
 }
 
+export class DisableModuleCall extends ethereum.Call {
+  get inputs(): DisableModuleCall__Inputs {
+    return new DisableModuleCall__Inputs(this);
+  }
+
+  get outputs(): DisableModuleCall__Outputs {
+    return new DisableModuleCall__Outputs(this);
+  }
+}
+
+export class DisableModuleCall__Inputs {
+  _call: DisableModuleCall;
+
+  constructor(call: DisableModuleCall) {
+    this._call = call;
+  }
+}
+
+export class DisableModuleCall__Outputs {
+  _call: DisableModuleCall;
+
+  constructor(call: DisableModuleCall) {
+    this._call = call;
+  }
+}
+
 export class EditCourseNFTCall extends ethereum.Call {
   get inputs(): EditCourseNFTCall__Inputs {
     return new EditCourseNFTCall__Inputs(this);
@@ -385,6 +519,14 @@ export class InitializeCall__Inputs {
   get _certificateImplementation(): Address {
     return this._call.inputValues[9].value.toAddress();
   }
+
+  get moduleRegisteryAddress(): Address {
+    return this._call.inputValues[10].value.toAddress();
+  }
+
+  get implmRegisteryAddress(): Address {
+    return this._call.inputValues[11].value.toAddress();
+  }
 }
 
 export class InitializeCall__Outputs {
@@ -426,6 +568,10 @@ export class MintCourseCertificateCall__Outputs {
 
   constructor(call: MintCourseCertificateCall) {
     this._call = call;
+  }
+
+  get tokenId(): BigInt {
+    return this._call.outputValues[0].value.toBigInt();
   }
 }
 

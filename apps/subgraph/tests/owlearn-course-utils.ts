@@ -3,7 +3,10 @@ import { ethereum, Address } from "@graphprotocol/graph-ts"
 import {
   AdminChanged,
   BeaconUpgraded,
+  CourseInitialised,
   Initialized,
+  MintModuleDisabled,
+  MintModuleInitialised,
   OwnershipTransferred,
   Upgraded
 } from "../generated/OwlearnCourse/OwlearnCourse"
@@ -41,6 +44,31 @@ export function createBeaconUpgradedEvent(beacon: Address): BeaconUpgraded {
   return beaconUpgradedEvent
 }
 
+export function createCourseInitialisedEvent(
+  course: Address,
+  resource: Address,
+  certificates: Address
+): CourseInitialised {
+  let courseInitialisedEvent = changetype<CourseInitialised>(newMockEvent())
+
+  courseInitialisedEvent.parameters = new Array()
+
+  courseInitialisedEvent.parameters.push(
+    new ethereum.EventParam("course", ethereum.Value.fromAddress(course))
+  )
+  courseInitialisedEvent.parameters.push(
+    new ethereum.EventParam("resource", ethereum.Value.fromAddress(resource))
+  )
+  courseInitialisedEvent.parameters.push(
+    new ethereum.EventParam(
+      "certificates",
+      ethereum.Value.fromAddress(certificates)
+    )
+  )
+
+  return courseInitialisedEvent
+}
+
 export function createInitializedEvent(version: i32): Initialized {
   let initializedEvent = changetype<Initialized>(newMockEvent())
 
@@ -54,6 +82,43 @@ export function createInitializedEvent(version: i32): Initialized {
   )
 
   return initializedEvent
+}
+
+export function createMintModuleDisabledEvent(
+  course: Address
+): MintModuleDisabled {
+  let mintModuleDisabledEvent = changetype<MintModuleDisabled>(newMockEvent())
+
+  mintModuleDisabledEvent.parameters = new Array()
+
+  mintModuleDisabledEvent.parameters.push(
+    new ethereum.EventParam("course", ethereum.Value.fromAddress(course))
+  )
+
+  return mintModuleDisabledEvent
+}
+
+export function createMintModuleInitialisedEvent(
+  course: Address,
+  moduleAddress: Address
+): MintModuleInitialised {
+  let mintModuleInitialisedEvent = changetype<MintModuleInitialised>(
+    newMockEvent()
+  )
+
+  mintModuleInitialisedEvent.parameters = new Array()
+
+  mintModuleInitialisedEvent.parameters.push(
+    new ethereum.EventParam("course", ethereum.Value.fromAddress(course))
+  )
+  mintModuleInitialisedEvent.parameters.push(
+    new ethereum.EventParam(
+      "moduleAddress",
+      ethereum.Value.fromAddress(moduleAddress)
+    )
+  )
+
+  return mintModuleInitialisedEvent
 }
 
 export function createOwnershipTransferredEvent(

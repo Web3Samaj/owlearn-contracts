@@ -4,27 +4,27 @@ import {
   ApprovalForAll as ApprovalForAllEvent,
   BeaconUpgraded as BeaconUpgradedEvent,
   ConsecutiveTransfer as ConsecutiveTransferEvent,
-  CourseInitialised as CourseInitialisedEvent,
   CourseResourceBurned as CourseResourceBurnedEvent,
+  CourseResourceInitialised as CourseResourceInitialisedEvent,
   CourseResourceUpdated as CourseResourceUpdatedEvent,
+  CourseURIUpdated as CourseURIUpdatedEvent,
   Initialized as InitializedEvent,
-  MetadataUpdate as MetadataUpdateEvent,
   NewCourseResourceMinted as NewCourseResourceMintedEvent,
   OwnershipTransferred as OwnershipTransferredEvent,
   Transfer as TransferEvent,
   Upgraded as UpgradedEvent
-} from "../generated/OwlearnCourseResources/OwlearnCourseResources"
+} from "../generated/OwlearnCourseResource/OwlearnCourseResource"
 import {
   AdminChanged,
   Approval,
   ApprovalForAll,
   BeaconUpgraded,
   ConsecutiveTransfer,
-  CourseInitialised,
   CourseResourceBurned,
+  CourseResourceInitialised,
   CourseResourceUpdated,
+  CourseURIUpdated,
   Initialized,
-  MetadataUpdate,
   NewCourseResourceMinted,
   OwnershipTransferred,
   Transfer,
@@ -106,13 +106,13 @@ export function handleConsecutiveTransfer(
   entity.save()
 }
 
-export function handleCourseInitialised(event: CourseInitialisedEvent): void {
-  let entity = new CourseInitialised(
+export function handleCourseResourceBurned(
+  event: CourseResourceBurnedEvent
+): void {
+  let entity = new CourseResourceBurned(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
-  entity.courseName = event.params.courseName
-  entity.courseSymbol = event.params.courseSymbol
-  entity.creator = event.params.creator
+  entity.tokenId = event.params.tokenId
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
@@ -121,13 +121,15 @@ export function handleCourseInitialised(event: CourseInitialisedEvent): void {
   entity.save()
 }
 
-export function handleCourseResourceBurned(
-  event: CourseResourceBurnedEvent
+export function handleCourseResourceInitialised(
+  event: CourseResourceInitialisedEvent
 ): void {
-  let entity = new CourseResourceBurned(
+  let entity = new CourseResourceInitialised(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
-  entity.tokenId = event.params.tokenId
+  entity.courseName = event.params.courseName
+  entity.courseSymbol = event.params.courseSymbol
+  entity.creator = event.params.creator
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
@@ -152,11 +154,11 @@ export function handleCourseResourceUpdated(
   entity.save()
 }
 
-export function handleInitialized(event: InitializedEvent): void {
-  let entity = new Initialized(
+export function handleCourseURIUpdated(event: CourseURIUpdatedEvent): void {
+  let entity = new CourseURIUpdated(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
-  entity.version = event.params.version
+  entity.newCourseURI = event.params.newCourseURI
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
@@ -165,12 +167,11 @@ export function handleInitialized(event: InitializedEvent): void {
   entity.save()
 }
 
-export function handleMetadataUpdate(event: MetadataUpdateEvent): void {
-  let entity = new MetadataUpdate(
+export function handleInitialized(event: InitializedEvent): void {
+  let entity = new Initialized(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
-  entity.tokenId = event.params.tokenId
-  entity.tokenURI = event.params.tokenURI
+  entity.version = event.params.version
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp

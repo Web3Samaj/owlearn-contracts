@@ -11,7 +11,7 @@ type Course @entity {
 }
 
 ## Contains the resource (video) info seperately
-type Resources @entity {
+type Resource @entity {
   id: Bytes!
 }
 
@@ -24,8 +24,7 @@ type Educator @entity {
 type User @entity {
   id: Bytes!
 }
-
-type OwlearnCourseAdminChanged @entity(immutable: true) {
+type AdminChanged @entity(immutable: true) {
   id: Bytes!
   previousAdmin: Bytes! # address
   newAdmin: Bytes! # address
@@ -34,9 +33,19 @@ type OwlearnCourseAdminChanged @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type OwlearnCourseBeaconUpgraded @entity(immutable: true) {
+type BeaconUpgraded @entity(immutable: true) {
   id: Bytes!
   beacon: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type CourseInitialised @entity(immutable: true) {
+  id: Bytes!
+  course: Bytes! # address
+  resource: Bytes! # address
+  certificates: Bytes! # address
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -45,6 +54,23 @@ type OwlearnCourseBeaconUpgraded @entity(immutable: true) {
 type Initialized @entity(immutable: true) {
   id: Bytes!
   version: Int! # uint8
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type MintModuleDisabled @entity(immutable: true) {
+  id: Bytes!
+  course: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type MintModuleInitialised @entity(immutable: true) {
+  id: Bytes!
+  course: Bytes! # address
+  moduleAddress: Bytes! # address
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -59,58 +85,7 @@ type OwnershipTransferred @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type OwlearnCourseUpgraded @entity(immutable: true) {
-  id: Bytes!
-  implementation: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-type ContractAdminChanged @entity(immutable: true) {
-  id: Bytes!
-  previousAdmin: Bytes! # address
-  newAdmin: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type ApprovalForAll @entity(immutable: true) {
-  id: Bytes!
-  owner: Bytes! # address
-  operator: Bytes! # address
-  approved: Boolean! # bool
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type ContractBeaconUpgraded @entity(immutable: true) {
-  id: Bytes!
-  beacon: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type ContractInitialized @entity(immutable: true) {
-  id: Bytes!
-  version: Int! # uint8
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type ContractOwnershipTransferred @entity(immutable: true) {
-  id: Bytes!
-  previousOwner: Bytes! # address
-  newOwner: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type ContractUpgraded @entity(immutable: true) {
+type Upgraded @entity(immutable: true) {
   id: Bytes!
   implementation: Bytes! # address
   blockNumber: BigInt!
@@ -126,9 +101,64 @@ type OwlearnCourseCertificatesAdminChanged @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
+type Approval @entity(immutable: true) {
+  id: Bytes!
+  owner: Bytes! # address
+  approved: Bytes! # address
+  tokenId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type ApprovalForAll @entity(immutable: true) {
+  id: Bytes!
+  owner: Bytes! # address
+  operator: Bytes! # address
+  approved: Boolean! # bool
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
 type OwlearnCourseCertificatesBeaconUpgraded @entity(immutable: true) {
   id: Bytes!
   beacon: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type CertificateBurned @entity(immutable: true) {
+  id: Bytes!
+  tokenId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type CertificateMinted @entity(immutable: true) {
+  id: Bytes!
+  to: Bytes! # address
+  tokenID: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type CertificateURIUpdated @entity(immutable: true) {
+  id: Bytes!
+  newBaseURI: String! # string
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type CourseCertificateIntialised @entity(immutable: true) {
+  id: Bytes!
+  courseCertificateName: String! # string
+  courseCertificateSymbol: String! # string
+  certificateBaseURI: String! # string
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -151,6 +181,16 @@ type OwlearnCourseCertificatesOwnershipTransferred @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
+type Transfer @entity(immutable: true) {
+  id: Bytes!
+  from: Bytes! # address
+  to: Bytes! # address
+  tokenId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
 type OwlearnCourseCertificatesUpgraded @entity(immutable: true) {
   id: Bytes!
   implementation: Bytes! # address
@@ -158,7 +198,7 @@ type OwlearnCourseCertificatesUpgraded @entity(immutable: true) {
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
-type OwlearnCourseResourcesAdminChanged @entity(immutable: true) {
+type OwlearnCourseResourceAdminChanged @entity(immutable: true) {
   id: Bytes!
   previousAdmin: Bytes! # address
   newAdmin: Bytes! # address
@@ -167,7 +207,7 @@ type OwlearnCourseResourcesAdminChanged @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type OwlearnCourseResourcesApproval @entity(immutable: true) {
+type OwlearnCourseResourceApproval @entity(immutable: true) {
   id: Bytes!
   owner: Bytes! # address
   approved: Bytes! # address
@@ -177,7 +217,7 @@ type OwlearnCourseResourcesApproval @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type OwlearnCourseResourcesApprovalForAll @entity(immutable: true) {
+type OwlearnCourseResourceApprovalForAll @entity(immutable: true) {
   id: Bytes!
   owner: Bytes! # address
   operator: Bytes! # address
@@ -187,7 +227,7 @@ type OwlearnCourseResourcesApprovalForAll @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type OwlearnCourseResourcesBeaconUpgraded @entity(immutable: true) {
+type OwlearnCourseResourceBeaconUpgraded @entity(immutable: true) {
   id: Bytes!
   beacon: Bytes! # address
   blockNumber: BigInt!
@@ -206,19 +246,19 @@ type ConsecutiveTransfer @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type CourseInitialised @entity(immutable: true) {
+type CourseResourceBurned @entity(immutable: true) {
   id: Bytes!
-  courseName: String! # string
-  courseSymbol: String! # string
-  creator: Bytes! # address
+  tokenId: BigInt! # uint256
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
 
-type CourseResourceBurned @entity(immutable: true) {
+type CourseResourceInitialised @entity(immutable: true) {
   id: Bytes!
-  tokenId: BigInt! # uint256
+  courseName: String! # string
+  courseSymbol: String! # string
+  creator: Bytes! # address
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -233,18 +273,17 @@ type CourseResourceUpdated @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type OwlearnCourseResourcesInitialized @entity(immutable: true) {
+type CourseURIUpdated @entity(immutable: true) {
   id: Bytes!
-  version: Int! # uint8
+  newCourseURI: String! # string
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
 
-type MetadataUpdate @entity(immutable: true) {
+type OwlearnCourseResourceInitialized @entity(immutable: true) {
   id: Bytes!
-  tokenId: BigInt! # uint256
-  tokenURI: String! # string
+  version: Int! # uint8
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -259,7 +298,7 @@ type NewCourseResourceMinted @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type OwlearnCourseResourcesOwnershipTransferred @entity(immutable: true) {
+type OwlearnCourseResourceOwnershipTransferred @entity(immutable: true) {
   id: Bytes!
   previousOwner: Bytes! # address
   newOwner: Bytes! # address
@@ -268,7 +307,7 @@ type OwlearnCourseResourcesOwnershipTransferred @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type OwlearnCourseResourcesTransfer @entity(immutable: true) {
+type OwlearnCourseResourceTransfer @entity(immutable: true) {
   id: Bytes!
   from: Bytes! # address
   to: Bytes! # address
@@ -278,7 +317,7 @@ type OwlearnCourseResourcesTransfer @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type OwlearnCourseResourcesUpgraded @entity(immutable: true) {
+type OwlearnCourseResourceUpgraded @entity(immutable: true) {
   id: Bytes!
   implementation: Bytes! # address
   blockNumber: BigInt!

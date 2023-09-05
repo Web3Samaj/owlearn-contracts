@@ -87,6 +87,76 @@
     "inputs": [
       {
         "indexed": false,
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
+    ],
+    "name": "CertificateBurned",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "tokenID",
+        "type": "uint256"
+      }
+    ],
+    "name": "CertificateMinted",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "newBaseURI",
+        "type": "string"
+      }
+    ],
+    "name": "CertificateURIUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "courseCertificateName",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "courseCertificateSymbol",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "certificateBaseURI",
+        "type": "string"
+      }
+    ],
+    "name": "CourseCertificateIntialised",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
         "internalType": "uint8",
         "name": "version",
         "type": "uint8"
@@ -197,6 +267,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "implRegistery",
+    "outputs": [
+      {
+        "internalType": "contract ImplementationRegistery",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "string",
@@ -213,7 +296,12 @@
         "name": "certificateBaseURI",
         "type": "string"
       },
-      { "internalType": "address", "name": "courseCreator", "type": "address" }
+      { "internalType": "address", "name": "courseCreator", "type": "address" },
+      {
+        "internalType": "address",
+        "name": "implmRegisteryAddress",
+        "type": "address"
+      }
     ],
     "name": "initialize",
     "outputs": [],

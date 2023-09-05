@@ -5,6 +5,10 @@ import {
   Approval,
   ApprovalForAll,
   BeaconUpgraded,
+  CertificateBurned,
+  CertificateMinted,
+  CertificateURIUpdated,
+  CourseCertificateIntialised,
   Initialized,
   OwnershipTransferred,
   Transfer,
@@ -89,6 +93,93 @@ export function createBeaconUpgradedEvent(beacon: Address): BeaconUpgraded {
   )
 
   return beaconUpgradedEvent
+}
+
+export function createCertificateBurnedEvent(
+  tokenId: BigInt
+): CertificateBurned {
+  let certificateBurnedEvent = changetype<CertificateBurned>(newMockEvent())
+
+  certificateBurnedEvent.parameters = new Array()
+
+  certificateBurnedEvent.parameters.push(
+    new ethereum.EventParam(
+      "tokenId",
+      ethereum.Value.fromUnsignedBigInt(tokenId)
+    )
+  )
+
+  return certificateBurnedEvent
+}
+
+export function createCertificateMintedEvent(
+  to: Address,
+  tokenID: BigInt
+): CertificateMinted {
+  let certificateMintedEvent = changetype<CertificateMinted>(newMockEvent())
+
+  certificateMintedEvent.parameters = new Array()
+
+  certificateMintedEvent.parameters.push(
+    new ethereum.EventParam("to", ethereum.Value.fromAddress(to))
+  )
+  certificateMintedEvent.parameters.push(
+    new ethereum.EventParam(
+      "tokenID",
+      ethereum.Value.fromUnsignedBigInt(tokenID)
+    )
+  )
+
+  return certificateMintedEvent
+}
+
+export function createCertificateURIUpdatedEvent(
+  newBaseURI: string
+): CertificateURIUpdated {
+  let certificateUriUpdatedEvent = changetype<CertificateURIUpdated>(
+    newMockEvent()
+  )
+
+  certificateUriUpdatedEvent.parameters = new Array()
+
+  certificateUriUpdatedEvent.parameters.push(
+    new ethereum.EventParam("newBaseURI", ethereum.Value.fromString(newBaseURI))
+  )
+
+  return certificateUriUpdatedEvent
+}
+
+export function createCourseCertificateIntialisedEvent(
+  courseCertificateName: string,
+  courseCertificateSymbol: string,
+  certificateBaseURI: string
+): CourseCertificateIntialised {
+  let courseCertificateIntialisedEvent = changetype<
+    CourseCertificateIntialised
+  >(newMockEvent())
+
+  courseCertificateIntialisedEvent.parameters = new Array()
+
+  courseCertificateIntialisedEvent.parameters.push(
+    new ethereum.EventParam(
+      "courseCertificateName",
+      ethereum.Value.fromString(courseCertificateName)
+    )
+  )
+  courseCertificateIntialisedEvent.parameters.push(
+    new ethereum.EventParam(
+      "courseCertificateSymbol",
+      ethereum.Value.fromString(courseCertificateSymbol)
+    )
+  )
+  courseCertificateIntialisedEvent.parameters.push(
+    new ethereum.EventParam(
+      "certificateBaseURI",
+      ethereum.Value.fromString(certificateBaseURI)
+    )
+  )
+
+  return courseCertificateIntialisedEvent
 }
 
 export function createInitializedEvent(version: i32): Initialized {

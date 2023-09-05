@@ -6,9 +6,33 @@ dataSources:
     name: OwlearnCourseFactory
     network: mumbai
     source:
-      address: "0xd3C4D22b90Ac6229F32AD99fd824dB16151e1A1D"
+      address: "0xA8c18a59d51Bc87A9Cc4b15274c5E055C891ce20"
       abi: OwlearnCourseFactory
-      startBlock: 38991812
+      startBlock: 39776538
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Course
+        - Resource
+        - Educator
+        - User
+      abis:
+        - name: OwlearnCourseFactory
+          file: ./abis/OwlearnCourseFactory.json
+      eventHandlers:
+        - event:
+            CourseCreated(uint256,uint256,indexed address,string,string,indexed
+            address,string,string[],string)
+          handler: handleCourseCreated
+      file: ./src/owlearn-course-factory.ts
+templates:
+  - kind: ethereum
+    name: OwlearnCourse
+    network: mumbai
+    source:
+      abi: OwlearnCourse
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -16,76 +40,33 @@ dataSources:
       entities:
         - AdminChanged
         - BeaconUpgraded
+        - CourseInitialised
+        - Initialized
+        - MintModuleDisabled
+        - MintModuleInitialised
+        - OwnershipTransferred
         - Upgraded
       abis:
-        - name: OwlearnCourseFactory
-          file: ./abis/OwlearnCourseFactory.json
+        - name: OwlearnCourse
+          file: ./abis/OwlearnCourse.json
       eventHandlers:
         - event: AdminChanged(address,address)
           handler: handleAdminChanged
         - event: BeaconUpgraded(indexed address)
           handler: handleBeaconUpgraded
-        - event: Upgraded(indexed address)
-          handler: handleUpgraded
-      file: ./src/owlearn-course-factory.ts
-templates:
-  - kind: ethereum
-    name: OwlearnCourseResources
-    network: mumbai
-    source:
-      abi: OwlearnCourseResources
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.7
-      language: wasm/assemblyscript
-      entities:
-        - OwlearnCourseResourcesAdminChanged
-        - OwlearnCourseResourcesApproval
-        - OwlearnCourseResourcesApprovalForAll
-        - OwlearnCourseResourcesBeaconUpgraded
-        - ConsecutiveTransfer
-        - CourseInitialised
-        - CourseResourceBurned
-        - CourseResourceUpdated
-        - OwlearnCourseResourcesInitialized
-        - MetadataUpdate
-        - NewCourseResourceMinted
-        - OwlearnCourseResourcesOwnershipTransferred
-        - OwlearnCourseResourcesTransfer
-        - OwlearnCourseResourcesUpgraded
-      abis:
-        - name: OwlearnCourseResources
-          file: ./abis/OwlearnCourseResources.json
-      eventHandlers:
-        - event: AdminChanged(address,address)
-          handler: handleAdminChanged
-        - event: Approval(indexed address,indexed address,indexed uint256)
-          handler: handleApproval
-        - event: ApprovalForAll(indexed address,indexed address,bool)
-          handler: handleApprovalForAll
-        - event: BeaconUpgraded(indexed address)
-          handler: handleBeaconUpgraded
-        - event: ConsecutiveTransfer(indexed uint256,uint256,indexed address,indexed address)
-          handler: handleConsecutiveTransfer
-        - event: CourseInitialised(string,string,address)
+        - event: CourseInitialised(indexed address,indexed address,indexed address)
           handler: handleCourseInitialised
-        - event: CourseResourceBurned(uint256)
-          handler: handleCourseResourceBurned
-        - event: CourseResourceUpdated(uint256,string)
-          handler: handleCourseResourceUpdated
         - event: Initialized(uint8)
           handler: handleInitialized
-        - event: MetadataUpdate(uint256,string)
-          handler: handleMetadataUpdate
-        - event: NewCourseResourceMinted(uint256,string[])
-          handler: handleNewCourseResourceMinted
+        - event: MintModuleDisabled(indexed address)
+          handler: handleMintModuleDisabled
+        - event: MintModuleInitialised(indexed address,indexed address)
+          handler: handleMintModuleInitialised
         - event: OwnershipTransferred(indexed address,indexed address)
           handler: handleOwnershipTransferred
-        - event: Transfer(indexed address,indexed address,indexed uint256)
-          handler: handleTransfer
         - event: Upgraded(indexed address)
           handler: handleUpgraded
-      file: ./src/owlearn-course-resources.ts
+      file: ./src/owlearn-course.ts
   - kind: ethereum
     name: OwlearnCourseCertificates
     network: mumbai
@@ -100,6 +81,10 @@ templates:
         - Approval
         - ApprovalForAll
         - OwlearnCourseCertificatesBeaconUpgraded
+        - CertificateBurned
+        - CertificateMinted
+        - CertificateURIUpdated
+        - CourseCertificateIntialised
         - OwlearnCourseCertificatesInitialized
         - OwlearnCourseCertificatesOwnershipTransferred
         - Transfer
@@ -116,6 +101,14 @@ templates:
           handler: handleApprovalForAll
         - event: BeaconUpgraded(indexed address)
           handler: handleBeaconUpgraded
+        - event: CertificateBurned(uint256)
+          handler: handleCertificateBurned
+        - event: CertificateMinted(address,uint256)
+          handler: handleCertificateMinted
+        - event: CertificateURIUpdated(string)
+          handler: handleCertificateURIUpdated
+        - event: CourseCertificateIntialised(string,string,string)
+          handler: handleCourseCertificateIntialised
         - event: Initialized(uint8)
           handler: handleInitialized
         - event: OwnershipTransferred(indexed address,indexed address)
@@ -125,33 +118,60 @@ templates:
         - event: Upgraded(indexed address)
           handler: handleUpgraded
       file: ./src/owlearn-course-certificates.ts
-  - name: OwlearnCourse
-    kind: ethereum/contract
+  - kind: ethereum
+    name: OwlearnCourseResource
     network: mumbai
     source:
-      abi: OwlearnCourse
+      abi: OwlearnCourseResource
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - OwlearnCourseAdminChanged
-        - OwlearnCourseBeaconUpgraded
-        - Initialized
-        - OwnershipTransferred
-        - OwlearnCourseUpgraded
+        - OwlearnCourseResourceAdminChanged
+        - OwlearnCourseResourceApproval
+        - OwlearnCourseResourceApprovalForAll
+        - OwlearnCourseResourceBeaconUpgraded
+        - ConsecutiveTransfer
+        - CourseResourceBurned
+        - CourseResourceInitialised
+        - CourseResourceUpdated
+        - CourseURIUpdated
+        - OwlearnCourseResourceInitialized
+        - NewCourseResourceMinted
+        - OwlearnCourseResourceOwnershipTransferred
+        - OwlearnCourseResourceTransfer
+        - OwlearnCourseResourceUpgraded
       abis:
-        - name: OwlearnCourse
-          file: ./abis/OwlearnCourse.json
+        - name: OwlearnCourseResource
+          file: ./abis/OwlearnCourseResource.json
       eventHandlers:
         - event: AdminChanged(address,address)
           handler: handleAdminChanged
+        - event: Approval(indexed address,indexed address,indexed uint256)
+          handler: handleApproval
+        - event: ApprovalForAll(indexed address,indexed address,bool)
+          handler: handleApprovalForAll
         - event: BeaconUpgraded(indexed address)
           handler: handleBeaconUpgraded
+        - event: ConsecutiveTransfer(indexed uint256,uint256,indexed address,indexed address)
+          handler: handleConsecutiveTransfer
+        - event: CourseResourceBurned(uint256)
+          handler: handleCourseResourceBurned
+        - event: CourseResourceInitialised(string,string,address)
+          handler: handleCourseResourceInitialised
+        - event: CourseResourceUpdated(uint256,string)
+          handler: handleCourseResourceUpdated
+        - event: CourseURIUpdated(string)
+          handler: handleCourseURIUpdated
         - event: Initialized(uint8)
           handler: handleInitialized
+        - event: NewCourseResourceMinted(uint256,string[])
+          handler: handleNewCourseResourceMinted
         - event: OwnershipTransferred(indexed address,indexed address)
           handler: handleOwnershipTransferred
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
         - event: Upgraded(indexed address)
           handler: handleUpgraded
-      file: ./src/owlearn-course.ts
+      file: ./src/owlearn-course-resource.ts

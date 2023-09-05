@@ -5,11 +5,17 @@ import {
   Approval,
   ApprovalForAll,
   BeaconUpgraded,
+  ConsecutiveTransfer,
+  CourseResourceBurned,
+  CourseResourceInitialised,
+  CourseResourceUpdated,
+  CourseURIUpdated,
   Initialized,
+  NewCourseResourceMinted,
   OwnershipTransferred,
   Transfer,
   Upgraded
-} from "../generated/Contract/Contract"
+} from "../generated/OwlearnCourseResource/OwlearnCourseResource"
 
 export function createAdminChangedEvent(
   previousAdmin: Address,
@@ -91,6 +97,127 @@ export function createBeaconUpgradedEvent(beacon: Address): BeaconUpgraded {
   return beaconUpgradedEvent
 }
 
+export function createConsecutiveTransferEvent(
+  fromTokenId: BigInt,
+  toTokenId: BigInt,
+  from: Address,
+  to: Address
+): ConsecutiveTransfer {
+  let consecutiveTransferEvent = changetype<ConsecutiveTransfer>(newMockEvent())
+
+  consecutiveTransferEvent.parameters = new Array()
+
+  consecutiveTransferEvent.parameters.push(
+    new ethereum.EventParam(
+      "fromTokenId",
+      ethereum.Value.fromUnsignedBigInt(fromTokenId)
+    )
+  )
+  consecutiveTransferEvent.parameters.push(
+    new ethereum.EventParam(
+      "toTokenId",
+      ethereum.Value.fromUnsignedBigInt(toTokenId)
+    )
+  )
+  consecutiveTransferEvent.parameters.push(
+    new ethereum.EventParam("from", ethereum.Value.fromAddress(from))
+  )
+  consecutiveTransferEvent.parameters.push(
+    new ethereum.EventParam("to", ethereum.Value.fromAddress(to))
+  )
+
+  return consecutiveTransferEvent
+}
+
+export function createCourseResourceBurnedEvent(
+  tokenId: BigInt
+): CourseResourceBurned {
+  let courseResourceBurnedEvent = changetype<CourseResourceBurned>(
+    newMockEvent()
+  )
+
+  courseResourceBurnedEvent.parameters = new Array()
+
+  courseResourceBurnedEvent.parameters.push(
+    new ethereum.EventParam(
+      "tokenId",
+      ethereum.Value.fromUnsignedBigInt(tokenId)
+    )
+  )
+
+  return courseResourceBurnedEvent
+}
+
+export function createCourseResourceInitialisedEvent(
+  courseName: string,
+  courseSymbol: string,
+  creator: Address
+): CourseResourceInitialised {
+  let courseResourceInitialisedEvent = changetype<CourseResourceInitialised>(
+    newMockEvent()
+  )
+
+  courseResourceInitialisedEvent.parameters = new Array()
+
+  courseResourceInitialisedEvent.parameters.push(
+    new ethereum.EventParam("courseName", ethereum.Value.fromString(courseName))
+  )
+  courseResourceInitialisedEvent.parameters.push(
+    new ethereum.EventParam(
+      "courseSymbol",
+      ethereum.Value.fromString(courseSymbol)
+    )
+  )
+  courseResourceInitialisedEvent.parameters.push(
+    new ethereum.EventParam("creator", ethereum.Value.fromAddress(creator))
+  )
+
+  return courseResourceInitialisedEvent
+}
+
+export function createCourseResourceUpdatedEvent(
+  tokenId: BigInt,
+  newResourceURI: string
+): CourseResourceUpdated {
+  let courseResourceUpdatedEvent = changetype<CourseResourceUpdated>(
+    newMockEvent()
+  )
+
+  courseResourceUpdatedEvent.parameters = new Array()
+
+  courseResourceUpdatedEvent.parameters.push(
+    new ethereum.EventParam(
+      "tokenId",
+      ethereum.Value.fromUnsignedBigInt(tokenId)
+    )
+  )
+  courseResourceUpdatedEvent.parameters.push(
+    new ethereum.EventParam(
+      "newResourceURI",
+      ethereum.Value.fromString(newResourceURI)
+    )
+  )
+
+  return courseResourceUpdatedEvent
+}
+
+export function createCourseURIUpdatedEvent(
+  newCourseURI: string
+): CourseURIUpdated {
+  let courseUriUpdatedEvent = changetype<CourseURIUpdated>(newMockEvent())
+
+  courseUriUpdatedEvent.parameters = new Array()
+
+  courseUriUpdatedEvent.parameters.push(
+    new ethereum.EventParam(
+      "newCourseURI",
+      ethereum.Value.fromString(newCourseURI)
+    )
+  )
+
+  return courseUriUpdatedEvent
+}
+
 export function createInitializedEvent(version: i32): Initialized {
   let initializedEvent = changetype<Initialized>(newMockEvent())
 
@@ -104,6 +231,32 @@ export function createInitializedEvent(version: i32): Initialized {
   )
 
   return initializedEvent
+}
+
+export function createNewCourseResourceMintedEvent(
+  totalResourceMinted: BigInt,
+  courseURIs: Array<string>
+): NewCourseResourceMinted {
+  let newCourseResourceMintedEvent = changetype<NewCourseResourceMinted>(
+    newMockEvent()
+  )
+
+  newCourseResourceMintedEvent.parameters = new Array()
+
+  newCourseResourceMintedEvent.parameters.push(
+    new ethereum.EventParam(
+      "totalResourceMinted",
+      ethereum.Value.fromUnsignedBigInt(totalResourceMinted)
+    )
+  )
+  newCourseResourceMintedEvent.parameters.push(
+    new ethereum.EventParam(
+      "courseURIs",
+      ethereum.Value.fromStringArray(courseURIs)
+    )
+  )
+
+  return newCourseResourceMintedEvent
 }
 
 export function createOwnershipTransferredEvent(

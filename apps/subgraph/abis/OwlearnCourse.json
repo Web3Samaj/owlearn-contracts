@@ -36,6 +36,31 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": true,
+        "internalType": "address",
+        "name": "course",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "resource",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "certificates",
+        "type": "address"
+      }
+    ],
+    "name": "CourseInitialised",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": false,
         "internalType": "uint8",
         "name": "version",
@@ -43,6 +68,38 @@
       }
     ],
     "name": "Initialized",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "course",
+        "type": "address"
+      }
+    ],
+    "name": "MintModuleDisabled",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "course",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "moduleAddress",
+        "type": "address"
+      }
+    ],
+    "name": "MintModuleInitialised",
     "type": "event"
   },
   {
@@ -127,6 +184,13 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "disableModule",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [
       { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
       { "internalType": "string", "name": "newNFTURI", "type": "string" }
@@ -134,6 +198,19 @@
     "name": "editCourseNFT",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "implRegistery",
+    "outputs": [
+      {
+        "internalType": "contract ImplementationRegistery",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -163,6 +240,16 @@
         "internalType": "address",
         "name": "_certificateImplementation",
         "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "moduleRegisteryAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "implmRegisteryAddress",
+        "type": "address"
       }
     ],
     "name": "initialize",
@@ -176,8 +263,10 @@
       { "internalType": "bytes", "name": "data", "type": "bytes" }
     ],
     "name": "mintCourseCertificate",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "outputs": [
+      { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
+    ],
+    "stateMutability": "payable",
     "type": "function"
   },
   {
@@ -197,6 +286,19 @@
     "inputs": [],
     "name": "mintModule",
     "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "moduleRegistery",
+    "outputs": [
+      {
+        "internalType": "contract OwlearnModuleRegistery",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },

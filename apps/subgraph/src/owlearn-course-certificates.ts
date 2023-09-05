@@ -3,6 +3,10 @@ import {
   Approval as ApprovalEvent,
   ApprovalForAll as ApprovalForAllEvent,
   BeaconUpgraded as BeaconUpgradedEvent,
+  CertificateBurned as CertificateBurnedEvent,
+  CertificateMinted as CertificateMintedEvent,
+  CertificateURIUpdated as CertificateURIUpdatedEvent,
+  CourseCertificateIntialised as CourseCertificateIntialisedEvent,
   Initialized as InitializedEvent,
   OwnershipTransferred as OwnershipTransferredEvent,
   Transfer as TransferEvent,
@@ -13,6 +17,10 @@ import {
   Approval,
   ApprovalForAll,
   BeaconUpgraded,
+  CertificateBurned,
+  CertificateMinted,
+  CertificateURIUpdated,
+  CourseCertificateIntialised,
   Initialized,
   OwnershipTransferred,
   Transfer,
@@ -68,6 +76,65 @@ export function handleBeaconUpgraded(event: BeaconUpgradedEvent): void {
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
   entity.beacon = event.params.beacon
+
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+
+  entity.save()
+}
+
+export function handleCertificateBurned(event: CertificateBurnedEvent): void {
+  let entity = new CertificateBurned(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
+  entity.tokenId = event.params.tokenId
+
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+
+  entity.save()
+}
+
+export function handleCertificateMinted(event: CertificateMintedEvent): void {
+  let entity = new CertificateMinted(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
+  entity.to = event.params.to
+  entity.tokenID = event.params.tokenID
+
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+
+  entity.save()
+}
+
+export function handleCertificateURIUpdated(
+  event: CertificateURIUpdatedEvent
+): void {
+  let entity = new CertificateURIUpdated(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
+  entity.newBaseURI = event.params.newBaseURI
+
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+
+  entity.save()
+}
+
+export function handleCourseCertificateIntialised(
+  event: CourseCertificateIntialisedEvent
+): void {
+  let entity = new CourseCertificateIntialised(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
+  entity.courseCertificateName = event.params.courseCertificateName
+  entity.courseCertificateSymbol = event.params.courseCertificateSymbol
+  entity.certificateBaseURI = event.params.certificateBaseURI
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp

@@ -1,54 +1,106 @@
-import { BigInt } from "@graphprotocol/graph-ts"
 import {
-  OwlearnCourseFactory,
+  AdminChanged as AdminChangedEvent,
+  BeaconUpgraded as BeaconUpgradedEvent,
+  CourseCreated as CourseCreatedEvent,
+  Initialized as InitializedEvent,
+  OwnershipTransferred as OwnershipTransferredEvent,
+  Upgraded as UpgradedEvent
+} from "../generated/OwlearnCourseFactory/OwlearnCourseFactory"
+import {
   AdminChanged,
   BeaconUpgraded,
+  CourseCreated,
+  Initialized,
+  OwnershipTransferred,
   Upgraded
-} from "../generated/OwlearnCourseFactory/OwlearnCourseFactory"
-import { ExampleEntity } from "../generated/schema"
+} from "../generated/schema"
 
-export function handleAdminChanged(event: AdminChanged): void {
-  // Entities can be loaded from the store using a string ID; this ID
-  // needs to be unique across all entities of the same type
-  let entity = ExampleEntity.load(event.transaction.from)
-
-  // Entities only exist after they have been saved to the store;
-  // `null` checks allow to create entities on demand
-  if (!entity) {
-    entity = new ExampleEntity(event.transaction.from)
-
-    // Entity fields can be set using simple assignments
-    entity.count = BigInt.fromI32(0)
-  }
-
-  // BigInt and BigDecimal math are supported
-  entity.count = entity.count + BigInt.fromI32(1)
-
-  // Entity fields can be set based on event parameters
+export function handleAdminChanged(event: AdminChangedEvent): void {
+  let entity = new AdminChanged(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
   entity.previousAdmin = event.params.previousAdmin
   entity.newAdmin = event.params.newAdmin
 
-  // Entities can be written to the store with `.save()`
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+
   entity.save()
-
-  // Note: If a handler doesn't require existing field values, it is faster
-  // _not_ to load the entity from the store. Instead, create it fresh with
-  // `new Entity(...)`, set the fields that should be updated and save the
-  // entity back to the store. Fields that were not set or unset remain
-  // unchanged, allowing for partial updates to be applied.
-
-  // It is also possible to access smart contracts from mappings. For
-  // example, the contract that has emitted the event can be connected to
-  // with:
-  //
-  // let contract = Contract.bind(event.address)
-  //
-  // The following functions can then be called on this contract to access
-  // state variables and other data:
-  //
-  // None
 }
 
-export function handleBeaconUpgraded(event: BeaconUpgraded): void {}
+export function handleBeaconUpgraded(event: BeaconUpgradedEvent): void {
+  let entity = new BeaconUpgraded(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
+  entity.beacon = event.params.beacon
 
-export function handleUpgraded(event: Upgraded): void {}
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+
+  entity.save()
+}
+
+export function handleCourseCreated(event: CourseCreatedEvent): void {
+  let entity = new CourseCreated(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
+  entity.creatorId = event.params.creatorId
+  entity.courseId = event.params.courseId
+  entity.courseAddress = event.params.courseAddress
+  entity.courseName = event.params.courseName
+  entity.courseSymbol = event.params.courseSymbol
+  entity.creator = event.params.creator
+  entity.courseURI = event.params.courseURI
+  entity.courseNFTURIs = event.params.courseNFTURIs
+  entity.certificateBaseURI = event.params.certificateBaseURI
+
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+
+  entity.save()
+}
+
+export function handleInitialized(event: InitializedEvent): void {
+  let entity = new Initialized(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
+  entity.version = event.params.version
+
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+
+  entity.save()
+}
+
+export function handleOwnershipTransferred(
+  event: OwnershipTransferredEvent
+): void {
+  let entity = new OwnershipTransferred(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
+  entity.previousOwner = event.params.previousOwner
+  entity.newOwner = event.params.newOwner
+
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+
+  entity.save()
+}
+
+export function handleUpgraded(event: UpgradedEvent): void {
+  let entity = new Upgraded(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
+  entity.implementation = event.params.implementation
+
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+
+  entity.save()
+}

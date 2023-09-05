@@ -1,8 +1,11 @@
 import { newMockEvent } from "matchstick-as"
-import { ethereum, Address } from "@graphprotocol/graph-ts"
+import { ethereum, Address, BigInt } from "@graphprotocol/graph-ts"
 import {
   AdminChanged,
   BeaconUpgraded,
+  CourseCreated,
+  Initialized,
+  OwnershipTransferred,
   Upgraded
 } from "../generated/OwlearnCourseFactory/OwlearnCourseFactory"
 
@@ -37,6 +40,108 @@ export function createBeaconUpgradedEvent(beacon: Address): BeaconUpgraded {
   )
 
   return beaconUpgradedEvent
+}
+
+export function createCourseCreatedEvent(
+  creatorId: BigInt,
+  courseId: BigInt,
+  courseAddress: Address,
+  courseName: string,
+  courseSymbol: string,
+  creator: Address,
+  courseURI: string,
+  courseNFTURIs: Array<string>,
+  certificateBaseURI: string
+): CourseCreated {
+  let courseCreatedEvent = changetype<CourseCreated>(newMockEvent())
+
+  courseCreatedEvent.parameters = new Array()
+
+  courseCreatedEvent.parameters.push(
+    new ethereum.EventParam(
+      "creatorId",
+      ethereum.Value.fromUnsignedBigInt(creatorId)
+    )
+  )
+  courseCreatedEvent.parameters.push(
+    new ethereum.EventParam(
+      "courseId",
+      ethereum.Value.fromUnsignedBigInt(courseId)
+    )
+  )
+  courseCreatedEvent.parameters.push(
+    new ethereum.EventParam(
+      "courseAddress",
+      ethereum.Value.fromAddress(courseAddress)
+    )
+  )
+  courseCreatedEvent.parameters.push(
+    new ethereum.EventParam("courseName", ethereum.Value.fromString(courseName))
+  )
+  courseCreatedEvent.parameters.push(
+    new ethereum.EventParam(
+      "courseSymbol",
+      ethereum.Value.fromString(courseSymbol)
+    )
+  )
+  courseCreatedEvent.parameters.push(
+    new ethereum.EventParam("creator", ethereum.Value.fromAddress(creator))
+  )
+  courseCreatedEvent.parameters.push(
+    new ethereum.EventParam("courseURI", ethereum.Value.fromString(courseURI))
+  )
+  courseCreatedEvent.parameters.push(
+    new ethereum.EventParam(
+      "courseNFTURIs",
+      ethereum.Value.fromStringArray(courseNFTURIs)
+    )
+  )
+  courseCreatedEvent.parameters.push(
+    new ethereum.EventParam(
+      "certificateBaseURI",
+      ethereum.Value.fromString(certificateBaseURI)
+    )
+  )
+
+  return courseCreatedEvent
+}
+
+export function createInitializedEvent(version: i32): Initialized {
+  let initializedEvent = changetype<Initialized>(newMockEvent())
+
+  initializedEvent.parameters = new Array()
+
+  initializedEvent.parameters.push(
+    new ethereum.EventParam(
+      "version",
+      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(version))
+    )
+  )
+
+  return initializedEvent
+}
+
+export function createOwnershipTransferredEvent(
+  previousOwner: Address,
+  newOwner: Address
+): OwnershipTransferred {
+  let ownershipTransferredEvent = changetype<OwnershipTransferred>(
+    newMockEvent()
+  )
+
+  ownershipTransferredEvent.parameters = new Array()
+
+  ownershipTransferredEvent.parameters.push(
+    new ethereum.EventParam(
+      "previousOwner",
+      ethereum.Value.fromAddress(previousOwner)
+    )
+  )
+  ownershipTransferredEvent.parameters.push(
+    new ethereum.EventParam("newOwner", ethereum.Value.fromAddress(newOwner))
+  )
+
+  return ownershipTransferredEvent
 }
 
 export function createUpgradedEvent(implementation: Address): Upgraded {

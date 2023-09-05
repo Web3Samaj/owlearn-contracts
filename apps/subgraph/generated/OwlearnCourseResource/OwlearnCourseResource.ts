@@ -102,6 +102,120 @@ export class BeaconUpgraded__Params {
   }
 }
 
+export class ConsecutiveTransfer extends ethereum.Event {
+  get params(): ConsecutiveTransfer__Params {
+    return new ConsecutiveTransfer__Params(this);
+  }
+}
+
+export class ConsecutiveTransfer__Params {
+  _event: ConsecutiveTransfer;
+
+  constructor(event: ConsecutiveTransfer) {
+    this._event = event;
+  }
+
+  get fromTokenId(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+
+  get toTokenId(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
+  }
+
+  get from(): Address {
+    return this._event.parameters[2].value.toAddress();
+  }
+
+  get to(): Address {
+    return this._event.parameters[3].value.toAddress();
+  }
+}
+
+export class CourseResourceBurned extends ethereum.Event {
+  get params(): CourseResourceBurned__Params {
+    return new CourseResourceBurned__Params(this);
+  }
+}
+
+export class CourseResourceBurned__Params {
+  _event: CourseResourceBurned;
+
+  constructor(event: CourseResourceBurned) {
+    this._event = event;
+  }
+
+  get tokenId(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+}
+
+export class CourseResourceInitialised extends ethereum.Event {
+  get params(): CourseResourceInitialised__Params {
+    return new CourseResourceInitialised__Params(this);
+  }
+}
+
+export class CourseResourceInitialised__Params {
+  _event: CourseResourceInitialised;
+
+  constructor(event: CourseResourceInitialised) {
+    this._event = event;
+  }
+
+  get courseName(): string {
+    return this._event.parameters[0].value.toString();
+  }
+
+  get courseSymbol(): string {
+    return this._event.parameters[1].value.toString();
+  }
+
+  get creator(): Address {
+    return this._event.parameters[2].value.toAddress();
+  }
+}
+
+export class CourseResourceUpdated extends ethereum.Event {
+  get params(): CourseResourceUpdated__Params {
+    return new CourseResourceUpdated__Params(this);
+  }
+}
+
+export class CourseResourceUpdated__Params {
+  _event: CourseResourceUpdated;
+
+  constructor(event: CourseResourceUpdated) {
+    this._event = event;
+  }
+
+  get tokenId(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+
+  get newResourceURI(): string {
+    return this._event.parameters[1].value.toString();
+  }
+}
+
+export class CourseURIUpdated extends ethereum.Event {
+  get params(): CourseURIUpdated__Params {
+    return new CourseURIUpdated__Params(this);
+  }
+}
+
+export class CourseURIUpdated__Params {
+  _event: CourseURIUpdated;
+
+  constructor(event: CourseURIUpdated) {
+    this._event = event;
+  }
+
+  get newCourseURI(): string {
+    return this._event.parameters[0].value.toString();
+  }
+}
+
 export class Initialized extends ethereum.Event {
   get params(): Initialized__Params {
     return new Initialized__Params(this);
@@ -117,6 +231,28 @@ export class Initialized__Params {
 
   get version(): i32 {
     return this._event.parameters[0].value.toI32();
+  }
+}
+
+export class NewCourseResourceMinted extends ethereum.Event {
+  get params(): NewCourseResourceMinted__Params {
+    return new NewCourseResourceMinted__Params(this);
+  }
+}
+
+export class NewCourseResourceMinted__Params {
+  _event: NewCourseResourceMinted;
+
+  constructor(event: NewCourseResourceMinted) {
+    this._event = event;
+  }
+
+  get totalResourceMinted(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+
+  get courseURIs(): Array<string> {
+    return this._event.parameters[1].value.toStringArray();
   }
 }
 
@@ -186,9 +322,9 @@ export class Upgraded__Params {
   }
 }
 
-export class OwlearnCourseCertificates extends ethereum.SmartContract {
-  static bind(address: Address): OwlearnCourseCertificates {
-    return new OwlearnCourseCertificates("OwlearnCourseCertificates", address);
+export class OwlearnCourseResource extends ethereum.SmartContract {
+  static bind(address: Address): OwlearnCourseResource {
+    return new OwlearnCourseResource("OwlearnCourseResource", address);
   }
 
   balanceOf(owner: Address): BigInt {
@@ -225,6 +361,29 @@ export class OwlearnCourseCertificates extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toString());
   }
 
+  courseDetailsURI(): string {
+    let result = super.call(
+      "courseDetailsURI",
+      "courseDetailsURI():(string)",
+      []
+    );
+
+    return result[0].toString();
+  }
+
+  try_courseDetailsURI(): ethereum.CallResult<string> {
+    let result = super.tryCall(
+      "courseDetailsURI",
+      "courseDetailsURI():(string)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toString());
+  }
+
   getApproved(tokenId: BigInt): Address {
     let result = super.call("getApproved", "getApproved(uint256):(address)", [
       ethereum.Value.fromUnsignedBigInt(tokenId)
@@ -238,6 +397,25 @@ export class OwlearnCourseCertificates extends ethereum.SmartContract {
       "getApproved",
       "getApproved(uint256):(address)",
       [ethereum.Value.fromUnsignedBigInt(tokenId)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
+  implRegistery(): Address {
+    let result = super.call("implRegistery", "implRegistery():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_implRegistery(): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "implRegistery",
+      "implRegistery():(address)",
+      []
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -272,21 +450,6 @@ export class OwlearnCourseCertificates extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
-  manager(): Address {
-    let result = super.call("manager", "manager():(address)", []);
-
-    return result[0].toAddress();
-  }
-
-  try_manager(): ethereum.CallResult<Address> {
-    let result = super.tryCall("manager", "manager():(address)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
   name(): string {
     let result = super.call("name", "name():(string)", []);
 
@@ -300,6 +463,25 @@ export class OwlearnCourseCertificates extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toString());
+  }
+
+  owlearnCourse(): Address {
+    let result = super.call("owlearnCourse", "owlearnCourse():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_owlearnCourse(): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "owlearnCourse",
+      "owlearnCourse():(address)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   owner(): Address {
@@ -353,25 +535,6 @@ export class OwlearnCourseCertificates extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBytes());
-  }
-
-  safeMint(to: Address): BigInt {
-    let result = super.call("safeMint", "safeMint(address):(uint256)", [
-      ethereum.Value.fromAddress(to)
-    ]);
-
-    return result[0].toBigInt();
-  }
-
-  try_safeMint(to: Address): ethereum.CallResult<BigInt> {
-    let result = super.tryCall("safeMint", "safeMint(address):(uint256)", [
-      ethereum.Value.fromAddress(to)
-    ]);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
   supportsInterface(interfaceId: Bytes): boolean {
@@ -429,6 +592,21 @@ export class OwlearnCourseCertificates extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toString());
+  }
+
+  totalSupply(): BigInt {
+    let result = super.call("totalSupply", "totalSupply():(uint256)", []);
+
+    return result[0].toBigInt();
+  }
+
+  try_totalSupply(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("totalSupply", "totalSupply():(uint256)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 }
 
@@ -492,20 +670,20 @@ export class ApproveCall__Outputs {
   }
 }
 
-export class BurnCall extends ethereum.Call {
-  get inputs(): BurnCall__Inputs {
-    return new BurnCall__Inputs(this);
+export class DeleteCourseNFTCall extends ethereum.Call {
+  get inputs(): DeleteCourseNFTCall__Inputs {
+    return new DeleteCourseNFTCall__Inputs(this);
   }
 
-  get outputs(): BurnCall__Outputs {
-    return new BurnCall__Outputs(this);
+  get outputs(): DeleteCourseNFTCall__Outputs {
+    return new DeleteCourseNFTCall__Outputs(this);
   }
 }
 
-export class BurnCall__Inputs {
-  _call: BurnCall;
+export class DeleteCourseNFTCall__Inputs {
+  _call: DeleteCourseNFTCall;
 
-  constructor(call: BurnCall) {
+  constructor(call: DeleteCourseNFTCall) {
     this._call = call;
   }
 
@@ -514,10 +692,44 @@ export class BurnCall__Inputs {
   }
 }
 
-export class BurnCall__Outputs {
-  _call: BurnCall;
+export class DeleteCourseNFTCall__Outputs {
+  _call: DeleteCourseNFTCall;
 
-  constructor(call: BurnCall) {
+  constructor(call: DeleteCourseNFTCall) {
+    this._call = call;
+  }
+}
+
+export class EditCourseNFTCall extends ethereum.Call {
+  get inputs(): EditCourseNFTCall__Inputs {
+    return new EditCourseNFTCall__Inputs(this);
+  }
+
+  get outputs(): EditCourseNFTCall__Outputs {
+    return new EditCourseNFTCall__Outputs(this);
+  }
+}
+
+export class EditCourseNFTCall__Inputs {
+  _call: EditCourseNFTCall;
+
+  constructor(call: EditCourseNFTCall) {
+    this._call = call;
+  }
+
+  get tokenId(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get newNFTURI(): string {
+    return this._call.inputValues[1].value.toString();
+  }
+}
+
+export class EditCourseNFTCall__Outputs {
+  _call: EditCourseNFTCall;
+
+  constructor(call: EditCourseNFTCall) {
     this._call = call;
   }
 }
@@ -539,20 +751,32 @@ export class InitializeCall__Inputs {
     this._call = call;
   }
 
-  get courseCertificateName(): string {
+  get courseName(): string {
     return this._call.inputValues[0].value.toString();
   }
 
-  get courseCertificateSymbol(): string {
+  get courseSymbol(): string {
     return this._call.inputValues[1].value.toString();
   }
 
-  get certificateBaseURI(): string {
-    return this._call.inputValues[2].value.toString();
+  get courseCreator(): Address {
+    return this._call.inputValues[2].value.toAddress();
   }
 
-  get courseCreator(): Address {
-    return this._call.inputValues[3].value.toAddress();
+  get courseURI(): string {
+    return this._call.inputValues[3].value.toString();
+  }
+
+  get courseNFTURIs(): Array<string> {
+    return this._call.inputValues[4].value.toStringArray();
+  }
+
+  get courseAddress(): Address {
+    return this._call.inputValues[5].value.toAddress();
+  }
+
+  get implmRegisteryAddress(): Address {
+    return this._call.inputValues[6].value.toAddress();
   }
 }
 
@@ -560,6 +784,36 @@ export class InitializeCall__Outputs {
   _call: InitializeCall;
 
   constructor(call: InitializeCall) {
+    this._call = call;
+  }
+}
+
+export class MintCourseNFTsCall extends ethereum.Call {
+  get inputs(): MintCourseNFTsCall__Inputs {
+    return new MintCourseNFTsCall__Inputs(this);
+  }
+
+  get outputs(): MintCourseNFTsCall__Outputs {
+    return new MintCourseNFTsCall__Outputs(this);
+  }
+}
+
+export class MintCourseNFTsCall__Inputs {
+  _call: MintCourseNFTsCall;
+
+  constructor(call: MintCourseNFTsCall) {
+    this._call = call;
+  }
+
+  get courseNFTURIs(): Array<string> {
+    return this._call.inputValues[0].value.toStringArray();
+  }
+}
+
+export class MintCourseNFTsCall__Outputs {
+  _call: MintCourseNFTsCall;
+
+  constructor(call: MintCourseNFTsCall) {
     this._call = call;
   }
 }
@@ -587,70 +841,6 @@ export class RenounceOwnershipCall__Outputs {
 
   constructor(call: RenounceOwnershipCall) {
     this._call = call;
-  }
-}
-
-export class RevokeCall extends ethereum.Call {
-  get inputs(): RevokeCall__Inputs {
-    return new RevokeCall__Inputs(this);
-  }
-
-  get outputs(): RevokeCall__Outputs {
-    return new RevokeCall__Outputs(this);
-  }
-}
-
-export class RevokeCall__Inputs {
-  _call: RevokeCall;
-
-  constructor(call: RevokeCall) {
-    this._call = call;
-  }
-
-  get tokenId(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-}
-
-export class RevokeCall__Outputs {
-  _call: RevokeCall;
-
-  constructor(call: RevokeCall) {
-    this._call = call;
-  }
-}
-
-export class SafeMintCall extends ethereum.Call {
-  get inputs(): SafeMintCall__Inputs {
-    return new SafeMintCall__Inputs(this);
-  }
-
-  get outputs(): SafeMintCall__Outputs {
-    return new SafeMintCall__Outputs(this);
-  }
-}
-
-export class SafeMintCall__Inputs {
-  _call: SafeMintCall;
-
-  constructor(call: SafeMintCall) {
-    this._call = call;
-  }
-
-  get to(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-}
-
-export class SafeMintCall__Outputs {
-  _call: SafeMintCall;
-
-  constructor(call: SafeMintCall) {
-    this._call = call;
-  }
-
-  get value0(): BigInt {
-    return this._call.outputValues[0].value.toBigInt();
   }
 }
 
@@ -721,7 +911,7 @@ export class SafeTransferFrom1Call__Inputs {
     return this._call.inputValues[2].value.toBigInt();
   }
 
-  get data(): Bytes {
+  get _data(): Bytes {
     return this._call.inputValues[3].value.toBytes();
   }
 }
@@ -785,7 +975,7 @@ export class SetBaseURICall__Inputs {
     this._call = call;
   }
 
-  get newURI(): string {
+  get _uri(): string {
     return this._call.inputValues[0].value.toString();
   }
 }
@@ -794,6 +984,36 @@ export class SetBaseURICall__Outputs {
   _call: SetBaseURICall;
 
   constructor(call: SetBaseURICall) {
+    this._call = call;
+  }
+}
+
+export class SetCourseURICall extends ethereum.Call {
+  get inputs(): SetCourseURICall__Inputs {
+    return new SetCourseURICall__Inputs(this);
+  }
+
+  get outputs(): SetCourseURICall__Outputs {
+    return new SetCourseURICall__Outputs(this);
+  }
+}
+
+export class SetCourseURICall__Inputs {
+  _call: SetCourseURICall;
+
+  constructor(call: SetCourseURICall) {
+    this._call = call;
+  }
+
+  get _uri(): string {
+    return this._call.inputValues[0].value.toString();
+  }
+}
+
+export class SetCourseURICall__Outputs {
+  _call: SetCourseURICall;
+
+  constructor(call: SetCourseURICall) {
     this._call = call;
   }
 }
