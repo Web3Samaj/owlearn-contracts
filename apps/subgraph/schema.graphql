@@ -24,6 +24,7 @@ type Educator @entity {
 type User @entity {
   id: Bytes!
 }
+
 type AdminChanged @entity(immutable: true) {
   id: Bytes!
   previousAdmin: Bytes! # address
