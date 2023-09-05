@@ -11,6 +11,9 @@
     },
     "OwlearnCourseResource": {
       "address": "0xf203d2Cd2107e89abcC0d522Cd3B3Dc15D95EcE6"
+    },
+    "OwlearnEducatorBadge": {
+      "address": "0x2F7Fcd95BC7479a2A642bbFa63546874cC51cB0a"
     }
   }
 }

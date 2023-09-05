@@ -29,6 +29,51 @@ dataSources:
       file: ./src/owlearn-course-factory.ts
 templates:
   - kind: ethereum
+    name: OwlearnEducatorBadge
+    network: mumbai
+    source:
+      abi: OwlearnEducatorBadge
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - OwlearnEducatorBadgeAdminChanged
+        - OwlearnEducatorBadgeApprovalForAll
+        - OwlearnEducatorBadgeBeaconUpgraded
+        - EducatorRegistered
+        - OwlearnEducatorBadgeInitialized
+        - OwlearnEducatorBadgeOwnershipTransferred
+        - TransferBatch
+        - TransferSingle
+        - URI
+        - OwlearnEducatorBadgeUpgraded
+      abis:
+        - name: OwlearnEducatorBadge
+          file: ./abis/OwlearnEducatorBadge.json
+      eventHandlers:
+        - event: AdminChanged(address,address)
+          handler: handleAdminChanged
+        - event: ApprovalForAll(indexed address,indexed address,bool)
+          handler: handleApprovalForAll
+        - event: BeaconUpgraded(indexed address)
+          handler: handleBeaconUpgraded
+        - event: EducatorRegistered(address,uint256)
+          handler: handleEducatorRegistered
+        - event: Initialized(uint8)
+          handler: handleInitialized
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: TransferBatch(indexed address,indexed address,indexed address,uint256[],uint256[])
+          handler: handleTransferBatch
+        - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleTransferSingle
+        - event: URI(string,indexed uint256)
+          handler: handleURI
+        - event: Upgraded(indexed address)
+          handler: handleUpgraded
+      file: ./src/owlearn-educator-badge.ts
+  - kind: ethereum
     name: OwlearnCourse
     network: mumbai
     source:

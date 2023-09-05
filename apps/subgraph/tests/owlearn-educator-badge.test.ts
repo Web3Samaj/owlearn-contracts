@@ -8,9 +8,9 @@ import {
 } from "matchstick-as/assembly/index"
 import { Address, BigInt } from "@graphprotocol/graph-ts"
 import { AdminChanged } from "../generated/schema"
-import { AdminChanged as AdminChangedEvent } from "../generated/OwlearnCourseResources/OwlearnCourseResources"
-import { handleAdminChanged } from "../src/owlearn-course-resources"
-import { createAdminChangedEvent } from "./owlearn-course-resources-utils"
+import { AdminChanged as AdminChangedEvent } from "../generated/OwlearnEducatorBadge/OwlearnEducatorBadge"
+import { handleAdminChanged } from "../src/owlearn-educator-badge"
+import { createAdminChangedEvent } from "./owlearn-educator-badge-utils"
 
 // Tests structure (matchstick-as >=0.5.0)
 // https://thegraph.com/docs/en/developer/matchstick/#tests-structure-0-5-0
