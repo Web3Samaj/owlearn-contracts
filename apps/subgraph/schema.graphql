@@ -7,8 +7,8 @@ type Course @entity {
   name: String!
   symbol: String!
   courseURI: String!
-  resourceAddress: Bytes!
-  certificateAddress: Bytes!
+  resourceAddress: Bytes
+  certificateAddress: Bytes
   resources: [Resource!] @derivedFrom(field: "course") ## Resource where the Couse is this
   educator: Educator!
   certificate: Certificate
