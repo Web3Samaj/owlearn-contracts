@@ -47,7 +47,7 @@ export function handleCourseResourceBurned(
 export function handleCourseResourceUpdated(
   event: CourseResourceUpdatedEvent
 ): void {
-  let entity = Resource.load(Bytes.fromBigInt(event.params.tokenId));
+  let entity = Resource.load(Bytes.fromI32(event.params.tokenId.toI32()));
   if (entity == null) {
     return;
   }

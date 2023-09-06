@@ -31,7 +31,8 @@ export function handleCertificateMinted(event: CertificateMintedEvent): void {
   if (preEnrolledUser == null) {
     entity.enrolledUsers = [event.params.to];
   } else {
-    entity.enrolledUsers = [...preEnrolledUser, event.params.to];
+    preEnrolledUser.push(event.params.to);
+    entity.enrolledUsers = preEnrolledUser;
   }
 
   let user = User.load(event.params.to);
@@ -44,7 +45,8 @@ export function handleCertificateMinted(event: CertificateMintedEvent): void {
   if (preEnrolledCourses == null) {
     user.enrolledCourses = [courseAddress];
   } else {
-    user.enrolledCourses = [...preEnrolledCourses, courseAddress];
+    preEnrolledCourses.push(courseAddress);
+    user.enrolledCourses = preEnrolledCourses;
   }
   user.save();
   entity.save();

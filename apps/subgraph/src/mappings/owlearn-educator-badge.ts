@@ -13,7 +13,7 @@ export function handleEducatorRegistered(event: EducatorRegisteredEvent): void {
   if (user == null) {
     return;
   }
-  entity.username = user?.username;
+  entity.username = user.username;
   entity.save();
 }
 
