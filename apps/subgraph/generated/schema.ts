@@ -263,38 +263,30 @@ export class Resource extends Entity {
     this.set("course", Value.fromBytes(value));
   }
 
-  get resourceURI(): string | null {
+  get resourceURI(): string {
     let value = this.get("resourceURI");
     if (!value || value.kind == ValueKind.NULL) {
-      return null;
+      throw new Error("Cannot return null for a required field.");
     } else {
       return value.toString();
     }
   }
 
-  set resourceURI(value: string | null) {
-    if (!value) {
-      this.unset("resourceURI");
-    } else {
-      this.set("resourceURI", Value.fromString(<string>value));
-    }
+  set resourceURI(value: string) {
+    this.set("resourceURI", Value.fromString(value));
   }
 
-  get resourceId(): BigInt | null {
+  get resourceId(): BigInt {
     let value = this.get("resourceId");
     if (!value || value.kind == ValueKind.NULL) {
-      return null;
+      throw new Error("Cannot return null for a required field.");
     } else {
       return value.toBigInt();
     }
   }
 
-  set resourceId(value: BigInt | null) {
-    if (!value) {
-      this.unset("resourceId");
-    } else {
-      this.set("resourceId", Value.fromBigInt(<BigInt>value));
-    }
+  set resourceId(value: BigInt) {
+    this.set("resourceId", Value.fromBigInt(value));
   }
 }
 

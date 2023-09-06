@@ -34,8 +34,6 @@ export function handleCertificateMinted(event: CertificateMintedEvent): void {
     entity.enrolledUsers = [...preEnrolledUser, event.params.to];
   }
 
-  // add this course in Users Profile
-  // let courseAddress = getCourseAddress(event.address)
   let user = User.load(event.params.to);
   if (user == null) {
     return;
