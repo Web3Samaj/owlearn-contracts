@@ -1,4 +1,5 @@
 import {
+  OwlearnCourseResource,
   CourseResourceBurned as CourseResourceBurnedEvent,
   CourseResourceInitialised as CourseResourceInitialisedEvent,
   CourseResourceUpdated as CourseResourceUpdatedEvent,
@@ -13,13 +14,19 @@ export function handleNewCourseResourceMinted(
   event: NewCourseResourceMintedEvent
 ): void {
   let totalResourcesMinted = event.params.totalResourceMinted;
+  let courseResource = OwlearnCourseResource.bind(event.address);
+  let totalSupply = courseResource.totalSupply();
+  let courseAddress = courseResource.owlearnCourse();
   if (totalResourcesMinted) {
-    for (let id = 0; id < totalResourcesMinted.toI32(); i++) {
+    for (let id = 0; id < totalResourcesMinted.toI32(); id++) {
       // Need to get the before minted tokenIds , to get the right token Id
-      let entity = new Resource(Bytes.fromI32(id));
+      let totalSupplyBefore =
+        totalSupply.toI32() - totalResourcesMinted.toI32();
 
+      let entity = new Resource(Bytes.fromI32(id + totalSupplyBefore));
+      entity.course = courseAddress;
       entity.resourceURI = event.params.courseURIs[id];
-      entity.resourceId = BigInt.fromI32(id);
+      entity.resourceId = BigInt.fromI32(id + totalSupplyBefore);
 
       entity.save();
     }
@@ -29,6 +36,7 @@ export function handleNewCourseResourceMinted(
 export function handleCourseResourceBurned(
   event: CourseResourceBurnedEvent
 ): void {
+  // Delete the particuar courseResource Somehow
   // let entity = new CourseResourceBurned(
   //   event.transaction.hash.concatI32(event.logIndex.toI32())
   // );
@@ -50,7 +58,8 @@ export function handleCourseResourceUpdated(
 }
 
 export function handleCourseURIUpdated(event: CourseURIUpdatedEvent): void {
-  // fetch Course URI somehow
+  let courseResource = OwlearnCourseResource.bind(event.address);
+  let courseAddress = courseResource.owlearnCourse();
   let entity = new Course(courseAddress);
   if (entity == null) {
     return;

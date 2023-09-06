@@ -1,4 +1,5 @@
 import {
+  OwlearnCourseCertificates,
   CertificateBurned as CertificateBurnedEvent,
   CertificateMinted as CertificateMintedEvent,
   CertificateURIUpdated as CertificateURIUpdatedEvent,
@@ -39,12 +40,14 @@ export function handleCertificateMinted(event: CertificateMintedEvent): void {
   if (user == null) {
     return;
   }
+  let courseCertificates = OwlearnCourseCertificates.bind(event.address);
+  let courseAddress = courseCertificates.manager();
   let preEnrolledCourses = user.enrolledCourses;
-  // if (preEnrolledCourses == null) {
-  //   user.enrolledCourses = [courseAddress];
-  // } else {
-  //   user.enrolledCourses = [...preEnrolledCourses, courseAddress];
-  // }
+  if (preEnrolledCourses == null) {
+    user.enrolledCourses = [courseAddress];
+  } else {
+    user.enrolledCourses = [...preEnrolledCourses, courseAddress];
+  }
   user.save();
   entity.save();
 }
