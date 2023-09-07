@@ -147,8 +147,6 @@ templates:
       eventHandlers:
         - event: CourseResourceBurned(uint256)
           handler: handleCourseResourceBurned
-        - event: CourseResourceInitialised(string,string,address)
-          handler: handleCourseResourceInitialised
         - event: CourseResourceUpdated(uint256,string)
           handler: handleCourseResourceUpdated
         - event: CourseURIUpdated(string)

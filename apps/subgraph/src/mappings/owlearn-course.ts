@@ -22,11 +22,11 @@ export function handleCourseInitialised(event: CourseInitialisedEvent): void {
   entity.resourceAddress = event.params.resource;
   entity.certificateAddress = event.params.certificates;
   entity.certificate = event.params.certificates;
-  OwlearnCourseCertificates.create(event.params.resource);
+  OwlearnCourseCertificates.create(event.params.certificates);
   let certificate = new Certificate(event.params.certificates);
   certificate.certificateAddress = event.params.certificates;
   certificate.course = entity.id;
-  OwlearnCourseResource.create(event.params.certificates);
+  OwlearnCourseResource.create(event.params.resource);
 
   certificate.save();
   entity.save();
