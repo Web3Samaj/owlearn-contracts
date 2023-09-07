@@ -59,14 +59,32 @@ export function handleCertificateBurned(event: CertificateBurnedEvent): void {
     return;
   }
   let courseCertificate = OwlearnCourseCertificates.bind(event.address);
-  let user = courseCertificate.ownerOf(event.params.tokenId);
-  let userEntity = User.load(user);
+  let userAddress = courseCertificate.ownerOf(event.params.tokenId);
+  let courseAddress = courseCertificate.manager();
+
+  let preEnrolledUser = entity.enrolledUsers;
+  if (preEnrolledUser == null) {
+    return;
+  }
+  let laterEnrolledUser = preEnrolledUser.filter((user) => {
+    return user != userAddress;
+  });
+  entity.enrolledUsers = laterEnrolledUser;
+
+  let userEntity = User.load(userAddress);
   if (userEntity == null) {
     return;
   }
   let preEnrolledCourses = userEntity.enrolledCourses;
+  if (preEnrolledCourses == null) {
+    return;
+  }
   // Need to somehow find the User , and then delete the records from the courses and Users record
-
+  let laterEnrolledCourses = preEnrolledCourses.filter((course) => {
+    return course != courseAddress;
+  });
+  userEntity.enrolledCourses = laterEnrolledCourses;
+  userEntity.save();
   entity.save();
 }
 
