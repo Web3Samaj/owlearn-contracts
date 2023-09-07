@@ -37,7 +37,7 @@ export function handleCourseResourceBurned(
   event: CourseResourceBurnedEvent
 ): void {
   // Delete the particuar courseResource Somehow
-  let entity = Resource.load(Bytes.fromBigInt(event.params.tokenId));
+  let entity = Resource.load(Bytes.fromI32(event.params.tokenId.toI32()));
   if (entity == null) {
     return;
   }

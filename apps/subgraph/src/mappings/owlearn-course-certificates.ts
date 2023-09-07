@@ -7,7 +7,7 @@ import {
   Transfer as TransferEvent,
 } from "../../generated/templates/OwlearnCourseCertificates/OwlearnCourseCertificates";
 import { Certificate, Course, User } from "../../generated/schema";
-import { store } from "@graphprotocol/graph-ts";
+import { Bytes, store } from "@graphprotocol/graph-ts";
 
 export function handleCourseCertificateIntialised(
   event: CourseCertificateIntialisedEvent
@@ -70,7 +70,7 @@ export function handleCertificateBurned(event: CertificateBurnedEvent): void {
   //   let isValid = user != userAddress;
   //   return isValid;
   // });
-  let laterEnrolledUser = [];
+  let laterEnrolledUser: Bytes[] = [];
   for (let i = 0; i < preEnrolledUser.length; i++) {
     if (preEnrolledUser[i] != userAddress) {
       laterEnrolledUser.push(preEnrolledUser[i]);
@@ -91,7 +91,7 @@ export function handleCertificateBurned(event: CertificateBurnedEvent): void {
   //   let isValid = course != courseAddress;
   //   return isValid;
   // });
-  let laterEnrolledCourses = [];
+  let laterEnrolledCourses: Bytes[] = [];
   for (let i = 0; i < preEnrolledCourses.length; i++) {
     if (preEnrolledCourses[i] != courseAddress) {
       laterEnrolledCourses.push(preEnrolledCourses[i]);
