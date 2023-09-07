@@ -66,9 +66,16 @@ export function handleCertificateBurned(event: CertificateBurnedEvent): void {
   if (preEnrolledUser == null) {
     return;
   }
-  let laterEnrolledUser = preEnrolledUser.filter((user) => {
-    return user != userAddress;
-  });
+  // let laterEnrolledUser = preEnrolledUser.filter((user) => {
+  //   let isValid = user != userAddress;
+  //   return isValid;
+  // });
+  let laterEnrolledUser = [];
+  for (let i = 0; i < preEnrolledUser.length; i++) {
+    if (preEnrolledUser[i] != userAddress) {
+      laterEnrolledUser.push(preEnrolledUser[i]);
+    }
+  }
   entity.enrolledUsers = laterEnrolledUser;
 
   let userEntity = User.load(userAddress);
@@ -80,9 +87,16 @@ export function handleCertificateBurned(event: CertificateBurnedEvent): void {
     return;
   }
   // Need to somehow find the User , and then delete the records from the courses and Users record
-  let laterEnrolledCourses = preEnrolledCourses.filter((course) => {
-    return course != courseAddress;
-  });
+  // let laterEnrolledCourses = preEnrolledCourses.filter((course) => {
+  //   let isValid = course != courseAddress;
+  //   return isValid;
+  // });
+  let laterEnrolledCourses = [];
+  for (let i = 0; i < preEnrolledCourses.length; i++) {
+    if (preEnrolledCourses[i] != courseAddress) {
+      laterEnrolledCourses.push(preEnrolledCourses[i]);
+    }
+  }
   userEntity.enrolledCourses = laterEnrolledCourses;
   userEntity.save();
   entity.save();
