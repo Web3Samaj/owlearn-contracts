@@ -8,7 +8,7 @@ import {
   Transfer as TransferEvent,
 } from "../../generated/templates/OwlearnCourseResource/OwlearnCourseResource";
 import { Resource, Course, Educator } from "../../generated/schema";
-import { BigInt, Bytes } from "@graphprotocol/graph-ts";
+import { BigInt, Bytes, store } from "@graphprotocol/graph-ts";
 
 export function handleNewCourseResourceMinted(
   event: NewCourseResourceMintedEvent
@@ -37,11 +37,11 @@ export function handleCourseResourceBurned(
   event: CourseResourceBurnedEvent
 ): void {
   // Delete the particuar courseResource Somehow
-  // let entity = new CourseResourceBurned(
-  //   event.transaction.hash.concatI32(event.logIndex.toI32())
-  // );
-  // entity.tokenId = event.params.tokenId;
-  // entity.save();
+  let entity = Resource.load(Bytes.fromBigInt(event.params.tokenId));
+  if (entity == null) {
+    return;
+  }
+  store.remove("Resource", `${entity.id}`);
 }
 
 export function handleCourseResourceUpdated(

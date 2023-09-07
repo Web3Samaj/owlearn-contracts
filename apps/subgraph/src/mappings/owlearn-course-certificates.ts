@@ -7,6 +7,7 @@ import {
   Transfer as TransferEvent,
 } from "../../generated/templates/OwlearnCourseCertificates/OwlearnCourseCertificates";
 import { Certificate, Course, User } from "../../generated/schema";
+import { store } from "@graphprotocol/graph-ts";
 
 export function handleCourseCertificateIntialised(
   event: CourseCertificateIntialisedEvent
@@ -57,6 +58,13 @@ export function handleCertificateBurned(event: CertificateBurnedEvent): void {
   if (entity == null) {
     return;
   }
+  let courseCertificate = OwlearnCourseCertificates.bind(event.address);
+  let user = courseCertificate.ownerOf(event.params.tokenId);
+  let userEntity = User.load(user);
+  if (userEntity == null) {
+    return;
+  }
+  let preEnrolledCourses = userEntity.enrolledCourses;
   // Need to somehow find the User , and then delete the records from the courses and Users record
 
   entity.save();
