@@ -40,7 +40,7 @@ contract FeeModuleScript is Test {
         OwlearnCourseResources resourceImplementation = new OwlearnCourseResources();
         OwlearnCourseCertificates certificateImplementation = new OwlearnCourseCertificates();
 
-        owlearnEducatorBadge.initialize("");
+        owlearnEducatorBadge.initialize("", address(0));
         owlearnEducatorBadge.mintEducatorBadges(alice, 1);
 
         address courseFactoryImplementation = address(

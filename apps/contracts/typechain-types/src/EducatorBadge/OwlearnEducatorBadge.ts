@@ -34,12 +34,15 @@ export interface OwlearnEducatorBadgeInterface extends utils.Interface {
     "balanceOfBatch(address[],uint256[])": FunctionFragment;
     "burn(address,uint256,uint256)": FunctionFragment;
     "burnBatch(address,uint256[],uint256[])": FunctionFragment;
+    "creatorIdByAddress(address)": FunctionFragment;
     "exists(uint256)": FunctionFragment;
-    "initialize(string)": FunctionFragment;
+    "initialize(string,address)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
     "mintEducatorBadges(address,uint256)": FunctionFragment;
+    "owlearnId()": FunctionFragment;
     "owner()": FunctionFragment;
     "proxiableUUID()": FunctionFragment;
+    "registerAsEducator(uint256)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "safeBatchTransferFrom(address,address,uint256[],uint256[],bytes)": FunctionFragment;
     "safeTransferFrom(address,address,uint256,uint256,bytes)": FunctionFragment;
@@ -59,12 +62,15 @@ export interface OwlearnEducatorBadgeInterface extends utils.Interface {
       | "balanceOfBatch"
       | "burn"
       | "burnBatch"
+      | "creatorIdByAddress"
       | "exists"
       | "initialize"
       | "isApprovedForAll"
       | "mintEducatorBadges"
+      | "owlearnId"
       | "owner"
       | "proxiableUUID"
+      | "registerAsEducator"
       | "renounceOwnership"
       | "safeBatchTransferFrom"
       | "safeTransferFrom"
@@ -103,12 +109,16 @@ export interface OwlearnEducatorBadgeInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
+    functionFragment: "creatorIdByAddress",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "exists",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "initialize",
-    values: [PromiseOrValue<string>]
+    values: [PromiseOrValue<string>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "isApprovedForAll",
@@ -118,10 +128,15 @@ export interface OwlearnEducatorBadgeInterface extends utils.Interface {
     functionFragment: "mintEducatorBadges",
     values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
   ): string;
+  encodeFunctionData(functionFragment: "owlearnId", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "proxiableUUID",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "registerAsEducator",
+    values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
@@ -187,6 +202,10 @@ export interface OwlearnEducatorBadgeInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "burnBatch", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "creatorIdByAddress",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "exists", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(
@@ -197,9 +216,14 @@ export interface OwlearnEducatorBadgeInterface extends utils.Interface {
     functionFragment: "mintEducatorBadges",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "owlearnId", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "proxiableUUID",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "registerAsEducator",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -242,6 +266,7 @@ export interface OwlearnEducatorBadgeInterface extends utils.Interface {
     "AdminChanged(address,address)": EventFragment;
     "ApprovalForAll(address,address,bool)": EventFragment;
     "BeaconUpgraded(address)": EventFragment;
+    "EducatorRegistered(address,uint256)": EventFragment;
     "Initialized(uint8)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "TransferBatch(address,address,address,uint256[],uint256[])": EventFragment;
@@ -253,6 +278,7 @@ export interface OwlearnEducatorBadgeInterface extends utils.Interface {
   getEvent(nameOrSignatureOrTopic: "AdminChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "BeaconUpgraded"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "EducatorRegistered"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "TransferBatch"): EventFragment;
@@ -293,6 +319,18 @@ export type BeaconUpgradedEvent = TypedEvent<
 >;
 
 export type BeaconUpgradedEventFilter = TypedEventFilter<BeaconUpgradedEvent>;
+
+export interface EducatorRegisteredEventObject {
+  educator: string;
+  creatorId: BigNumber;
+}
+export type EducatorRegisteredEvent = TypedEvent<
+  [string, BigNumber],
+  EducatorRegisteredEventObject
+>;
+
+export type EducatorRegisteredEventFilter =
+  TypedEventFilter<EducatorRegisteredEvent>;
 
 export interface InitializedEventObject {
   version: number;
@@ -409,6 +447,11 @@ export interface OwlearnEducatorBadge extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    creatorIdByAddress(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     exists(
       id: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -416,6 +459,7 @@ export interface OwlearnEducatorBadge extends BaseContract {
 
     initialize(
       token0URI: PromiseOrValue<string>,
+      owlIdAddress: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -431,9 +475,16 @@ export interface OwlearnEducatorBadge extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    owlearnId(overrides?: CallOverrides): Promise<[string]>;
+
     owner(overrides?: CallOverrides): Promise<[string]>;
 
     proxiableUUID(overrides?: CallOverrides): Promise<[string]>;
+
+    registerAsEducator(
+      owlId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -527,6 +578,11 @@ export interface OwlearnEducatorBadge extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  creatorIdByAddress(
+    arg0: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   exists(
     id: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
@@ -534,6 +590,7 @@ export interface OwlearnEducatorBadge extends BaseContract {
 
   initialize(
     token0URI: PromiseOrValue<string>,
+    owlIdAddress: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -549,9 +606,16 @@ export interface OwlearnEducatorBadge extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  owlearnId(overrides?: CallOverrides): Promise<string>;
+
   owner(overrides?: CallOverrides): Promise<string>;
 
   proxiableUUID(overrides?: CallOverrides): Promise<string>;
+
+  registerAsEducator(
+    owlId: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   renounceOwnership(
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -645,6 +709,11 @@ export interface OwlearnEducatorBadge extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    creatorIdByAddress(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     exists(
       id: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -652,6 +721,7 @@ export interface OwlearnEducatorBadge extends BaseContract {
 
     initialize(
       token0URI: PromiseOrValue<string>,
+      owlIdAddress: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -667,9 +737,16 @@ export interface OwlearnEducatorBadge extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    owlearnId(overrides?: CallOverrides): Promise<string>;
+
     owner(overrides?: CallOverrides): Promise<string>;
 
     proxiableUUID(overrides?: CallOverrides): Promise<string>;
+
+    registerAsEducator(
+      owlId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
@@ -763,6 +840,15 @@ export interface OwlearnEducatorBadge extends BaseContract {
       beacon?: PromiseOrValue<string> | null
     ): BeaconUpgradedEventFilter;
 
+    "EducatorRegistered(address,uint256)"(
+      educator?: null,
+      creatorId?: null
+    ): EducatorRegisteredEventFilter;
+    EducatorRegistered(
+      educator?: null,
+      creatorId?: null
+    ): EducatorRegisteredEventFilter;
+
     "Initialized(uint8)"(version?: null): InitializedEventFilter;
     Initialized(version?: null): InitializedEventFilter;
 
@@ -846,6 +932,11 @@ export interface OwlearnEducatorBadge extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    creatorIdByAddress(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     exists(
       id: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -853,6 +944,7 @@ export interface OwlearnEducatorBadge extends BaseContract {
 
     initialize(
       token0URI: PromiseOrValue<string>,
+      owlIdAddress: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -868,9 +960,16 @@ export interface OwlearnEducatorBadge extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    owlearnId(overrides?: CallOverrides): Promise<BigNumber>;
+
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
     proxiableUUID(overrides?: CallOverrides): Promise<BigNumber>;
+
+    registerAsEducator(
+      owlId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -965,6 +1064,11 @@ export interface OwlearnEducatorBadge extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
+    creatorIdByAddress(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     exists(
       id: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -972,6 +1076,7 @@ export interface OwlearnEducatorBadge extends BaseContract {
 
     initialize(
       token0URI: PromiseOrValue<string>,
+      owlIdAddress: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -987,9 +1092,16 @@ export interface OwlearnEducatorBadge extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
+    owlearnId(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     proxiableUUID(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    registerAsEducator(
+      owlId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: PromiseOrValue<string> }

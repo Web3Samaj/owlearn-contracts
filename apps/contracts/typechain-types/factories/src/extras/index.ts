@@ -3,3 +3,4 @@
 /* eslint-disable */
 export * as owlearnCourseSol from "./OwlearnCourse.sol";
 export * as owlearnCourse2Sol from "./OwlearnCourse2.sol";
+export { FeeToken__factory } from "./FeeToken__factory";

@@ -1,8 +1,6 @@
 import { Address, DeployFunction } from "hardhat-deploy/types";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
-import {
-  CONTRACT_NAMES,
-} from "../config/constants";
+import { CONTRACT_NAMES } from "../config/constants";
 import { OwlearnCourseFactory } from "../typechain-types";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
@@ -11,7 +9,9 @@ const contractName = CONTRACT_NAMES.OwlearnCourseFactory;
 const deployGeneric =
   (deploy: any, deployer: SignerWithAddress) =>
   async (contractToBeDeployed: string): Promise<Address> => {
-    console.log(`Deploying implementation for ${contractToBeDeployed} using ${deployer.address}`)
+    console.log(
+      `Deploying implementation for ${contractToBeDeployed} using ${deployer.address}`
+    );
     const { address: implementation } = await deploy(contractToBeDeployed, {
       from: deployer.address,
       args: [],
@@ -54,12 +54,22 @@ const deployCourseFactory: DeployFunction = async (
     CONTRACT_NAMES.OwlearnEducatorBadge
   );
 
+  const { address: moduleRegisteryAddress } = await ethers.getContract(
+    CONTRACT_NAMES.OwlearnModuleRegistery
+  );
+
+  const { address: implementationRegisteryAddress } = await ethers.getContract(
+    CONTRACT_NAMES.ImplementationRegistery
+  );
+
   // prepare arguments
   const courseFactoryArguments = [
     educatorBadgeAddress,
     owlearnCourseImplementation,
     owlearnResourcesImplementation,
     owlearnCertificatesImplementation,
+    moduleRegisteryAddress,
+    implementationRegisteryAddress,
   ];
 
   // get contract factory

@@ -36,13 +36,21 @@ export interface OwlearnCourseFactoryInterface extends utils.Interface {
     "createCourse(uint256,string,string,string,string[],string)": FunctionFragment;
     "educateBadgeNFT()": FunctionFragment;
     "getCourse(uint256)": FunctionFragment;
-    "initialize(address,address,address,address)": FunctionFragment;
+    "implementationRegistery()": FunctionFragment;
+    "initialize(address,address,address,address,address,address)": FunctionFragment;
+    "moduleRegistery()": FunctionFragment;
     "owner()": FunctionFragment;
     "proxiableUUID()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "resourceImplementation()": FunctionFragment;
     "totalCourses()": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
+    "updateCertificateImpl(address)": FunctionFragment;
+    "updateCourseImpl(address)": FunctionFragment;
+    "updateEducatorBadge(address)": FunctionFragment;
+    "updateImplmentationRegistery(address)": FunctionFragment;
+    "updateModuleRegistery(address)": FunctionFragment;
+    "updateResourceImpl(address)": FunctionFragment;
     "upgradeTo(address)": FunctionFragment;
     "upgradeToAndCall(address,bytes)": FunctionFragment;
   };
@@ -55,13 +63,21 @@ export interface OwlearnCourseFactoryInterface extends utils.Interface {
       | "createCourse"
       | "educateBadgeNFT"
       | "getCourse"
+      | "implementationRegistery"
       | "initialize"
+      | "moduleRegistery"
       | "owner"
       | "proxiableUUID"
       | "renounceOwnership"
       | "resourceImplementation"
       | "totalCourses"
       | "transferOwnership"
+      | "updateCertificateImpl"
+      | "updateCourseImpl"
+      | "updateEducatorBadge"
+      | "updateImplmentationRegistery"
+      | "updateModuleRegistery"
+      | "updateResourceImpl"
       | "upgradeTo"
       | "upgradeToAndCall"
   ): FunctionFragment;
@@ -98,13 +114,23 @@ export interface OwlearnCourseFactoryInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
+    functionFragment: "implementationRegistery",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "initialize",
     values: [
       PromiseOrValue<string>,
       PromiseOrValue<string>,
       PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
       PromiseOrValue<string>
     ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "moduleRegistery",
+    values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
@@ -125,6 +151,30 @@ export interface OwlearnCourseFactoryInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "transferOwnership",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "updateCertificateImpl",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "updateCourseImpl",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "updateEducatorBadge",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "updateImplmentationRegistery",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "updateModuleRegistery",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "updateResourceImpl",
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
@@ -154,7 +204,15 @@ export interface OwlearnCourseFactoryInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "getCourse", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "implementationRegistery",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "moduleRegistery",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "proxiableUUID",
@@ -176,6 +234,30 @@ export interface OwlearnCourseFactoryInterface extends utils.Interface {
     functionFragment: "transferOwnership",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "updateCertificateImpl",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "updateCourseImpl",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "updateEducatorBadge",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "updateImplmentationRegistery",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "updateModuleRegistery",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "updateResourceImpl",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "upgradeTo", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "upgradeToAndCall",
@@ -185,7 +267,7 @@ export interface OwlearnCourseFactoryInterface extends utils.Interface {
   events: {
     "AdminChanged(address,address)": EventFragment;
     "BeaconUpgraded(address)": EventFragment;
-    "CourseCreated(address,string,string,address,string,string[],string)": EventFragment;
+    "CourseCreated(uint256,uint256,address,string,string,address,string,string[],string)": EventFragment;
     "Initialized(uint8)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "Upgraded(address)": EventFragment;
@@ -221,6 +303,8 @@ export type BeaconUpgradedEvent = TypedEvent<
 export type BeaconUpgradedEventFilter = TypedEventFilter<BeaconUpgradedEvent>;
 
 export interface CourseCreatedEventObject {
+  creatorId: BigNumber;
+  courseId: BigNumber;
   courseAddress: string;
   courseName: string;
   courseSymbol: string;
@@ -230,7 +314,17 @@ export interface CourseCreatedEventObject {
   certificateBaseURI: string;
 }
 export type CourseCreatedEvent = TypedEvent<
-  [string, string, string, string, string, string[], string],
+  [
+    BigNumber,
+    BigNumber,
+    string,
+    string,
+    string,
+    string,
+    string,
+    string[],
+    string
+  ],
   CourseCreatedEventObject
 >;
 
@@ -315,13 +409,19 @@ export interface OwlearnCourseFactory extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string]>;
 
+    implementationRegistery(overrides?: CallOverrides): Promise<[string]>;
+
     initialize(
       educatorBadgeNFT: PromiseOrValue<string>,
       _courseImplementation: PromiseOrValue<string>,
       _resourceImplementation: PromiseOrValue<string>,
       _certificateImplementation: PromiseOrValue<string>,
+      moduleRegisteryAddress: PromiseOrValue<string>,
+      implRegisteryAddress: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
+
+    moduleRegistery(overrides?: CallOverrides): Promise<[string]>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
@@ -337,6 +437,36 @@ export interface OwlearnCourseFactory extends BaseContract {
 
     transferOwnership(
       newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    updateCertificateImpl(
+      _certificateImplementation: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    updateCourseImpl(
+      _courseImplementation: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    updateEducatorBadge(
+      educatorBadgeNFT: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    updateImplmentationRegistery(
+      implRegisteryAddress: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    updateModuleRegistery(
+      moduleRegisteryAddress: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    updateResourceImpl(
+      _resourceImplementation: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -378,13 +508,19 @@ export interface OwlearnCourseFactory extends BaseContract {
     overrides?: CallOverrides
   ): Promise<string>;
 
+  implementationRegistery(overrides?: CallOverrides): Promise<string>;
+
   initialize(
     educatorBadgeNFT: PromiseOrValue<string>,
     _courseImplementation: PromiseOrValue<string>,
     _resourceImplementation: PromiseOrValue<string>,
     _certificateImplementation: PromiseOrValue<string>,
+    moduleRegisteryAddress: PromiseOrValue<string>,
+    implRegisteryAddress: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
+
+  moduleRegistery(overrides?: CallOverrides): Promise<string>;
 
   owner(overrides?: CallOverrides): Promise<string>;
 
@@ -400,6 +536,36 @@ export interface OwlearnCourseFactory extends BaseContract {
 
   transferOwnership(
     newOwner: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  updateCertificateImpl(
+    _certificateImplementation: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  updateCourseImpl(
+    _courseImplementation: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  updateEducatorBadge(
+    educatorBadgeNFT: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  updateImplmentationRegistery(
+    implRegisteryAddress: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  updateModuleRegistery(
+    moduleRegisteryAddress: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  updateResourceImpl(
+    _resourceImplementation: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -441,13 +607,19 @@ export interface OwlearnCourseFactory extends BaseContract {
       overrides?: CallOverrides
     ): Promise<string>;
 
+    implementationRegistery(overrides?: CallOverrides): Promise<string>;
+
     initialize(
       educatorBadgeNFT: PromiseOrValue<string>,
       _courseImplementation: PromiseOrValue<string>,
       _resourceImplementation: PromiseOrValue<string>,
       _certificateImplementation: PromiseOrValue<string>,
+      moduleRegisteryAddress: PromiseOrValue<string>,
+      implRegisteryAddress: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    moduleRegistery(overrides?: CallOverrides): Promise<string>;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
@@ -461,6 +633,36 @@ export interface OwlearnCourseFactory extends BaseContract {
 
     transferOwnership(
       newOwner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    updateCertificateImpl(
+      _certificateImplementation: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    updateCourseImpl(
+      _courseImplementation: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    updateEducatorBadge(
+      educatorBadgeNFT: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    updateImplmentationRegistery(
+      implRegisteryAddress: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    updateModuleRegistery(
+      moduleRegisteryAddress: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    updateResourceImpl(
+      _resourceImplementation: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -493,7 +695,9 @@ export interface OwlearnCourseFactory extends BaseContract {
       beacon?: PromiseOrValue<string> | null
     ): BeaconUpgradedEventFilter;
 
-    "CourseCreated(address,string,string,address,string,string[],string)"(
+    "CourseCreated(uint256,uint256,address,string,string,address,string,string[],string)"(
+      creatorId?: null,
+      courseId?: null,
       courseAddress?: PromiseOrValue<string> | null,
       courseName?: null,
       courseSymbol?: null,
@@ -503,6 +707,8 @@ export interface OwlearnCourseFactory extends BaseContract {
       certificateBaseURI?: null
     ): CourseCreatedEventFilter;
     CourseCreated(
+      creatorId?: null,
+      courseId?: null,
       courseAddress?: PromiseOrValue<string> | null,
       courseName?: null,
       courseSymbol?: null,
@@ -559,13 +765,19 @@ export interface OwlearnCourseFactory extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    implementationRegistery(overrides?: CallOverrides): Promise<BigNumber>;
+
     initialize(
       educatorBadgeNFT: PromiseOrValue<string>,
       _courseImplementation: PromiseOrValue<string>,
       _resourceImplementation: PromiseOrValue<string>,
       _certificateImplementation: PromiseOrValue<string>,
+      moduleRegisteryAddress: PromiseOrValue<string>,
+      implRegisteryAddress: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
+
+    moduleRegistery(overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -581,6 +793,36 @@ export interface OwlearnCourseFactory extends BaseContract {
 
     transferOwnership(
       newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    updateCertificateImpl(
+      _certificateImplementation: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    updateCourseImpl(
+      _courseImplementation: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    updateEducatorBadge(
+      educatorBadgeNFT: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    updateImplmentationRegistery(
+      implRegisteryAddress: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    updateModuleRegistery(
+      moduleRegisteryAddress: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    updateResourceImpl(
+      _resourceImplementation: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -627,13 +869,21 @@ export interface OwlearnCourseFactory extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    implementationRegistery(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     initialize(
       educatorBadgeNFT: PromiseOrValue<string>,
       _courseImplementation: PromiseOrValue<string>,
       _resourceImplementation: PromiseOrValue<string>,
       _certificateImplementation: PromiseOrValue<string>,
+      moduleRegisteryAddress: PromiseOrValue<string>,
+      implRegisteryAddress: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
+
+    moduleRegistery(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -651,6 +901,36 @@ export interface OwlearnCourseFactory extends BaseContract {
 
     transferOwnership(
       newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    updateCertificateImpl(
+      _certificateImplementation: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    updateCourseImpl(
+      _courseImplementation: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    updateEducatorBadge(
+      educatorBadgeNFT: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    updateImplmentationRegistery(
+      implRegisteryAddress: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    updateModuleRegistery(
+      moduleRegisteryAddress: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    updateResourceImpl(
+      _resourceImplementation: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

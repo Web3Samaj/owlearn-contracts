@@ -9,6 +9,7 @@ import type {
   CallOverrides,
   ContractTransaction,
   Overrides,
+  PayableOverrides,
   PopulatedTransaction,
   Signer,
   utils,
@@ -111,9 +112,9 @@ export interface IMintModule extends BaseContract {
     beforeMint(
       creatorId: PromiseOrValue<BigNumberish>,
       courseId: PromiseOrValue<BigNumberish>,
-      recepient: PromiseOrValue<string>,
+      user: PromiseOrValue<string>,
       data: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     initialiseMintModule(
@@ -136,9 +137,9 @@ export interface IMintModule extends BaseContract {
   beforeMint(
     creatorId: PromiseOrValue<BigNumberish>,
     courseId: PromiseOrValue<BigNumberish>,
-    recepient: PromiseOrValue<string>,
+    user: PromiseOrValue<string>,
     data: PromiseOrValue<BytesLike>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   initialiseMintModule(
@@ -161,7 +162,7 @@ export interface IMintModule extends BaseContract {
     beforeMint(
       creatorId: PromiseOrValue<BigNumberish>,
       courseId: PromiseOrValue<BigNumberish>,
-      recepient: PromiseOrValue<string>,
+      user: PromiseOrValue<string>,
       data: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<void>;
@@ -189,9 +190,9 @@ export interface IMintModule extends BaseContract {
     beforeMint(
       creatorId: PromiseOrValue<BigNumberish>,
       courseId: PromiseOrValue<BigNumberish>,
-      recepient: PromiseOrValue<string>,
+      user: PromiseOrValue<string>,
       data: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     initialiseMintModule(
@@ -215,9 +216,9 @@ export interface IMintModule extends BaseContract {
     beforeMint(
       creatorId: PromiseOrValue<BigNumberish>,
       courseId: PromiseOrValue<BigNumberish>,
-      recepient: PromiseOrValue<string>,
+      user: PromiseOrValue<string>,
       data: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     initialiseMintModule(

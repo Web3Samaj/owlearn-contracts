@@ -57,7 +57,7 @@ const _abi = [
       },
       {
         internalType: "address",
-        name: "recepient",
+        name: "user",
         type: "address",
       },
       {
@@ -68,7 +68,7 @@ const _abi = [
     ],
     name: "beforeMint",
     outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "payable",
     type: "function",
   },
   {

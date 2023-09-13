@@ -1,6 +1,9 @@
 import { DeployFunction } from "hardhat-deploy/types";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
-import { Basic_Educator_Badge_Token_URI, CONTRACT_NAMES } from "../config/constants";
+import {
+  Basic_Educator_Badge_Token_URI,
+  CONTRACT_NAMES,
+} from "../config/constants";
 import { OwlearnEducatorBadge } from "../typechain-types";
 
 const contractName = CONTRACT_NAMES.OwlearnEducatorBadge;
@@ -17,8 +20,16 @@ const deployEducatorBadge: DeployFunction = async (
   // destructure deployments object
   const { save, getExtendedArtifact } = deployments;
 
+  // get educator badge
+  const { address: owleanIdAddress } = await ethers.getContract(
+    CONTRACT_NAMES.OwlearnId
+  );
+
   // prepare arguments
-  const educatorBadgeArguments = [Basic_Educator_Badge_Token_URI];
+  const educatorBadgeArguments = [
+    Basic_Educator_Badge_Token_URI,
+    owleanIdAddress,
+  ];
 
   // get contract factory
   const educatorBadgeFactory = await ethers.getContractFactory(
@@ -26,7 +37,14 @@ const deployEducatorBadge: DeployFunction = async (
     deployer
   );
 
-  console.log("Gas consumption:", (await ethers.provider.estimateGas({data: educatorBadgeFactory.interface.encodeDeploy()})).toString());
+  console.log(
+    "Gas consumption:",
+    (
+      await ethers.provider.estimateGas({
+        data: educatorBadgeFactory.interface.encodeDeploy(),
+      })
+    ).toString()
+  );
 
   console.log(
     `Deploying ${contractName} on network ${network.name} using address ${deployer.address}`

@@ -23,7 +23,7 @@ const {
   NOT_CI,
   POLYGONSCAN_KEY,
   OPTIMIZER_RUNS,
-  COINMARKETCAP_API
+  COINMARKETCAP_API,
 } = process.env;
 
 if (NOT_CI === "true") {
@@ -42,6 +42,7 @@ const sharedCompilerConfig = {
     enabled: true,
     runs: parseInt(OPTIMIZER_RUNS as string),
   },
+  viaIR: true,
   outputSelection: {
     "*": {
       "*": ["storageLayout"],

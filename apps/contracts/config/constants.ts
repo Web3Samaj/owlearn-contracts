@@ -5,6 +5,8 @@ export const CONTRACT_NAMES = {
   OwlearnCourseCertificates: "OwlearnCourseCertificates",
   OwlearnCourseResources: "OwlearnCourseResources",
   OwlearnId: "OwlearnId",
+  ImplementationRegistery: "ImplementationRegistery",
+  OwlearnModuleRegistery: "OwlearnModuleRegistery",
   CertificateProxy: "CertificateProxy",
   CourseProxy: "CourseProxy",
   EducatorBadgeProxy: "EducatorBadgeProxy",

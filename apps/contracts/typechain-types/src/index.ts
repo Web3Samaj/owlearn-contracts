@@ -5,6 +5,8 @@ import type * as educatorBadge from "./EducatorBadge";
 export type { educatorBadge };
 import type * as factory from "./Factory";
 export type { factory };
+import type * as implementation from "./Implementation";
+export type { implementation };
 import type * as owlearnCourse from "./OwlearnCourse";
 export type { owlearnCourse };
 import type * as owlearnId from "./OwlearnId";
