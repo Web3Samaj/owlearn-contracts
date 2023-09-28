@@ -4,8 +4,10 @@ pragma solidity ^0.8.10;
 // From https://github.com/Web3Samaj/owlearn-contracts/blob/3-feat-owlearn-id-for-users/apps/contracts/src/OwlearnId.sol
 
 import {OwlearnIdStorage} from "./OwlearnIdStorage.sol";
+import {ILensHub} from "../interfaces/ILensHub.sol";
 import {StringUtils} from "@ensdomains/ens-contracts/contracts/ethregistrar/StringUtils.sol";
 import {Base64Upgradeable} from "@openzeppelin/contracts-upgradeable/utils/Base64Upgradeable.sol";
+import {MerkleProofUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/cryptography/MerkleProofUpgradeable.sol";
 import {IOwlearnId} from "../interfaces/IOwlearnId.sol";
 
 import "forge-std/console.sol";
@@ -13,7 +15,7 @@ import "forge-std/console.sol";
 import {ERC721URIStorageUpgradeable, StringsUpgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721URIStorageUpgradeable.sol";
 import {CountersUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
 import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
-import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 /// @title OwlearnID
 /// @notice A namespace NFT contract that mints unique user handles.
@@ -30,11 +32,14 @@ contract OwlearnId is
 
     /*///////////////////// Constants //////////////////////////////////*/
 
+    uint256 public constant ONE_LETTER_MULTIPLIER = 50;
+    uint256 public constant TWO_LETTER_MULTIPLIER = 25;
     uint256 public constant THREE_LETTER_MULTIPLIER = 10;
     uint256 public constant FOUR_LETTER_MULTIPLIER = 5;
-    uint256 public constant PRICE_MULTIPLIER = 3;
+    uint256 public constant PRICE_MULTIPLIER = 1;
 
     /*///////////////////// Errors //////////////////////////////////*/
+    error notAllowlisted();
     error Unauthorized();
     error AlreadyRegistered();
     error InvalidName(string name);
@@ -58,14 +63,26 @@ contract OwlearnId is
      *
      * @param _tld the domain name extension
      */
-    function initialize(string memory _tld) external payable initializer {
+    function initialize(
+        string memory _tld,
+        address _lensHub,
+        bytes32 _allowListmerkleRoot
+    ) external payable initializer {
         __ERC721_init("Owlearn Id", "OWLID");
         __Ownable_init();
         tld = _tld;
-        _svgPartOne='<svg xmlns="http://www.w3.org/2000/svg" width="270" height="270" fill="none"><path fill="url(#B)" d="M0 0h270v270H0z"/><defs><filter id="A" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse" height="270" width="270"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-opacity=".225" width="200%" height="200%"/></filter></defs><path d="M72.863 42.949c-.668-.387-1.426-.59-2.197-.59s-1.529.204-2.197.59l-10.081 6.032-6.85 3.934-10.081 6.032c-.668.387-1.426.59-2.197.59s-1.529-.204-2.197-.59l-8.013-4.721a4.52 4.52 0 0 1-1.589-1.616c-.384-.665-.594-1.418-.608-2.187v-9.31c-.013-.775.185-1.538.572-2.208a4.25 4.25 0 0 1 1.625-1.595l7.884-4.59c.668-.387 1.426-.59 2.197-.59s1.529.204 2.197.59l7.884 4.59a4.52 4.52 0 0 1 1.589 1.616c.384.665.594 1.418.608 2.187v6.032l6.85-4.065v-6.032c.013-.775-.185-1.538-.572-2.208a4.25 4.25 0 0 0-1.625-1.595L41.456 24.59c-.668-.387-1.426-.59-2.197-.59s-1.529.204-2.197.59l-14.864 8.655a4.25 4.25 0 0 0-1.625 1.595c-.387.67-.585 1.434-.572 2.208v17.441c-.013.775.185 1.538.572 2.208a4.25 4.25 0 0 0 1.625 1.595l14.864 8.655c.668.387 1.426.59 2.197.59s1.529-.204 2.197-.59l10.081-5.901 6.85-4.065 10.081-5.901c.668-.387 1.426-.59 2.197-.59s1.529.204 2.197.59l7.884 4.59a4.52 4.52 0 0 1 1.589 1.616c.384.665.594 1.418.608 2.187v9.311c.013.775-.185 1.538-.572 2.208a4.25 4.25 0 0 1-1.625 1.595l-7.884 4.721c-.668.387-1.426.59-2.197.59s-1.529-.204-2.197-.59l-7.884-4.59a4.52 4.52 0 0 1-1.589-1.616c-.385-.665-.594-1.418-.608-2.187v-6.032l-6.85 4.065v6.032c-.013.775.185 1.538.572 2.208a4.25 4.25 0 0 0 1.625 1.595l14.864 8.655c.668.387 1.426.59 2.197.59s1.529-.204 2.197-.59l14.864-8.655c.657-.394 1.204-.95 1.589-1.616s.594-1.418.609-2.187V55.538c.013-.775-.185-1.538-.572-2.208a4.25 4.25 0 0 0-1.625-1.595l-14.993-8.786z" fill="#fff"/><defs><linearGradient id="B" x1="0" y1="0" x2="270" y2="270" gradientUnits="userSpaceOnUse"><stop stop-color="#cb5eee"/><stop offset="1" stop-color="#0cd7e4" stop-opacity=".99"/></linearGradient></defs><text x="32.5" y="231" font-size="27" fill="#fff" filter="url(#A)" font-family="Plus Jakarta Sans,DejaVu Sans,Noto Color Emoji,Apple Color Emoji,sans-serif" font-weight="bold">';
+        _svgPartOne = '<svg xmlns="http://www.w3.org/2000/svg" width="270" height="270" fill="none"><path fill="url(#B)" d="M0 0h270v270H0z"/><defs><filter id="A" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse" height="270" width="270"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-opacity=".225" width="200%" height="200%"/></filter></defs><path d="M72.863 42.949c-.668-.387-1.426-.59-2.197-.59s-1.529.204-2.197.59l-10.081 6.032-6.85 3.934-10.081 6.032c-.668.387-1.426.59-2.197.59s-1.529-.204-2.197-.59l-8.013-4.721a4.52 4.52 0 0 1-1.589-1.616c-.384-.665-.594-1.418-.608-2.187v-9.31c-.013-.775.185-1.538.572-2.208a4.25 4.25 0 0 1 1.625-1.595l7.884-4.59c.668-.387 1.426-.59 2.197-.59s1.529.204 2.197.59l7.884 4.59a4.52 4.52 0 0 1 1.589 1.616c.384.665.594 1.418.608 2.187v6.032l6.85-4.065v-6.032c.013-.775-.185-1.538-.572-2.208a4.25 4.25 0 0 0-1.625-1.595L41.456 24.59c-.668-.387-1.426-.59-2.197-.59s-1.529.204-2.197.59l-14.864 8.655a4.25 4.25 0 0 0-1.625 1.595c-.387.67-.585 1.434-.572 2.208v17.441c-.013.775.185 1.538.572 2.208a4.25 4.25 0 0 0 1.625 1.595l14.864 8.655c.668.387 1.426.59 2.197.59s1.529-.204 2.197-.59l10.081-5.901 6.85-4.065 10.081-5.901c.668-.387 1.426-.59 2.197-.59s1.529.204 2.197.59l7.884 4.59a4.52 4.52 0 0 1 1.589 1.616c.384.665.594 1.418.608 2.187v9.311c.013.775-.185 1.538-.572 2.208a4.25 4.25 0 0 1-1.625 1.595l-7.884 4.721c-.668.387-1.426.59-2.197.59s-1.529-.204-2.197-.59l-7.884-4.59a4.52 4.52 0 0 1-1.589-1.616c-.385-.665-.594-1.418-.608-2.187v-6.032l-6.85 4.065v6.032c-.013.775.185 1.538.572 2.208a4.25 4.25 0 0 0 1.625 1.595l14.864 8.655c.668.387 1.426.59 2.197.59s1.529-.204 2.197-.59l14.864-8.655c.657-.394 1.204-.95 1.589-1.616s.594-1.418.609-2.187V55.538c.013-.775-.185-1.538-.572-2.208a4.25 4.25 0 0 0-1.625-1.595l-14.993-8.786z" fill="#fff"/><defs><linearGradient id="B" x1="0" y1="0" x2="270" y2="270" gradientUnits="userSpaceOnUse"><stop stop-color="#cb5eee"/><stop offset="1" stop-color="#0cd7e4" stop-opacity=".99"/></linearGradient></defs><text x="32.5" y="231" font-size="27" fill="#fff" filter="url(#A)" font-family="Plus Jakarta Sans,DejaVu Sans,Noto Color Emoji,Apple Color Emoji,sans-serif" font-weight="bold">';
         _svgPartTwo = "</text></svg>";
+        lensHub = ILensHub(_lensHub);
+        allowlistMerkleRoot = _allowListmerkleRoot;
         console.log("%s name service deployed ", _tld);
     }
+
+    /*///////////////////////////////////////////////////////////////
+                           Modifier
+    //////////////////////////////////////////////////////////////*/
+
+    // modifier
 
     /*///////////////////////////////////////////////////////////////
                            Functions
@@ -77,20 +94,73 @@ contract OwlearnId is
      * @param _username domain Name to mint
      * @return amount amount to be paid for minting
      */
-    function price(
-        string calldata _username
-    ) public pure returns (uint256 amount) {
+    function getPrice(string calldata _username) public view returns (uint256) {
         uint256 len = StringUtils.strlen(_username);
-
-        if (len == 0) revert InvalidName(_username);
-
-        if (len == 3) {
-            return THREE_LETTER_MULTIPLIER * 1 ether; // 10 Matic for len 3
+        uint amount;
+        if (len == 0) {
+            revert InvalidName(_username);
+        } else if (len == 1) {
+            amount = THREE_LETTER_MULTIPLIER * 1 ether; // 10 Matic for len 3
+        } else if (len == 2) {
+            amount = THREE_LETTER_MULTIPLIER * 1 ether; // 10 Matic for len 3
+        } else if (len == 3) {
+            amount = THREE_LETTER_MULTIPLIER * 1 ether; // 10 Matic for len 3
         } else if (len == 4) {
-            return FOUR_LETTER_MULTIPLIER * 1 ether; // 5 Matic for len 4
+            amount = FOUR_LETTER_MULTIPLIER * 1 ether; // 5 Matic for len 4
         } else {
-            return PRICE_MULTIPLIER * 1 ether; // 3 Matic for len 5
+            amount = PRICE_MULTIPLIER * 1 ether; // 3 Matic for len 5
         }
+        bool isEligibleForDiscount = checkLensHandle(msg.sender);
+
+        if (isEligibleForDiscount) {
+            return (amount / 2);
+        } else {
+            return amount;
+        }
+    }
+
+    /**
+     * @dev checks if the user if allowed to Mint from the allowlist
+     *
+     * @param proof proof for the verification
+     * @param user user address
+     * @return isAllowed if the user is allowed
+     */
+    function checkAllowlist(
+        bytes32[] calldata proof,
+        address user
+    ) public view returns (bool isAllowed) {
+        bytes32 leaf = keccak256(abi.encode(user));
+        isAllowed = MerkleProofUpgradeable.verify(
+            proof,
+            allowlistMerkleRoot,
+            leaf
+        );
+    }
+
+    /**
+     * @dev to check if the handle is eligible
+     *
+     * @param _username domain Name to mint
+     * @return isEligible if the username is eligible
+     */
+    function checkHandle(
+        string calldata _username
+    ) public view returns (bool isEligible) {
+        isEligible = domainNames[_username].user != address(0) ? false : true;
+    }
+
+    /**
+     * @dev check if the user owns a lens handle
+     *
+     * @param user user address
+     * @return ownsLensHandle if the user owns any lens handle
+     */
+    function checkLensHandle(
+        address user
+    ) public view returns (bool ownsLensHandle) {
+        uint balance = lensHub.balanceOf(user);
+        ownsLensHandle = balance >= 1 ? true : false;
     }
 
     /**
@@ -99,14 +169,18 @@ contract OwlearnId is
      * @param _username domain Name to mint
      * @return recordID amount to be paid for minting
      */
-    function register(
-        string calldata _username
+    function registerOwlId(
+        string calldata _username,
+        bytes32[] calldata proof
     ) public payable returns (uint recordID) {
-        if (domainNames[_username].user != address(0))
-            revert AlreadyRegistered();
+        // Checking AllowList
+        if (!checkAllowlist(proof, msg.sender)) revert notAllowlisted();
+
+        // check if the handle is available
+        if (!checkHandle(_username)) revert AlreadyRegistered();
 
         // fetching the price and check
-        uint256 _price = price(_username);
+        uint256 _price = getPrice(_username);
         require(msg.value >= _price, "NOT ENOUGH MATIC PAID");
 
         string memory finalSvg = _getSVG(_username);
@@ -228,6 +302,8 @@ contract OwlearnId is
         return domainRecords[user];
     }
 
+    /*======================== Owner Functions ========================*/
+
     /**
      * @dev withdraw the funds collected
      * @notice restricted only for the owner
@@ -239,10 +315,18 @@ contract OwlearnId is
         require(success, "Failed to withdraw Matic");
     }
 
-    function _authorizeUpgrade(address newImplementation)
-		internal
-		virtual
-		override
-		onlyOwner
-	{}
+    /**
+     * @dev update the allowlistMerkleRoot to add new addresses to the allowlist
+     * @notice restricted only for the owner
+     * @param _allowListmerkleRoot The updated merkle Root
+     */
+    function updateAllowlistMerkleRoot(
+        bytes32 _allowListmerkleRoot
+    ) public onlyOwner {
+        allowlistMerkleRoot = _allowListmerkleRoot;
+    }
+
+    function _authorizeUpgrade(
+        address newImplementation
+    ) internal virtual override onlyOwner {}
 }

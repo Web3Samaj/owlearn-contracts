@@ -3,6 +3,8 @@ pragma solidity ^0.8.10;
 
 // From : https://github.com/Web3Samaj/owlearn-contracts/blob/3-feat-owlearn-id-for-users/apps/contracts/src/storage/OwlearnIdStorage.sol
 
+import {ILensHub} from "../interfaces/ILensHub.sol";
+
 /// @title OwlearnIdStorage
 /// @notice The Storage contract for OwlearnID
 /// @author Dhruv <contact.dhruvagarwal@gmail.com>
@@ -25,6 +27,9 @@ abstract contract OwlearnIdStorage {
 
     // domain extension ->  .owl
     string public tld;
+
+    ILensHub public lensHub;
+    bytes32 public allowlistMerkleRoot;
 
     /*/////////////////////// NFT SVG  /////////////////////////////*/
     string _svgPartOne;
