@@ -30,6 +30,7 @@ abstract contract OwlearnIdStorage {
 
     ILensHub public lensHub;
     bytes32 public allowlistMerkleRoot;
+    bytes32 public blackListNameMerkleRoot;
 
     /*/////////////////////// NFT SVG  /////////////////////////////*/
     string _svgPartOne;

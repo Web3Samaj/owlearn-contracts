@@ -40,6 +40,7 @@ contract OwlearnId is
 
     /*///////////////////// Errors //////////////////////////////////*/
     error notAllowlisted();
+    error usernameBlackListed();
     error Unauthorized();
     error AlreadyRegistered();
     error InvalidName(string name);
@@ -66,7 +67,8 @@ contract OwlearnId is
     function initialize(
         string memory _tld,
         address _lensHub,
-        bytes32 _allowListmerkleRoot
+        bytes32 _allowListmerkleRoot,
+        bytes32 _blackListNameMerkleRoot
     ) external payable initializer {
         __ERC721_init("Owlearn Id", "OWLID");
         __Ownable_init();
@@ -75,6 +77,7 @@ contract OwlearnId is
         _svgPartTwo = "</text></svg>";
         lensHub = ILensHub(_lensHub);
         allowlistMerkleRoot = _allowListmerkleRoot;
+        blackListNameMerkleRoot = _blackListNameMerkleRoot;
         console.log("%s name service deployed ", _tld);
     }
 
@@ -138,6 +141,18 @@ contract OwlearnId is
         );
     }
 
+    function checkBlackListName(
+        bytes32[] calldata proof,
+        string calldata _username
+    ) public view returns (bool isAllowed) {
+        bytes32 leaf = keccak256(abi.encode(_username));
+        isAllowed = MerkleProofUpgradeable.verify(
+            proof,
+            blackListNameMerkleRoot,
+            leaf
+        );
+    }
+
     /**
      * @dev to check if the handle is eligible
      *
@@ -171,10 +186,14 @@ contract OwlearnId is
      */
     function registerOwlId(
         string calldata _username,
-        bytes32[] calldata proof
+        bytes32[] calldata allowListProof,
+        bytes32[] calldata blackListProof
     ) public payable returns (uint recordID) {
         // Checking AllowList
-        if (!checkAllowlist(proof, msg.sender)) revert notAllowlisted();
+        if (!checkAllowlist(allowListProof, msg.sender))
+            revert notAllowlisted();
+        if (checkBlackListName(blackListProof, _username))
+            revert usernameBlackListed();
 
         // check if the handle is available
         if (!checkHandle(_username)) revert AlreadyRegistered();
@@ -225,6 +244,66 @@ contract OwlearnId is
         _tokenIds.increment();
 
         emit OwlIdRegistered(msg.sender, _username, newRecordId);
+
+        return newRecordId;
+    }
+
+    function registerRestrictedNames(
+        address to,
+        string calldata _username,
+        bytes32[] calldata proof
+    ) public payable onlyOwner returns (uint recordID) {
+        if (!checkBlackListName(proof, _username)) revert usernameBlackListed();
+
+        // check if the handle is available
+        if (!checkHandle(_username)) revert AlreadyRegistered();
+
+        // fetching the price and check
+        uint256 _price = getPrice(_username);
+        require(msg.value >= _price, "NOT ENOUGH MATIC PAID");
+
+        string memory finalSvg = _getSVG(_username);
+
+        uint256 newRecordId = _tokenIds.current();
+
+        console.log(
+            "Registering %s.%s on the contract with tokenID %d",
+            _username,
+            tld,
+            newRecordId
+        );
+
+        string memory finalTokenUri = _getMetadata(_username, finalSvg);
+
+        console.log(
+            "\n--------------------------------------------------------"
+        );
+        console.log("Final tokenURI", finalTokenUri);
+        console.log(
+            "--------------------------------------------------------\n"
+        );
+
+        // Minting the NFT
+        _safeMint(to, newRecordId);
+
+        // Set the Token URI
+        _setTokenURI(newRecordId, finalTokenUri);
+
+        // Prepare the recordData
+        Record memory _record = Record({
+            domain: _username,
+            user: to,
+            tokenId: newRecordId
+        });
+
+        // Store the Recors in the mapping
+        domainRecords[to] = _username;
+        domainNames[_username] = _record;
+
+        // Incrementing the TokenId for NFT
+        _tokenIds.increment();
+
+        emit OwlIdRegistered(to, _username, newRecordId);
 
         return newRecordId;
     }
@@ -324,6 +403,17 @@ contract OwlearnId is
         bytes32 _allowListmerkleRoot
     ) public onlyOwner {
         allowlistMerkleRoot = _allowListmerkleRoot;
+    }
+
+    /**
+     * @dev update the blackListNameMerkleRoot to add new names to the blacklist
+     * @notice restricted only for the owner
+     * @param _blackListNameMerkleRoot The updated merkle Root
+     */
+    function updateBlacklistNameMerkleRoot(
+        bytes32 _blackListNameMerkleRoot
+    ) public onlyOwner {
+        blackListNameMerkleRoot = _blackListNameMerkleRoot;
     }
 
     function _authorizeUpgrade(
