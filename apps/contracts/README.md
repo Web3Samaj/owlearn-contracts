@@ -1,7 +1,9 @@
 # contracts
 
 ## Setup
+
 Create an `.env` file with enviornment variables. Add following enviornment variables:
+
 ```python
 INFURA_KEY=
 ETHERSCAN_KEY=
@@ -41,6 +43,7 @@ yarn hardhat deploy --network $NETWORK_NAME -tags OwlearnCourseFactory
 Note: all contracts are deployed as UUPS upgradeable that is the owner of the contract can upgrade the implementation.
 
 ## Mint new Educator badge
+
 ```sh
 yarn hardhat giveBadge --network $NETWORK_NAME --receiver $RECEIVER_ADDRESS --badge $BADGE_ID
 ```
@@ -48,15 +51,38 @@ yarn hardhat giveBadge --network $NETWORK_NAME --receiver $RECEIVER_ADDRESS --ba
 for time being, only one badge exist so you can safely use BADGE_ID = 1
 
 ## Mint new Owl ID to your own account
+
 ```sh
-yarn hardhat mintOwlId --network $NETWORK_NAME --name $DOMAIN_NAME 
+yarn hardhat mintOwlId --network $NETWORK_NAME --name $DOMAIN_NAME
 ```
 
 ## Create new Course
+
 1. Create a new file in `./config/inputs/$FILENAME.ts` directory with a unique name.
 2. Refer to `./config/inputs/exampleInputs.ts` file to find all the necessary field and variables you need.
 3. Save the file
 4. Run following command
+
 ```sh
 yarn hardhat createNewCourse --network $NETWORK_NAME --inputs "$FILENAME.ts"
+```
+
+## Prepare a new MerkleRoot
+
+1. Create a new file in `./config/inputs/$FILENAME.ts` directory with a unique name.
+2. Refer to `./config/inputs/merkleRootInputsExample.ts` file to find all the necessary field and variables you need.
+3. Save the file
+4. Run following command
+
+```sh
+yarn hardhat prepareMerkleRoot --addresslistfile "$FILENAME.ts"
+```
+
+## Prepare a new Merkle Proof
+
+1. Follow the same steps above to prepare a file of the inputs
+2. Address for which the proof is to be generated
+
+```sh
+yarn hardhat prepareMerkleProof --addresslistfile "$FILENAME.ts" --address $ADDRESS
 ```

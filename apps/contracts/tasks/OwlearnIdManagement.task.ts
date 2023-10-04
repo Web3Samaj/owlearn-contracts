@@ -5,11 +5,18 @@ import { OwlearnEducatorBadge, OwlearnId } from "../typechain-types";
 import keccak256 from "keccak256";
 import { MerkleTree } from "merkletreejs";
 import { BytesLike } from "ethers";
-import { ethers } from "hardhat";
+// import { ethers } from "hardhat";
 
-async function encodeLeaf(address: `0x${string}`) {
+async function encodeLeaf(
+  address: `0x${string}`,
+  hre: HardhatRuntimeEnvironment
+) {
+  const { ethers, network } = hre;
+
   const abiCoder = new ethers.utils.AbiCoder();
-  return abiCoder.encode(["address"], [address]);
+  const encodedLeaf = abiCoder.encode(["address"], [address]);
+  // console.log(encodedLeaf);
+  return encodedLeaf;
 }
 
 interface MintOwlIdUserArguments {
@@ -42,20 +49,32 @@ async function mintOwlId(
 }
 
 interface PrepareMerkleRootArguments {
-  addressList: `0x${string}`[];
+  addresslistfile: string;
+}
+
+interface MerkleRootInputs {
+  allowedAddressList: `0x${string}`[];
 }
 
 async function prepareMerkleRoot(
-  { addressList }: PrepareMerkleRootArguments,
+  { addresslistfile }: PrepareMerkleRootArguments,
   hre: HardhatRuntimeEnvironment
 ): Promise<string> {
   const { ethers, network } = hre;
 
+  const inputs: MerkleRootInputs = await import(
+    "../config/inputs/" + addresslistfile
+  );
+  const { allowedAddressList: addressList } = inputs;
+  // console.log(addressList);
+
   let encodedAddressList: any[] = [];
   // prepare the encoded list
-  addressList.forEach((address) => {
-    encodedAddressList.push(encodeLeaf(address));
+  await addressList.forEach(async (address) => {
+    encodedAddressList.push(await encodeLeaf(address, hre));
   });
+
+  // console.log(encodedAddressList);
 
   // prepare the MerkleTree
   const merkleTree: MerkleTree = new MerkleTree(encodedAddressList, keccak256, {
@@ -71,21 +90,29 @@ async function prepareMerkleRoot(
 }
 
 interface PrepareMerkleProofArguments {
-  addressList: `0x${string}`[];
+  addresslistfile: string;
   address: `0x${string}`;
 }
 
 async function prepareMerkleProof(
-  { addressList, address }: PrepareMerkleProofArguments,
+  { addresslistfile, address }: PrepareMerkleProofArguments,
   hre: HardhatRuntimeEnvironment
 ): Promise<string[]> {
   const { ethers, network } = hre;
 
+  const inputs: MerkleRootInputs = await import(
+    "../config/inputs/" + addresslistfile
+  );
+
+  const { allowedAddressList: addressList } = inputs;
+
   let encodedAddressList: any[] = [];
   // prepare the encoded list
-  addressList.forEach(async (address) => {
-    await encodedAddressList.push(encodeLeaf(address));
+  await addressList.forEach(async (address) => {
+    encodedAddressList.push(await encodeLeaf(address, hre));
   });
+
+  // console.log(encodedAddressList);
 
   // prepare the MerkleTree
   const merkleTree: MerkleTree = new MerkleTree(encodedAddressList, keccak256, {
@@ -94,26 +121,55 @@ async function prepareMerkleProof(
     sortLeaves: true,
   });
 
-  const leaf = await encodeLeaf(address);
-  const proof: string[] = merkleTree.getHexProof(leaf);
+  const leaf = keccak256(await encodeLeaf(address, hre));
+  const proof: string[] = await merkleTree.getHexProof(leaf);
   console.log(proof);
   return proof;
 }
 
 interface VerifyMerkleProofArguments {
-  root: string;
-  proof: string[];
+  addresslistfile: string;
+  prooffile: string;
   address: `0x${string}`;
 }
 
+interface MerkleProofInputs {
+  proofs: string[];
+}
+
 async function verifyMerkleProof(
-  { root, proof, address }: VerifyMerkleProofArguments,
+  { addresslistfile, prooffile, address }: VerifyMerkleProofArguments,
   hre: HardhatRuntimeEnvironment
 ): Promise<boolean> {
   const { ethers, network } = hre;
 
-  const leaf = await encodeLeaf(address);
-  const isVerified = MerkleTree.verify(proof, root, leaf);
+  const proofInputs: MerkleProofInputs = await import(
+    "../config/outputs/" + prooffile
+  );
+
+  const inputs: MerkleRootInputs = await import(
+    "../config/inputs/" + addresslistfile
+  );
+
+  const { allowedAddressList: addressList } = inputs;
+
+  let encodedAddressList: any[] = [];
+  // prepare the encoded list
+  await addressList.forEach(async (address) => {
+    encodedAddressList.push(await encodeLeaf(address, hre));
+  });
+
+  const merkleTree: MerkleTree = new MerkleTree(encodedAddressList, keccak256, {
+    hashLeaves: true, // Hash each leaf using keccak256 to make them fixed-size
+    sortPairs: true, // Sort the tree for determinstic output
+    sortLeaves: true,
+  });
+  const root = merkleTree.getHexRoot();
+
+  const { proofs } = proofInputs;
+
+  const leaf = keccak256(await encodeLeaf(address, hre));
+  const isVerified = merkleTree.verify(proofs, leaf, root);
 
   console.log(isVerified);
   return isVerified;
@@ -124,16 +180,16 @@ task("mintOwlId", "Mint Owl ID")
   .setAction(mintOwlId);
 
 task("prepareMerkleRoot", "prepare the merkle root")
-  .addParam("addressList", "list of the addresses to be whitelisted")
+  .addParam("addresslistfile", "address list input file")
   .setAction(prepareMerkleRoot);
 
 task("prepareMerkleProof", "prepare the merkle proof for verification")
-  .addParam("addressList", "list of the addresses whitelisted")
+  .addParam("addresslistfile", "address list input file")
   .addParam("address", "address for which the proof is needed")
-  .setAction(prepareMerkleRoot);
+  .setAction(prepareMerkleProof);
 
 task("verifyMerkleProof", "prepare the merkle proof for verification")
-  .addParam("root", "Merkle Root for the whitelisted address")
-  .addParam("proof", "Mekrle proof for the address to verify")
+  .addParam("addresslistfile", "Merkle Root for the whitelisted address")
+  .addParam("prooffile", "Mekrle proof for the address to verify")
   .addParam("address", "address for which the proof is needed")
   .setAction(verifyMerkleProof);
