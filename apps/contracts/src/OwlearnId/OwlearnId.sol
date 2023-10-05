@@ -97,23 +97,27 @@ contract OwlearnId is
      * @param _username domain Name to mint
      * @return amount amount to be paid for minting
      */
-    function getPrice(string calldata _username) public view returns (uint256) {
+    function getPrice(
+        string calldata _username,
+        address user
+    ) public view returns (uint256) {
         uint256 len = StringUtils.strlen(_username);
         uint amount;
         if (len == 0) {
             revert InvalidName(_username);
         } else if (len == 1) {
-            amount = THREE_LETTER_MULTIPLIER * 1 ether; // 10 Matic for len 3
+            amount = ONE_LETTER_MULTIPLIER * 1 ether; // 50 Matic for len 1
         } else if (len == 2) {
-            amount = THREE_LETTER_MULTIPLIER * 1 ether; // 10 Matic for len 3
+            amount = TWO_LETTER_MULTIPLIER * 1 ether; // 25 Matic for len 2
         } else if (len == 3) {
             amount = THREE_LETTER_MULTIPLIER * 1 ether; // 10 Matic for len 3
         } else if (len == 4) {
             amount = FOUR_LETTER_MULTIPLIER * 1 ether; // 5 Matic for len 4
         } else {
-            amount = PRICE_MULTIPLIER * 1 ether; // 3 Matic for len 5
+            amount = PRICE_MULTIPLIER * 1 ether; // 1 Matic for len 5
         }
-        bool isEligibleForDiscount = checkLensHandle(msg.sender);
+
+        bool isEligibleForDiscount = checkLensHandle(user);
 
         if (isEligibleForDiscount) {
             return (amount / 2);
@@ -174,8 +178,12 @@ contract OwlearnId is
     function checkLensHandle(
         address user
     ) public view returns (bool ownsLensHandle) {
-        uint balance = lensHub.balanceOf(user);
-        ownsLensHandle = balance >= 1 ? true : false;
+        if (address(lensHub) != address(0)) {
+            uint balance = lensHub.balanceOf(user);
+            ownsLensHandle = balance >= 1 ? true : false;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -199,7 +207,7 @@ contract OwlearnId is
         if (!checkHandle(_username)) revert AlreadyRegistered();
 
         // fetching the price and check
-        uint256 _price = getPrice(_username);
+        uint256 _price = getPrice(_username, msg.sender);
         require(msg.value >= _price, "NOT ENOUGH MATIC PAID");
 
         string memory finalSvg = _getSVG(_username);
@@ -259,7 +267,7 @@ contract OwlearnId is
         if (!checkHandle(_username)) revert AlreadyRegistered();
 
         // fetching the price and check
-        uint256 _price = getPrice(_username);
+        uint256 _price = getPrice(_username, to);
         require(msg.value >= _price, "NOT ENOUGH MATIC PAID");
 
         string memory finalSvg = _getSVG(_username);

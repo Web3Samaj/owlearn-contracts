@@ -7,6 +7,34 @@ import { MerkleTree } from "merkletreejs";
 import { BytesLike } from "ethers";
 // import { ethers } from "hardhat";
 
+interface SetBlackListArguements {
+  blacklistfile: string;
+}
+
+// async function setBlackList(
+//   { blacklistfile }: SetBlackListArguements,
+//   hre: HardhatRuntimeEnvironment
+// ): Promise<void> {
+//   const { ethers, network } = hre;
+//   const [deployer] = await ethers.getSigners();
+
+//   console.log(`Updating the Black List Root on ${network.name}`);
+//   const owlearnIdInstance = (await ethers.getContract(
+//     CONTRACT_NAMES.OwlearnId
+//   )) as OwlearnId;
+
+//   const root = await prepareMerkleRoot({ addresslistfile: blacklistfile }, hre);
+
+//   const transaction = await owlearnIdInstance.updateBlacklistNameMerkleRoot(
+//     root
+//   );
+//   console.log(`Waiting for transaction to be completed...`);
+//   const receipt = await transaction.wait();
+//   console.log(
+//     `New Owl Domain Name ${domainName}.owl minted to ${deployer.address}`
+//   );
+// }
+
 async function encodeLeaf(
   address: `0x${string}`,
   hre: HardhatRuntimeEnvironment
@@ -21,15 +49,22 @@ async function encodeLeaf(
 
 interface MintOwlIdUserArguments {
   name: string;
-  merkleProof: BytesLike[];
+  addresslistfile: string;
 }
 
 async function mintOwlId(
-  { name: domainName, merkleProof: proof }: MintOwlIdUserArguments,
+  { name: domainName, addresslistfile }: MintOwlIdUserArguments,
   hre: HardhatRuntimeEnvironment
 ): Promise<void> {
   const { ethers, network } = hre;
   const [deployer] = await ethers.getSigners();
+  const address = await deployer.getAddress();
+
+  const allow_proof = await prepareMerkleProof(
+    { addresslistfile, address },
+    hre
+  );
+  const blacklist_proof = ["0x", "0x", "0x"];
   console.log(
     `Minting new Owl ID with domain name ${domainName} on ${network.name}`
   );
@@ -37,10 +72,15 @@ async function mintOwlId(
     CONTRACT_NAMES.OwlearnId
   )) as OwlearnId;
   // fetch domain name price
-  const domainNamePrice = await owlearnIdInstance.getPrice(domainName);
-  const transaction = await owlearnIdInstance.registerOwlId(domainName, proof, {
-    value: domainNamePrice,
-  });
+  const domainNamePrice = await owlearnIdInstance.getPrice(domainName, address);
+  const transaction = await owlearnIdInstance.registerOwlId(
+    domainName,
+    allow_proof,
+    blacklist_proof,
+    {
+      value: domainNamePrice,
+    }
+  );
   console.log(`Waiting for transaction to be completed...`);
   const receipt = await transaction.wait();
   console.log(
@@ -177,6 +217,7 @@ async function verifyMerkleProof(
 
 task("mintOwlId", "Mint Owl ID")
   .addParam("name", "username for owl ID")
+  .addParam("addresslistfile", "address list input file")
   .setAction(mintOwlId);
 
 task("prepareMerkleRoot", "prepare the merkle root")

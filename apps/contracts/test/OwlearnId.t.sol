@@ -18,7 +18,7 @@ contract OwnlearnIdScript is Test {
     bytes32 _blackListmerkleRoot =
         0x3b3fde3b18438281dfe0cc075df6d2043365f063ec0dd04495f530ca2c4dddee;
 
-    bytes32[3] _mintProof = [
+    bytes32[] _allowListProof = [
         bytes32(
             0xc35d9b60a22fca9000cd06fe54e5d6519a32e41da6a9770879b110c77dcdcc4d
         ),
@@ -29,6 +29,8 @@ contract OwnlearnIdScript is Test {
             0xeabc706638072e691ae28a7c390574fea15d4c88d208362bba45d232235356fd
         )
     ];
+
+    bytes32[] _userNameProof = [bytes32(0), bytes32(0), bytes32(0)];
 
     function setUp() public {
         address owlearnIdAddress = address(new OwlearnId());
@@ -45,12 +47,17 @@ contract OwnlearnIdScript is Test {
     }
 
     function testRegister() public {
-        address alice = address(0x1);
+        address alice = address(0x62C43323447899acb61C18181e34168903E033Bf);
         startHoax(alice, 100e18);
 
-        uint amount = owlearnId.getPrice("Dhruv");
+        // uint amount = owlearnId.getPrice("Dhruv", alice);
+        uint amount = 1 ether;
 
-        owlearnId.registerOwlId{value: amount}("Dhruv", _mintProof);
+        owlearnId.registerOwlId{value: amount}(
+            "Dhruv",
+            _allowListProof,
+            _userNameProof
+        );
 
         assertEq(owlearnId.getNameRecordFromAddress(alice), "Dhruv");
         OwlearnId.Record memory record = owlearnId.getNameRecord("Dhruv");
@@ -59,12 +66,17 @@ contract OwnlearnIdScript is Test {
     }
 
     function testNFTMetadata() public {
-        address alice = address(0x1);
+        address alice = address(0x62C43323447899acb61C18181e34168903E033Bf);
         startHoax(alice, 100e18);
 
-        uint amount = owlearnId.price("Dhruv");
+        // uint amount = owlearnId.getPrice("Dhruv", alice);
+        uint amount = 1 ether;
 
-        owlearnId.register{value: amount}("Dhruv");
+        owlearnId.registerOwlId{value: amount}(
+            "Dhruv",
+            _allowListProof,
+            _userNameProof
+        );
         OwlearnId.Record memory record = owlearnId.getNameRecord("Dhruv");
         string memory metadata = owlearnId.tokenURI(record.tokenId);
 

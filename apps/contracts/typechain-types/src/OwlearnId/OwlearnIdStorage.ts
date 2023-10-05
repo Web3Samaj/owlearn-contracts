@@ -23,6 +23,7 @@ import type {
 export interface OwlearnIdStorageInterface extends utils.Interface {
   functions: {
     "allowlistMerkleRoot()": FunctionFragment;
+    "blackListNameMerkleRoot()": FunctionFragment;
     "domainNames(string)": FunctionFragment;
     "domainRecords(address)": FunctionFragment;
     "lensHub()": FunctionFragment;
@@ -32,6 +33,7 @@ export interface OwlearnIdStorageInterface extends utils.Interface {
   getFunction(
     nameOrSignatureOrTopic:
       | "allowlistMerkleRoot"
+      | "blackListNameMerkleRoot"
       | "domainNames"
       | "domainRecords"
       | "lensHub"
@@ -40,6 +42,10 @@ export interface OwlearnIdStorageInterface extends utils.Interface {
 
   encodeFunctionData(
     functionFragment: "allowlistMerkleRoot",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "blackListNameMerkleRoot",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -55,6 +61,10 @@ export interface OwlearnIdStorageInterface extends utils.Interface {
 
   decodeFunctionResult(
     functionFragment: "allowlistMerkleRoot",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "blackListNameMerkleRoot",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -100,6 +110,8 @@ export interface OwlearnIdStorage extends BaseContract {
   functions: {
     allowlistMerkleRoot(overrides?: CallOverrides): Promise<[string]>;
 
+    blackListNameMerkleRoot(overrides?: CallOverrides): Promise<[string]>;
+
     domainNames(
       arg0: PromiseOrValue<string>,
       overrides?: CallOverrides
@@ -123,6 +135,8 @@ export interface OwlearnIdStorage extends BaseContract {
 
   allowlistMerkleRoot(overrides?: CallOverrides): Promise<string>;
 
+  blackListNameMerkleRoot(overrides?: CallOverrides): Promise<string>;
+
   domainNames(
     arg0: PromiseOrValue<string>,
     overrides?: CallOverrides
@@ -145,6 +159,8 @@ export interface OwlearnIdStorage extends BaseContract {
 
   callStatic: {
     allowlistMerkleRoot(overrides?: CallOverrides): Promise<string>;
+
+    blackListNameMerkleRoot(overrides?: CallOverrides): Promise<string>;
 
     domainNames(
       arg0: PromiseOrValue<string>,
@@ -172,6 +188,8 @@ export interface OwlearnIdStorage extends BaseContract {
   estimateGas: {
     allowlistMerkleRoot(overrides?: CallOverrides): Promise<BigNumber>;
 
+    blackListNameMerkleRoot(overrides?: CallOverrides): Promise<BigNumber>;
+
     domainNames(
       arg0: PromiseOrValue<string>,
       overrides?: CallOverrides
@@ -189,6 +207,10 @@ export interface OwlearnIdStorage extends BaseContract {
 
   populateTransaction: {
     allowlistMerkleRoot(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    blackListNameMerkleRoot(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

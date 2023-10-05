@@ -1,7 +1,13 @@
 import { OwlearnId } from "../typechain-types";
 import { DeployFunction } from "hardhat-deploy/types";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
-import { CONTRACT_NAMES, OwlearnID_Domain_name } from "../config/constants";
+import {
+  CONTRACT_NAMES,
+  OwlearnID_Domain_name,
+  LENS_HUB,
+  ALLOW_LIST_ROOT,
+  BLACK_LIST_ROOT,
+} from "../config/constants";
 
 const contractName = CONTRACT_NAMES.OwlearnId;
 
@@ -18,7 +24,12 @@ const deployOwlearnId: DeployFunction = async (
   const { save, getExtendedArtifact } = deployments;
 
   // prepare arguments
-  const owlearnIdArguments = [OwlearnID_Domain_name];
+  const owlearnIdArguments = [
+    OwlearnID_Domain_name,
+    LENS_HUB,
+    ALLOW_LIST_ROOT,
+    BLACK_LIST_ROOT,
+  ];
 
   // get contract factory
   const owlearnIdFactory = await ethers.getContractFactory(
@@ -26,7 +37,13 @@ const deployOwlearnId: DeployFunction = async (
     deployer
   );
 
-  console.log((await ethers.provider.estimateGas({data: owlearnIdFactory.interface.encodeDeploy()})).toString());
+  console.log(
+    (
+      await ethers.provider.estimateGas({
+        data: owlearnIdFactory.interface.encodeDeploy(),
+      })
+    ).toString()
+  );
 
   console.log(
     `Deploying ${contractName} on network ${network.name} using address ${deployer.address}`
