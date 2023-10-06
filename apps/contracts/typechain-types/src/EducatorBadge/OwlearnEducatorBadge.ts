@@ -51,6 +51,7 @@ export interface OwlearnEducatorBadgeInterface extends utils.Interface {
     "supportsInterface(bytes4)": FunctionFragment;
     "totalSupply(uint256)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
+    "updateOwlearnId(address)": FunctionFragment;
     "upgradeTo(address)": FunctionFragment;
     "upgradeToAndCall(address,bytes)": FunctionFragment;
     "uri(uint256)": FunctionFragment;
@@ -79,6 +80,7 @@ export interface OwlearnEducatorBadgeInterface extends utils.Interface {
       | "supportsInterface"
       | "totalSupply"
       | "transferOwnership"
+      | "updateOwlearnId"
       | "upgradeTo"
       | "upgradeToAndCall"
       | "uri"
@@ -183,6 +185,10 @@ export interface OwlearnEducatorBadgeInterface extends utils.Interface {
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
+    functionFragment: "updateOwlearnId",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "upgradeTo",
     values: [PromiseOrValue<string>]
   ): string;
@@ -253,6 +259,10 @@ export interface OwlearnEducatorBadgeInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "transferOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "updateOwlearnId",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "upgradeTo", data: BytesLike): Result;
@@ -535,6 +545,11 @@ export interface OwlearnEducatorBadge extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    updateOwlearnId(
+      owlearnIdNew: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     upgradeTo(
       newImplementation: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -666,6 +681,11 @@ export interface OwlearnEducatorBadge extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  updateOwlearnId(
+    owlearnIdNew: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   upgradeTo(
     newImplementation: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -792,6 +812,11 @@ export interface OwlearnEducatorBadge extends BaseContract {
 
     transferOwnership(
       newOwner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    updateOwlearnId(
+      owlearnIdNew: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1020,6 +1045,11 @@ export interface OwlearnEducatorBadge extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    updateOwlearnId(
+      owlearnIdNew: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     upgradeTo(
       newImplementation: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -1149,6 +1179,11 @@ export interface OwlearnEducatorBadge extends BaseContract {
 
     transferOwnership(
       newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    updateOwlearnId(
+      owlearnIdNew: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
