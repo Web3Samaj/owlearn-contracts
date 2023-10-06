@@ -50,7 +50,6 @@ async function encodeLeaf(
 
 interface MintOwlIdUserArguments {
   name: string;
-  addresslistfile: string;
 }
 
 async function mintOwlId(
@@ -139,10 +138,10 @@ async function prepareAllowListMerkleRoot(
   console.log("Merkle Root for the addressAllowList");
   console.log(merkleRoot);
 
-  console.log(
-    "Merkle Root is also saved to the file config/outputs/allowListMerkleRoot.js"
-  );
-  await fs.writeFile("../config/outputs/allowListMerkleRoot.js", merkleRoot);
+  // console.log(
+  //   "Merkle Root is also saved to the file config/outputs/allowListMerkleRoot.js"
+  // );
+  // await fs.writeFile("../config/outputs/allowListMerkleRoot.js", merkleRoot);
 
   return merkleRoot;
 }
@@ -281,10 +280,10 @@ async function prepareBlackListMerkleRoot(
   console.log("Merkle Root for the UserName Blacklist");
   console.log(merkleRoot);
 
-  console.log(
-    "Merkle Root is also saved to the file config/outputs/blackListMerkleRoot.js"
-  );
-  await fs.writeFile("../config/outputs/blackListMerkleRoot.js", merkleRoot);
+  // console.log(
+  //   "Merkle Root is also saved to the file config/outputs/blackListMerkleRoot.js"
+  // );
+  // await fs.writeFile("../config/outputs/blackListMerkleRoot.js", merkleRoot);
 
   return merkleRoot;
 }
@@ -336,7 +335,6 @@ async function prepareBlackListMerkleProof(
 
 task("mintOwlId", "Mint Owl ID")
   .addParam("name", "username for owl ID")
-  .addParam("addresslistfile", "address list input file")
   .setAction(mintOwlId);
 
 task("prepareAllowListMerkleRoot", "prepare the merkle root")
@@ -347,7 +345,7 @@ task("prepareBlackListMerkleRoot", "prepare the merkle root")
   .addParam("blacklistfile", "Username Black list input file")
   .setAction(prepareBlackListMerkleRoot);
 
-task("prepareMerkleProof", "prepare the merkle proof for verification")
+task("prepareAllowListMerkleProof", "prepare the merkle proof for verification")
   .addParam("addresslistfile", "address list input file")
   .addParam("address", "address for which the proof is needed")
   .setAction(prepareAllowListMerkleProof);
