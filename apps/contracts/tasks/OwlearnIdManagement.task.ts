@@ -97,6 +97,56 @@ async function mintOwlId(
   );
 }
 
+interface MintRestrictedOwlIdUserArguments {
+  name: string;
+  address: `0x${string}`;
+}
+
+async function mintRestrictedOwlId(
+  { name: domainName, address: user }: MintRestrictedOwlIdUserArguments,
+  hre: HardhatRuntimeEnvironment
+): Promise<void> {
+  const { ethers, network } = hre;
+  const [deployer] = await ethers.getSigners();
+  // const address = await deployer.getAddress();
+
+  // generate allowListProof
+  const addresslistfile = "allowListInputs.ts";
+  const allow_proof = await prepareAllowListMerkleProof(
+    { addresslistfile, address: user },
+    hre
+  );
+
+  // // generate blackListProof
+  // const blacklistfile = "usernameBlackListInputs.ts";
+  // const blacklist_proof = await prepareBlackListMerkleProof(
+  //   { blacklistfile, username: domainName },
+  //   hre
+  // );
+
+  console.log(
+    `Minting new Owl ID with domain name ${domainName} on ${network.name}`
+  );
+  const owlearnIdInstance = (await ethers.getContract(
+    CONTRACT_NAMES.OwlearnId
+  )) as OwlearnId;
+  // fetch domain name price
+  const domainNamePrice = await owlearnIdInstance.getPrice(domainName, user);
+  const transaction = await owlearnIdInstance.registerRestrictedNames(
+    domainName,
+    user,
+    allow_proof,
+    {
+      value: domainNamePrice,
+    }
+  );
+  console.log(`Waiting for transaction to be completed...`);
+  const receipt = await transaction.wait();
+  console.log(
+    `New Owl Domain Name ${domainName}.owl minted to ${deployer.address}`
+  );
+}
+
 interface PrepareAllowListRootArguments {
   addresslistfile: string;
 }
@@ -336,6 +386,11 @@ async function prepareBlackListMerkleProof(
 task("mintOwlId", "Mint Owl ID")
   .addParam("name", "username for owl ID")
   .setAction(mintOwlId);
+
+task("mintRestrictedOwlId", "Mint Restricted username Owl ID")
+  .addParam("name", "username for owl ID")
+  .addParam("address", "Address to mint")
+  .setAction(mintRestrictedOwlId);
 
 task("prepareAllowListMerkleRoot", "prepare the merkle root")
   .addParam("addresslistfile", "address list input file")

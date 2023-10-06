@@ -53,6 +53,12 @@ for time being, only one badge exist so you can safely use BADGE_ID = 1
 ## Mint new Owl ID to your own account
 
 ```sh
+yarn hardhat mintRestrictedOwlId --network $NETWORK_NAME --name $DOMAIN_NAME --address $ADDRESS_TO_MINT
+```
+
+## Mint new Owl ID to an restricted Username account
+
+```sh
 yarn hardhat mintOwlId --network $NETWORK_NAME --name $DOMAIN_NAME
 ```
 
