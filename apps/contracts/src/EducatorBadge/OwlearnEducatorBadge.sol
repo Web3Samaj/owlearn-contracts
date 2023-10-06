@@ -89,6 +89,15 @@ contract OwlearnEducatorBadge is
         emit EducatorRegistered(msg.sender, owlId);
     }
 
+    /**
+     * @dev Update the OwlearnID In Case needed
+     *
+     * @param owlearnIdNew - new owlearnId Contract Address
+     */
+    function updateOwlearnId(OwlearnId owlearnIdNew) external onlyOwner {
+        owlearnId = owlearnIdNew;
+    }
+
     // =============================================================
     //                           PUBLIC FUNCTIONS
     // =============================================================
