@@ -45,23 +45,33 @@ export declare namespace OwlearnIdStorage {
 export interface OwlearnIdInterface extends utils.Interface {
   functions: {
     "FOUR_LETTER_MULTIPLIER()": FunctionFragment;
+    "ONE_LETTER_MULTIPLIER()": FunctionFragment;
     "PRICE_MULTIPLIER()": FunctionFragment;
     "THREE_LETTER_MULTIPLIER()": FunctionFragment;
+    "TWO_LETTER_MULTIPLIER()": FunctionFragment;
+    "allowlistMerkleRoot()": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
+    "blackListNameMerkleRoot()": FunctionFragment;
+    "checkAllowlist(bytes32[],address)": FunctionFragment;
+    "checkBlackListName(bytes32[],string)": FunctionFragment;
+    "checkHandle(string)": FunctionFragment;
+    "checkLensHandle(address)": FunctionFragment;
     "domainNames(string)": FunctionFragment;
     "domainRecords(address)": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
     "getNameRecord(string)": FunctionFragment;
     "getNameRecordFromAddress(address)": FunctionFragment;
-    "initialize(string)": FunctionFragment;
+    "getPrice(string,address)": FunctionFragment;
+    "initialize(string,address,bytes32,bytes32)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
+    "lensHub()": FunctionFragment;
     "name()": FunctionFragment;
     "owner()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
-    "price(string)": FunctionFragment;
     "proxiableUUID()": FunctionFragment;
-    "register(string)": FunctionFragment;
+    "registerOwlId(string,bytes32[],bytes32[])": FunctionFragment;
+    "registerRestrictedNames(address,string,bytes32[])": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "safeTransferFrom(address,address,uint256,bytes)": FunctionFragment;
@@ -72,6 +82,8 @@ export interface OwlearnIdInterface extends utils.Interface {
     "tokenURI(uint256)": FunctionFragment;
     "transferFrom(address,address,uint256)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
+    "updateAllowlistMerkleRoot(bytes32)": FunctionFragment;
+    "updateBlacklistNameMerkleRoot(bytes32)": FunctionFragment;
     "upgradeTo(address)": FunctionFragment;
     "upgradeToAndCall(address,bytes)": FunctionFragment;
     "withdraw()": FunctionFragment;
@@ -80,23 +92,33 @@ export interface OwlearnIdInterface extends utils.Interface {
   getFunction(
     nameOrSignatureOrTopic:
       | "FOUR_LETTER_MULTIPLIER"
+      | "ONE_LETTER_MULTIPLIER"
       | "PRICE_MULTIPLIER"
       | "THREE_LETTER_MULTIPLIER"
+      | "TWO_LETTER_MULTIPLIER"
+      | "allowlistMerkleRoot"
       | "approve"
       | "balanceOf"
+      | "blackListNameMerkleRoot"
+      | "checkAllowlist"
+      | "checkBlackListName"
+      | "checkHandle"
+      | "checkLensHandle"
       | "domainNames"
       | "domainRecords"
       | "getApproved"
       | "getNameRecord"
       | "getNameRecordFromAddress"
+      | "getPrice"
       | "initialize"
       | "isApprovedForAll"
+      | "lensHub"
       | "name"
       | "owner"
       | "ownerOf"
-      | "price"
       | "proxiableUUID"
-      | "register"
+      | "registerOwlId"
+      | "registerRestrictedNames"
       | "renounceOwnership"
       | "safeTransferFrom(address,address,uint256)"
       | "safeTransferFrom(address,address,uint256,bytes)"
@@ -107,6 +129,8 @@ export interface OwlearnIdInterface extends utils.Interface {
       | "tokenURI"
       | "transferFrom"
       | "transferOwnership"
+      | "updateAllowlistMerkleRoot"
+      | "updateBlacklistNameMerkleRoot"
       | "upgradeTo"
       | "upgradeToAndCall"
       | "withdraw"
@@ -114,6 +138,10 @@ export interface OwlearnIdInterface extends utils.Interface {
 
   encodeFunctionData(
     functionFragment: "FOUR_LETTER_MULTIPLIER",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "ONE_LETTER_MULTIPLIER",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -125,11 +153,39 @@ export interface OwlearnIdInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "TWO_LETTER_MULTIPLIER",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "allowlistMerkleRoot",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "approve",
     values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "balanceOf",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "blackListNameMerkleRoot",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "checkAllowlist",
+    values: [PromiseOrValue<BytesLike>[], PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "checkBlackListName",
+    values: [PromiseOrValue<BytesLike>[], PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "checkHandle",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "checkLensHandle",
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
@@ -153,13 +209,23 @@ export interface OwlearnIdInterface extends utils.Interface {
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
+    functionFragment: "getPrice",
+    values: [PromiseOrValue<string>, PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "initialize",
-    values: [PromiseOrValue<string>]
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<BytesLike>,
+      PromiseOrValue<BytesLike>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: "isApprovedForAll",
     values: [PromiseOrValue<string>, PromiseOrValue<string>]
   ): string;
+  encodeFunctionData(functionFragment: "lensHub", values?: undefined): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
@@ -167,16 +233,24 @@ export interface OwlearnIdInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
-    functionFragment: "price",
-    values: [PromiseOrValue<string>]
-  ): string;
-  encodeFunctionData(
     functionFragment: "proxiableUUID",
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "register",
-    values: [PromiseOrValue<string>]
+    functionFragment: "registerOwlId",
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<BytesLike>[],
+      PromiseOrValue<BytesLike>[]
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "registerRestrictedNames",
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<BytesLike>[]
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
@@ -226,6 +300,14 @@ export interface OwlearnIdInterface extends utils.Interface {
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
+    functionFragment: "updateAllowlistMerkleRoot",
+    values: [PromiseOrValue<BytesLike>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "updateBlacklistNameMerkleRoot",
+    values: [PromiseOrValue<BytesLike>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "upgradeTo",
     values: [PromiseOrValue<string>]
   ): string;
@@ -240,6 +322,10 @@ export interface OwlearnIdInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "ONE_LETTER_MULTIPLIER",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "PRICE_MULTIPLIER",
     data: BytesLike
   ): Result;
@@ -247,8 +333,36 @@ export interface OwlearnIdInterface extends utils.Interface {
     functionFragment: "THREE_LETTER_MULTIPLIER",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "TWO_LETTER_MULTIPLIER",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "allowlistMerkleRoot",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "blackListNameMerkleRoot",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "checkAllowlist",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "checkBlackListName",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "checkHandle",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "checkLensHandle",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "domainNames",
     data: BytesLike
@@ -269,20 +383,28 @@ export interface OwlearnIdInterface extends utils.Interface {
     functionFragment: "getNameRecordFromAddress",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "getPrice", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "isApprovedForAll",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "lensHub", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "price", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "proxiableUUID",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "register", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "registerOwlId",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "registerRestrictedNames",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
     data: BytesLike
@@ -312,6 +434,14 @@ export interface OwlearnIdInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "transferOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "updateAllowlistMerkleRoot",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "updateBlacklistNameMerkleRoot",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "upgradeTo", data: BytesLike): Result;
@@ -494,9 +624,15 @@ export interface OwlearnId extends BaseContract {
   functions: {
     FOUR_LETTER_MULTIPLIER(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    ONE_LETTER_MULTIPLIER(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     PRICE_MULTIPLIER(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     THREE_LETTER_MULTIPLIER(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    TWO_LETTER_MULTIPLIER(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    allowlistMerkleRoot(overrides?: CallOverrides): Promise<[string]>;
 
     approve(
       to: PromiseOrValue<string>,
@@ -508,6 +644,30 @@ export interface OwlearnId extends BaseContract {
       owner: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
+
+    blackListNameMerkleRoot(overrides?: CallOverrides): Promise<[string]>;
+
+    checkAllowlist(
+      proof: PromiseOrValue<BytesLike>[],
+      user: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[boolean] & { isAllowed: boolean }>;
+
+    checkBlackListName(
+      proof: PromiseOrValue<BytesLike>[],
+      _username: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[boolean] & { isAllowed: boolean }>;
+
+    checkHandle(
+      _username: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[boolean] & { isEligible: boolean }>;
+
+    checkLensHandle(
+      user: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[boolean] & { ownsLensHandle: boolean }>;
 
     domainNames(
       arg0: PromiseOrValue<string>,
@@ -540,8 +700,17 @@ export interface OwlearnId extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string]>;
 
+    getPrice(
+      _username: PromiseOrValue<string>,
+      user: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     initialize(
       _tld: PromiseOrValue<string>,
+      _lensHub: PromiseOrValue<string>,
+      _allowListmerkleRoot: PromiseOrValue<BytesLike>,
+      _blackListNameMerkleRoot: PromiseOrValue<BytesLike>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -550,6 +719,8 @@ export interface OwlearnId extends BaseContract {
       operator: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
+
+    lensHub(overrides?: CallOverrides): Promise<[string]>;
 
     name(overrides?: CallOverrides): Promise<[string]>;
 
@@ -560,15 +731,19 @@ export interface OwlearnId extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string]>;
 
-    price(
-      _username: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber] & { amount: BigNumber }>;
-
     proxiableUUID(overrides?: CallOverrides): Promise<[string]>;
 
-    register(
+    registerOwlId(
       _username: PromiseOrValue<string>,
+      allowListProof: PromiseOrValue<BytesLike>[],
+      blackListProof: PromiseOrValue<BytesLike>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    registerRestrictedNames(
+      to: PromiseOrValue<string>,
+      _username: PromiseOrValue<string>,
+      proof: PromiseOrValue<BytesLike>[],
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -623,6 +798,16 @@ export interface OwlearnId extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    updateAllowlistMerkleRoot(
+      _allowListmerkleRoot: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    updateBlacklistNameMerkleRoot(
+      _blackListNameMerkleRoot: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     upgradeTo(
       newImplementation: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -641,9 +826,15 @@ export interface OwlearnId extends BaseContract {
 
   FOUR_LETTER_MULTIPLIER(overrides?: CallOverrides): Promise<BigNumber>;
 
+  ONE_LETTER_MULTIPLIER(overrides?: CallOverrides): Promise<BigNumber>;
+
   PRICE_MULTIPLIER(overrides?: CallOverrides): Promise<BigNumber>;
 
   THREE_LETTER_MULTIPLIER(overrides?: CallOverrides): Promise<BigNumber>;
+
+  TWO_LETTER_MULTIPLIER(overrides?: CallOverrides): Promise<BigNumber>;
+
+  allowlistMerkleRoot(overrides?: CallOverrides): Promise<string>;
 
   approve(
     to: PromiseOrValue<string>,
@@ -655,6 +846,30 @@ export interface OwlearnId extends BaseContract {
     owner: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
+
+  blackListNameMerkleRoot(overrides?: CallOverrides): Promise<string>;
+
+  checkAllowlist(
+    proof: PromiseOrValue<BytesLike>[],
+    user: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
+  checkBlackListName(
+    proof: PromiseOrValue<BytesLike>[],
+    _username: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
+  checkHandle(
+    _username: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
+  checkLensHandle(
+    user: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
 
   domainNames(
     arg0: PromiseOrValue<string>,
@@ -687,8 +902,17 @@ export interface OwlearnId extends BaseContract {
     overrides?: CallOverrides
   ): Promise<string>;
 
+  getPrice(
+    _username: PromiseOrValue<string>,
+    user: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   initialize(
     _tld: PromiseOrValue<string>,
+    _lensHub: PromiseOrValue<string>,
+    _allowListmerkleRoot: PromiseOrValue<BytesLike>,
+    _blackListNameMerkleRoot: PromiseOrValue<BytesLike>,
     overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -697,6 +921,8 @@ export interface OwlearnId extends BaseContract {
     operator: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<boolean>;
+
+  lensHub(overrides?: CallOverrides): Promise<string>;
 
   name(overrides?: CallOverrides): Promise<string>;
 
@@ -707,15 +933,19 @@ export interface OwlearnId extends BaseContract {
     overrides?: CallOverrides
   ): Promise<string>;
 
-  price(
-    _username: PromiseOrValue<string>,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
   proxiableUUID(overrides?: CallOverrides): Promise<string>;
 
-  register(
+  registerOwlId(
     _username: PromiseOrValue<string>,
+    allowListProof: PromiseOrValue<BytesLike>[],
+    blackListProof: PromiseOrValue<BytesLike>[],
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  registerRestrictedNames(
+    to: PromiseOrValue<string>,
+    _username: PromiseOrValue<string>,
+    proof: PromiseOrValue<BytesLike>[],
     overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -770,6 +1000,16 @@ export interface OwlearnId extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  updateAllowlistMerkleRoot(
+    _allowListmerkleRoot: PromiseOrValue<BytesLike>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  updateBlacklistNameMerkleRoot(
+    _blackListNameMerkleRoot: PromiseOrValue<BytesLike>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   upgradeTo(
     newImplementation: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -788,9 +1028,15 @@ export interface OwlearnId extends BaseContract {
   callStatic: {
     FOUR_LETTER_MULTIPLIER(overrides?: CallOverrides): Promise<BigNumber>;
 
+    ONE_LETTER_MULTIPLIER(overrides?: CallOverrides): Promise<BigNumber>;
+
     PRICE_MULTIPLIER(overrides?: CallOverrides): Promise<BigNumber>;
 
     THREE_LETTER_MULTIPLIER(overrides?: CallOverrides): Promise<BigNumber>;
+
+    TWO_LETTER_MULTIPLIER(overrides?: CallOverrides): Promise<BigNumber>;
+
+    allowlistMerkleRoot(overrides?: CallOverrides): Promise<string>;
 
     approve(
       to: PromiseOrValue<string>,
@@ -802,6 +1048,30 @@ export interface OwlearnId extends BaseContract {
       owner: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    blackListNameMerkleRoot(overrides?: CallOverrides): Promise<string>;
+
+    checkAllowlist(
+      proof: PromiseOrValue<BytesLike>[],
+      user: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    checkBlackListName(
+      proof: PromiseOrValue<BytesLike>[],
+      _username: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    checkHandle(
+      _username: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    checkLensHandle(
+      user: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
 
     domainNames(
       arg0: PromiseOrValue<string>,
@@ -834,8 +1104,17 @@ export interface OwlearnId extends BaseContract {
       overrides?: CallOverrides
     ): Promise<string>;
 
+    getPrice(
+      _username: PromiseOrValue<string>,
+      user: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     initialize(
       _tld: PromiseOrValue<string>,
+      _lensHub: PromiseOrValue<string>,
+      _allowListmerkleRoot: PromiseOrValue<BytesLike>,
+      _blackListNameMerkleRoot: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -844,6 +1123,8 @@ export interface OwlearnId extends BaseContract {
       operator: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<boolean>;
+
+    lensHub(overrides?: CallOverrides): Promise<string>;
 
     name(overrides?: CallOverrides): Promise<string>;
 
@@ -854,15 +1135,19 @@ export interface OwlearnId extends BaseContract {
       overrides?: CallOverrides
     ): Promise<string>;
 
-    price(
+    proxiableUUID(overrides?: CallOverrides): Promise<string>;
+
+    registerOwlId(
       _username: PromiseOrValue<string>,
+      allowListProof: PromiseOrValue<BytesLike>[],
+      blackListProof: PromiseOrValue<BytesLike>[],
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    proxiableUUID(overrides?: CallOverrides): Promise<string>;
-
-    register(
+    registerRestrictedNames(
+      to: PromiseOrValue<string>,
       _username: PromiseOrValue<string>,
+      proof: PromiseOrValue<BytesLike>[],
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -912,6 +1197,16 @@ export interface OwlearnId extends BaseContract {
 
     transferOwnership(
       newOwner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    updateAllowlistMerkleRoot(
+      _allowListmerkleRoot: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    updateBlacklistNameMerkleRoot(
+      _blackListNameMerkleRoot: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1025,9 +1320,15 @@ export interface OwlearnId extends BaseContract {
   estimateGas: {
     FOUR_LETTER_MULTIPLIER(overrides?: CallOverrides): Promise<BigNumber>;
 
+    ONE_LETTER_MULTIPLIER(overrides?: CallOverrides): Promise<BigNumber>;
+
     PRICE_MULTIPLIER(overrides?: CallOverrides): Promise<BigNumber>;
 
     THREE_LETTER_MULTIPLIER(overrides?: CallOverrides): Promise<BigNumber>;
+
+    TWO_LETTER_MULTIPLIER(overrides?: CallOverrides): Promise<BigNumber>;
+
+    allowlistMerkleRoot(overrides?: CallOverrides): Promise<BigNumber>;
 
     approve(
       to: PromiseOrValue<string>,
@@ -1037,6 +1338,30 @@ export interface OwlearnId extends BaseContract {
 
     balanceOf(
       owner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    blackListNameMerkleRoot(overrides?: CallOverrides): Promise<BigNumber>;
+
+    checkAllowlist(
+      proof: PromiseOrValue<BytesLike>[],
+      user: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    checkBlackListName(
+      proof: PromiseOrValue<BytesLike>[],
+      _username: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    checkHandle(
+      _username: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    checkLensHandle(
+      user: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1065,8 +1390,17 @@ export interface OwlearnId extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getPrice(
+      _username: PromiseOrValue<string>,
+      user: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     initialize(
       _tld: PromiseOrValue<string>,
+      _lensHub: PromiseOrValue<string>,
+      _allowListmerkleRoot: PromiseOrValue<BytesLike>,
+      _blackListNameMerkleRoot: PromiseOrValue<BytesLike>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -1075,6 +1409,8 @@ export interface OwlearnId extends BaseContract {
       operator: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    lensHub(overrides?: CallOverrides): Promise<BigNumber>;
 
     name(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1085,15 +1421,19 @@ export interface OwlearnId extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    price(
-      _username: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     proxiableUUID(overrides?: CallOverrides): Promise<BigNumber>;
 
-    register(
+    registerOwlId(
       _username: PromiseOrValue<string>,
+      allowListProof: PromiseOrValue<BytesLike>[],
+      blackListProof: PromiseOrValue<BytesLike>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    registerRestrictedNames(
+      to: PromiseOrValue<string>,
+      _username: PromiseOrValue<string>,
+      proof: PromiseOrValue<BytesLike>[],
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -1148,6 +1488,16 @@ export interface OwlearnId extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    updateAllowlistMerkleRoot(
+      _allowListmerkleRoot: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    updateBlacklistNameMerkleRoot(
+      _blackListNameMerkleRoot: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     upgradeTo(
       newImplementation: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -1169,9 +1519,21 @@ export interface OwlearnId extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    ONE_LETTER_MULTIPLIER(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     PRICE_MULTIPLIER(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     THREE_LETTER_MULTIPLIER(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    TWO_LETTER_MULTIPLIER(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    allowlistMerkleRoot(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1183,6 +1545,32 @@ export interface OwlearnId extends BaseContract {
 
     balanceOf(
       owner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    blackListNameMerkleRoot(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    checkAllowlist(
+      proof: PromiseOrValue<BytesLike>[],
+      user: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    checkBlackListName(
+      proof: PromiseOrValue<BytesLike>[],
+      _username: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    checkHandle(
+      _username: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    checkLensHandle(
+      user: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1211,8 +1599,17 @@ export interface OwlearnId extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    getPrice(
+      _username: PromiseOrValue<string>,
+      user: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     initialize(
       _tld: PromiseOrValue<string>,
+      _lensHub: PromiseOrValue<string>,
+      _allowListmerkleRoot: PromiseOrValue<BytesLike>,
+      _blackListNameMerkleRoot: PromiseOrValue<BytesLike>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1221,6 +1618,8 @@ export interface OwlearnId extends BaseContract {
       operator: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
+
+    lensHub(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -1231,15 +1630,19 @@ export interface OwlearnId extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    price(
-      _username: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     proxiableUUID(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    register(
+    registerOwlId(
       _username: PromiseOrValue<string>,
+      allowListProof: PromiseOrValue<BytesLike>[],
+      blackListProof: PromiseOrValue<BytesLike>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    registerRestrictedNames(
+      to: PromiseOrValue<string>,
+      _username: PromiseOrValue<string>,
+      proof: PromiseOrValue<BytesLike>[],
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1291,6 +1694,16 @@ export interface OwlearnId extends BaseContract {
 
     transferOwnership(
       newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    updateAllowlistMerkleRoot(
+      _allowListmerkleRoot: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    updateBlacklistNameMerkleRoot(
+      _blackListNameMerkleRoot: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

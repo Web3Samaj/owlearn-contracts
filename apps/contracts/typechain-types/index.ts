@@ -126,6 +126,8 @@ export type { ImplementationRegistery } from "./src/Implementation/Implementatio
 export { ImplementationRegistery__factory } from "./factories/src/Implementation/ImplementationRegistery__factory";
 export type { ImplementationRegisteryStorage } from "./src/Implementation/ImplementationRegisteryStorage";
 export { ImplementationRegisteryStorage__factory } from "./factories/src/Implementation/ImplementationRegisteryStorage__factory";
+export type { ILensHub } from "./src/interfaces/ILensHub";
+export { ILensHub__factory } from "./factories/src/interfaces/ILensHub__factory";
 export type { IMintModule } from "./src/interfaces/IMintModule";
 export { IMintModule__factory } from "./factories/src/interfaces/IMintModule__factory";
 export type { IOwlearnId } from "./src/interfaces/IOwlearnId";

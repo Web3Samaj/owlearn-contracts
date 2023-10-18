@@ -4,13 +4,13 @@
 export const creatorId = 0;
 
 // Name of the course
-export const courseName = "Introduction to Solidity";
+export const courseName = "Introduction to Python";
 
 // Symbol of the Course
-export const courseSymbol = "IoS";
+export const courseSymbol = "IoP";
 
 // IPFS or URL of the .json course metadata
-export const courseURI = "ipfs://courseURI";
+export const courseURI = "ipfs://courseURI1";
 
 // Array of IPFS or URLs to each course resources
 export const courseNFTURIs = ["ipfs://resource1", "ipfs://resource2"];
