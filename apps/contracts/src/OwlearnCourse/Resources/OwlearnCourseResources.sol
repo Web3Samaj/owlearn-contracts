@@ -155,8 +155,11 @@ contract OwlearnCourseResources is
         address courseCreator,
         string[] memory courseNFTURIs
     ) internal {
+        uint courseNFTURILength = courseNFTURIs.length;
+        if (courseNFTURILength > 0) {
+            _mintandSetURI(courseCreator, courseNFTURIs);
+        }
         // mint the initial NFTs
-        _mintandSetURI(courseCreator, courseNFTURIs);
     }
 
     /**
