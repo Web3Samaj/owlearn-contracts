@@ -47,6 +47,27 @@ contract OwlearnCourseResourcesScript is Test {
         );
     }
 
+    function testCreateWithoutNFTURIs() public {
+        string[] memory NFTURIs;
+        address owlearnCourseResourcesAddress = address(
+            new OwlearnCourseResources()
+        );
+        bytes memory initData = abi.encodeWithSelector(
+            owlearnCourseResources.initialize.selector,
+            "Python Beginner",
+            "PB",
+            alice,
+            "s",
+            NFTURIs,
+            address(this),
+            address(implRegistery)
+        );
+        OwlearnCourseResources _owlearnCourseResources = OwlearnCourseResources(
+            address(new ResourceProxy(owlearnCourseResourcesAddress, initData))
+        );
+        console.log(address(_owlearnCourseResources));
+    }
+
     function testConstructor() public {
         assertEq(owlearnCourseResources.balanceOf(alice), 2);
         assertEq(owlearnCourseResources.tokenURI(0), "s1");
