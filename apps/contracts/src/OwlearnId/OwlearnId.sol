@@ -78,6 +78,8 @@ contract OwlearnId is
         lensHub = ILensHub(_lensHub);
         allowlistMerkleRoot = _allowListmerkleRoot;
         blackListNameMerkleRoot = _blackListNameMerkleRoot;
+        isAllowListEnabled = true;
+        isBlackListEnabled = true;
         console.log("%s name service deployed ", _tld);
     }
 
@@ -197,18 +199,26 @@ contract OwlearnId is
         bytes32[] calldata allowListProof,
         bytes32[] calldata blackListProof
     ) public payable returns (uint recordID) {
-        // Checking AllowList
-        if (!checkAllowlist(allowListProof, msg.sender))
-            revert notAllowlisted();
-        if (checkBlackListName(blackListProof, _username))
-            revert usernameBlackListed();
+        if (isAllowListEnabled) {
+            // Checking AllowList
+            if (!checkAllowlist(allowListProof, msg.sender))
+                revert notAllowlisted();
+        }
+
+        if (isBlackListEnabled) {
+            // Checking BlackList
+            if (checkBlackListName(blackListProof, _username))
+                revert usernameBlackListed();
+        }
 
         // check if the handle is available
         if (!checkHandle(_username)) revert AlreadyRegistered();
 
-        // fetching the price and check
-        uint256 _price = getPrice(_username, msg.sender);
-        require(msg.value >= _price, "NOT ENOUGH MATIC PAID");
+        if (isFeeEnabled) {
+            // fetching the price and check if the user has paid
+            uint256 _price = getPrice(_username, msg.sender);
+            require(msg.value >= _price, "NOT ENOUGH MATIC PAID");
+        }
 
         string memory finalSvg = _getSVG(_username);
 
@@ -261,15 +271,19 @@ contract OwlearnId is
         string calldata _username,
         bytes32[] calldata proof
     ) public payable onlyOwner returns (uint recordID) {
-        if (!checkBlackListName(proof, _username)) revert usernameBlackListed();
+        if (isBlackListEnabled) {
+            if (!checkBlackListName(proof, _username))
+                revert usernameBlackListed();
+        }
 
         // check if the handle is available
         if (!checkHandle(_username)) revert AlreadyRegistered();
 
-        // fetching the price and check
-        uint256 _price = getPrice(_username, to);
-        require(msg.value >= _price, "NOT ENOUGH MATIC PAID");
-
+        if (isFeeEnabled) {
+            // fetching the price and check if the user has paid
+            uint256 _price = getPrice(_username, msg.sender);
+            require(msg.value >= _price, "NOT ENOUGH MATIC PAID");
+        }
         string memory finalSvg = _getSVG(_username);
 
         uint256 newRecordId = _tokenIds.current();
@@ -422,6 +436,37 @@ contract OwlearnId is
         bytes32 _blackListNameMerkleRoot
     ) public onlyOwner {
         blackListNameMerkleRoot = _blackListNameMerkleRoot;
+    }
+
+    /**
+     * @dev update the isFeeEnabled to switch the fees on or Off
+     * @notice restricted only for the owner
+     * @param _isFeeEnabled The switch status : TRUE or FALSE
+     */
+    function switchIsFeeEnabled(bool _isFeeEnabled) public onlyOwner {
+        isFeeEnabled = _isFeeEnabled;
+    }
+
+    /**
+     * @dev update the isAllowListEnabled to switch the Allowlist method on or Off
+     * @notice restricted only for the owner
+     * @param _isAllowListEnabled The switch status : TRUE or FALSE
+     */
+    function switchIsAllowlistEnabled(
+        bool _isAllowListEnabled
+    ) public onlyOwner {
+        isAllowListEnabled = _isAllowListEnabled;
+    }
+
+    /**
+     * @dev update the isBlackListEnabled to switch the fees on or Off
+     * @notice restricted only for the owner
+     * @param _isBlackListEnabled The switch status : TRUE or FALSE
+     */
+    function switchIsBlackListEnabled(
+        bool _isBlackListEnabled
+    ) public onlyOwner {
+        isBlackListEnabled = _isBlackListEnabled;
     }
 
     function _authorizeUpgrade(

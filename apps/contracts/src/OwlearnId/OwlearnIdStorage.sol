@@ -36,6 +36,10 @@ abstract contract OwlearnIdStorage {
     string _svgPartOne;
     string _svgPartTwo;
 
+    bool public isFeeEnabled;
+    bool public isAllowListEnabled;
+    bool public isBlackListEnabled;
+
     // adding a gap variable to allow future upgrades
     uint256[50] private __gap;
 }
