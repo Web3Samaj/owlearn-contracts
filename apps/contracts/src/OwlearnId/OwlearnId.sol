@@ -286,6 +286,8 @@ contract OwlearnId is
         }
         string memory finalSvg = _getSVG(_username);
 
+        // Incrementing the TokenId for NFT
+        _tokenIds.increment();
         uint256 newRecordId = _tokenIds.current();
 
         console.log(
@@ -321,9 +323,6 @@ contract OwlearnId is
         // Store the Recors in the mapping
         domainRecords[to] = _username;
         domainNames[_username] = _record;
-
-        // Incrementing the TokenId for NFT
-        _tokenIds.increment();
 
         emit OwlIdRegistered(to, _username, newRecordId);
 
