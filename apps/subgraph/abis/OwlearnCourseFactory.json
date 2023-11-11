@@ -1,5 +1,9 @@
 [
-  { "inputs": [], "stateMutability": "nonpayable", "type": "constructor" },
+  {
+    "inputs": [],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
   {
     "anonymous": false,
     "inputs": [
@@ -139,32 +143,72 @@
     "type": "event"
   },
   {
-    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "name": "allCourses",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "certificateImplementation",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "courseImplementation",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "creatorId", "type": "uint256" },
-      { "internalType": "string", "name": "courseName", "type": "string" },
-      { "internalType": "string", "name": "courseSymbol", "type": "string" },
-      { "internalType": "string", "name": "courseURI", "type": "string" },
+      {
+        "internalType": "uint256",
+        "name": "creatorId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "courseName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "courseSymbol",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "courseURI",
+        "type": "string"
+      },
       {
         "internalType": "string[]",
         "name": "courseNFTURIs",
@@ -178,8 +222,16 @@
     ],
     "name": "createCourse",
     "outputs": [
-      { "internalType": "address", "name": "course", "type": "address" },
-      { "internalType": "uint256", "name": "courseId", "type": "uint256" }
+      {
+        "internalType": "address",
+        "name": "course",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "courseId",
+        "type": "uint256"
+      }
     ],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -198,16 +250,34 @@
     "type": "function"
   },
   {
-    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "name": "getCourse",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "implementationRegistery",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
@@ -252,21 +322,39 @@
   {
     "inputs": [],
     "name": "moduleRegistery",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "owner",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "proxiableUUID",
-    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
@@ -280,20 +368,36 @@
   {
     "inputs": [],
     "name": "resourceImplementation",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "totalCourses",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "newOwner", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
     ],
     "name": "transferOwnership",
     "outputs": [],
@@ -398,7 +502,11 @@
         "name": "newImplementation",
         "type": "address"
       },
-      { "internalType": "bytes", "name": "data", "type": "bytes" }
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      }
     ],
     "name": "upgradeToAndCall",
     "outputs": [],
