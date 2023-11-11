@@ -50,13 +50,13 @@ yarn hardhat giveBadge --network $NETWORK_NAME --receiver $RECEIVER_ADDRESS --ba
 
 for time being, only one badge exist so you can safely use BADGE_ID = 1
 
-## Mint new Owl ID to your own account
+## Mint new Owl ID to an restricted Username account
 
 ```sh
 yarn hardhat mintRestrictedOwlId --network $NETWORK_NAME --name $DOMAIN_NAME --address $ADDRESS_TO_MINT
 ```
 
-## Mint new Owl ID to an restricted Username account
+## Mint new Owl ID to your own accountunt
 
 ```sh
 yarn hardhat mintOwlId --network $NETWORK_NAME --name $DOMAIN_NAME

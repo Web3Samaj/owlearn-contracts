@@ -81,7 +81,12 @@ async function mintOwlId(
     CONTRACT_NAMES.OwlearnId
   )) as OwlearnId;
   // fetch domain name price
-  const domainNamePrice = await owlearnIdInstance.getPrice(domainName, address);
+  const isFeeEnabled = await owlearnIdInstance.isFeeEnabled();
+
+  const domainNamePrice = isFeeEnabled
+    ? await owlearnIdInstance.getPrice(domainName, address)
+    : 0;
+
   const transaction = await owlearnIdInstance.registerOwlId(
     domainName,
     allow_proof,
@@ -131,7 +136,12 @@ async function mintRestrictedOwlId(
     CONTRACT_NAMES.OwlearnId
   )) as OwlearnId;
   // fetch domain name price
-  const domainNamePrice = await owlearnIdInstance.getPrice(domainName, user);
+  const isFeeEnabled = await owlearnIdInstance.isFeeEnabled();
+
+  const domainNamePrice = isFeeEnabled
+    ? await owlearnIdInstance.getPrice(domainName, user)
+    : 0;
+
   const transaction = await owlearnIdInstance.registerRestrictedNames(
     domainName,
     user,
