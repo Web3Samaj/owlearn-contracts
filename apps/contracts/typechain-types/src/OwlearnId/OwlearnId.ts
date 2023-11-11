@@ -64,7 +64,10 @@ export interface OwlearnIdInterface extends utils.Interface {
     "getNameRecordFromAddress(address)": FunctionFragment;
     "getPrice(string,address)": FunctionFragment;
     "initialize(string,address,bytes32,bytes32)": FunctionFragment;
+    "isAllowListEnabled()": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
+    "isBlackListEnabled()": FunctionFragment;
+    "isFeeEnabled()": FunctionFragment;
     "lensHub()": FunctionFragment;
     "name()": FunctionFragment;
     "owner()": FunctionFragment;
@@ -77,6 +80,9 @@ export interface OwlearnIdInterface extends utils.Interface {
     "safeTransferFrom(address,address,uint256,bytes)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
+    "switchIsAllowlistEnabled(bool)": FunctionFragment;
+    "switchIsBlackListEnabled(bool)": FunctionFragment;
+    "switchIsFeeEnabled(bool)": FunctionFragment;
     "symbol()": FunctionFragment;
     "tld()": FunctionFragment;
     "tokenURI(uint256)": FunctionFragment;
@@ -111,7 +117,10 @@ export interface OwlearnIdInterface extends utils.Interface {
       | "getNameRecordFromAddress"
       | "getPrice"
       | "initialize"
+      | "isAllowListEnabled"
       | "isApprovedForAll"
+      | "isBlackListEnabled"
+      | "isFeeEnabled"
       | "lensHub"
       | "name"
       | "owner"
@@ -124,6 +133,9 @@ export interface OwlearnIdInterface extends utils.Interface {
       | "safeTransferFrom(address,address,uint256,bytes)"
       | "setApprovalForAll"
       | "supportsInterface"
+      | "switchIsAllowlistEnabled"
+      | "switchIsBlackListEnabled"
+      | "switchIsFeeEnabled"
       | "symbol"
       | "tld"
       | "tokenURI"
@@ -222,8 +234,20 @@ export interface OwlearnIdInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
+    functionFragment: "isAllowListEnabled",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "isApprovedForAll",
     values: [PromiseOrValue<string>, PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "isBlackListEnabled",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "isFeeEnabled",
+    values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "lensHub", values?: undefined): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
@@ -280,6 +304,18 @@ export interface OwlearnIdInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "supportsInterface",
     values: [PromiseOrValue<BytesLike>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "switchIsAllowlistEnabled",
+    values: [PromiseOrValue<boolean>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "switchIsBlackListEnabled",
+    values: [PromiseOrValue<boolean>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "switchIsFeeEnabled",
+    values: [PromiseOrValue<boolean>]
   ): string;
   encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
   encodeFunctionData(functionFragment: "tld", values?: undefined): string;
@@ -386,7 +422,19 @@ export interface OwlearnIdInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "getPrice", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "isAllowListEnabled",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "isApprovedForAll",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "isBlackListEnabled",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "isFeeEnabled",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "lensHub", data: BytesLike): Result;
@@ -423,6 +471,18 @@ export interface OwlearnIdInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "supportsInterface",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "switchIsAllowlistEnabled",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "switchIsBlackListEnabled",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "switchIsFeeEnabled",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
@@ -714,11 +774,17 @@ export interface OwlearnId extends BaseContract {
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    isAllowListEnabled(overrides?: CallOverrides): Promise<[boolean]>;
+
     isApprovedForAll(
       owner: PromiseOrValue<string>,
       operator: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
+
+    isBlackListEnabled(overrides?: CallOverrides): Promise<[boolean]>;
+
+    isFeeEnabled(overrides?: CallOverrides): Promise<[boolean]>;
 
     lensHub(overrides?: CallOverrides): Promise<[string]>;
 
@@ -776,6 +842,21 @@ export interface OwlearnId extends BaseContract {
       interfaceId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
+
+    switchIsAllowlistEnabled(
+      _isAllowListEnabled: PromiseOrValue<boolean>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    switchIsBlackListEnabled(
+      _isBlackListEnabled: PromiseOrValue<boolean>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    switchIsFeeEnabled(
+      _isFeeEnabled: PromiseOrValue<boolean>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     symbol(overrides?: CallOverrides): Promise<[string]>;
 
@@ -916,11 +997,17 @@ export interface OwlearnId extends BaseContract {
     overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  isAllowListEnabled(overrides?: CallOverrides): Promise<boolean>;
+
   isApprovedForAll(
     owner: PromiseOrValue<string>,
     operator: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<boolean>;
+
+  isBlackListEnabled(overrides?: CallOverrides): Promise<boolean>;
+
+  isFeeEnabled(overrides?: CallOverrides): Promise<boolean>;
 
   lensHub(overrides?: CallOverrides): Promise<string>;
 
@@ -978,6 +1065,21 @@ export interface OwlearnId extends BaseContract {
     interfaceId: PromiseOrValue<BytesLike>,
     overrides?: CallOverrides
   ): Promise<boolean>;
+
+  switchIsAllowlistEnabled(
+    _isAllowListEnabled: PromiseOrValue<boolean>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  switchIsBlackListEnabled(
+    _isBlackListEnabled: PromiseOrValue<boolean>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  switchIsFeeEnabled(
+    _isFeeEnabled: PromiseOrValue<boolean>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   symbol(overrides?: CallOverrides): Promise<string>;
 
@@ -1118,11 +1220,17 @@ export interface OwlearnId extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    isAllowListEnabled(overrides?: CallOverrides): Promise<boolean>;
+
     isApprovedForAll(
       owner: PromiseOrValue<string>,
       operator: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<boolean>;
+
+    isBlackListEnabled(overrides?: CallOverrides): Promise<boolean>;
+
+    isFeeEnabled(overrides?: CallOverrides): Promise<boolean>;
 
     lensHub(overrides?: CallOverrides): Promise<string>;
 
@@ -1178,6 +1286,21 @@ export interface OwlearnId extends BaseContract {
       interfaceId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<boolean>;
+
+    switchIsAllowlistEnabled(
+      _isAllowListEnabled: PromiseOrValue<boolean>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    switchIsBlackListEnabled(
+      _isBlackListEnabled: PromiseOrValue<boolean>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    switchIsFeeEnabled(
+      _isFeeEnabled: PromiseOrValue<boolean>,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     symbol(overrides?: CallOverrides): Promise<string>;
 
@@ -1404,11 +1527,17 @@ export interface OwlearnId extends BaseContract {
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    isAllowListEnabled(overrides?: CallOverrides): Promise<BigNumber>;
+
     isApprovedForAll(
       owner: PromiseOrValue<string>,
       operator: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    isBlackListEnabled(overrides?: CallOverrides): Promise<BigNumber>;
+
+    isFeeEnabled(overrides?: CallOverrides): Promise<BigNumber>;
 
     lensHub(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1465,6 +1594,21 @@ export interface OwlearnId extends BaseContract {
     supportsInterface(
       interfaceId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    switchIsAllowlistEnabled(
+      _isAllowListEnabled: PromiseOrValue<boolean>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    switchIsBlackListEnabled(
+      _isBlackListEnabled: PromiseOrValue<boolean>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    switchIsFeeEnabled(
+      _isFeeEnabled: PromiseOrValue<boolean>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     symbol(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1613,11 +1757,21 @@ export interface OwlearnId extends BaseContract {
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
+    isAllowListEnabled(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     isApprovedForAll(
       owner: PromiseOrValue<string>,
       operator: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
+
+    isBlackListEnabled(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    isFeeEnabled(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     lensHub(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -1674,6 +1828,21 @@ export interface OwlearnId extends BaseContract {
     supportsInterface(
       interfaceId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    switchIsAllowlistEnabled(
+      _isAllowListEnabled: PromiseOrValue<boolean>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    switchIsBlackListEnabled(
+      _isBlackListEnabled: PromiseOrValue<boolean>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    switchIsFeeEnabled(
+      _isFeeEnabled: PromiseOrValue<boolean>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     symbol(overrides?: CallOverrides): Promise<PopulatedTransaction>;

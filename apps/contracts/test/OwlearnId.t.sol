@@ -12,7 +12,7 @@ import "../src/Proxy/OwlearnIdProxy.sol";
 contract OwnlearnIdScript is Test {
     OwlearnId public owlearnId;
     address public bob = address(0x2);
-    address public lensHub = address(0x5);
+    address public lensHub = address(0x0);
     bytes32 _allowListmerkleRoot =
         0x3b3fde3b18438281dfe0cc075df6d2043365f063ec0dd04495f530ca2c4dddee;
     bytes32 _blackListmerkleRoot =
@@ -50,14 +50,28 @@ contract OwnlearnIdScript is Test {
         address alice = address(0x62C43323447899acb61C18181e34168903E033Bf);
         startHoax(alice, 100e18);
 
-        // uint amount = owlearnId.getPrice("Dhruv", alice);
-        uint amount = 1 ether;
+        uint amount = owlearnId.getPrice("Dhruv", alice);
+        // uint amount = 1 ether;
 
         owlearnId.registerOwlId{value: amount}(
             "Dhruv",
             _allowListProof,
             _userNameProof
         );
+
+        assertEq(owlearnId.getNameRecordFromAddress(alice), "Dhruv");
+        OwlearnId.Record memory record = owlearnId.getNameRecord("Dhruv");
+
+        assertEq(owlearnId.ownerOf(record.tokenId), alice);
+    }
+
+    function testRegisterNoFee() public {
+        address alice = address(0x62C43323447899acb61C18181e34168903E033Bf);
+        startHoax(alice, 100e18);
+
+        // uint amount = 1 ether;
+
+        owlearnId.registerOwlId("Dhruv", _allowListProof, _userNameProof);
 
         assertEq(owlearnId.getNameRecordFromAddress(alice), "Dhruv");
         OwlearnId.Record memory record = owlearnId.getNameRecord("Dhruv");

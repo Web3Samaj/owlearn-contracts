@@ -26,6 +26,9 @@ export interface OwlearnIdStorageInterface extends utils.Interface {
     "blackListNameMerkleRoot()": FunctionFragment;
     "domainNames(string)": FunctionFragment;
     "domainRecords(address)": FunctionFragment;
+    "isAllowListEnabled()": FunctionFragment;
+    "isBlackListEnabled()": FunctionFragment;
+    "isFeeEnabled()": FunctionFragment;
     "lensHub()": FunctionFragment;
     "tld()": FunctionFragment;
   };
@@ -36,6 +39,9 @@ export interface OwlearnIdStorageInterface extends utils.Interface {
       | "blackListNameMerkleRoot"
       | "domainNames"
       | "domainRecords"
+      | "isAllowListEnabled"
+      | "isBlackListEnabled"
+      | "isFeeEnabled"
       | "lensHub"
       | "tld"
   ): FunctionFragment;
@@ -56,6 +62,18 @@ export interface OwlearnIdStorageInterface extends utils.Interface {
     functionFragment: "domainRecords",
     values: [PromiseOrValue<string>]
   ): string;
+  encodeFunctionData(
+    functionFragment: "isAllowListEnabled",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "isBlackListEnabled",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "isFeeEnabled",
+    values?: undefined
+  ): string;
   encodeFunctionData(functionFragment: "lensHub", values?: undefined): string;
   encodeFunctionData(functionFragment: "tld", values?: undefined): string;
 
@@ -73,6 +91,18 @@ export interface OwlearnIdStorageInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "domainRecords",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "isAllowListEnabled",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "isBlackListEnabled",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "isFeeEnabled",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "lensHub", data: BytesLike): Result;
@@ -128,6 +158,12 @@ export interface OwlearnIdStorage extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string]>;
 
+    isAllowListEnabled(overrides?: CallOverrides): Promise<[boolean]>;
+
+    isBlackListEnabled(overrides?: CallOverrides): Promise<[boolean]>;
+
+    isFeeEnabled(overrides?: CallOverrides): Promise<[boolean]>;
+
     lensHub(overrides?: CallOverrides): Promise<[string]>;
 
     tld(overrides?: CallOverrides): Promise<[string]>;
@@ -152,6 +188,12 @@ export interface OwlearnIdStorage extends BaseContract {
     arg0: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<string>;
+
+  isAllowListEnabled(overrides?: CallOverrides): Promise<boolean>;
+
+  isBlackListEnabled(overrides?: CallOverrides): Promise<boolean>;
+
+  isFeeEnabled(overrides?: CallOverrides): Promise<boolean>;
 
   lensHub(overrides?: CallOverrides): Promise<string>;
 
@@ -178,6 +220,12 @@ export interface OwlearnIdStorage extends BaseContract {
       overrides?: CallOverrides
     ): Promise<string>;
 
+    isAllowListEnabled(overrides?: CallOverrides): Promise<boolean>;
+
+    isBlackListEnabled(overrides?: CallOverrides): Promise<boolean>;
+
+    isFeeEnabled(overrides?: CallOverrides): Promise<boolean>;
+
     lensHub(overrides?: CallOverrides): Promise<string>;
 
     tld(overrides?: CallOverrides): Promise<string>;
@@ -199,6 +247,12 @@ export interface OwlearnIdStorage extends BaseContract {
       arg0: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    isAllowListEnabled(overrides?: CallOverrides): Promise<BigNumber>;
+
+    isBlackListEnabled(overrides?: CallOverrides): Promise<BigNumber>;
+
+    isFeeEnabled(overrides?: CallOverrides): Promise<BigNumber>;
 
     lensHub(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -223,6 +277,16 @@ export interface OwlearnIdStorage extends BaseContract {
       arg0: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
+
+    isAllowListEnabled(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    isBlackListEnabled(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    isFeeEnabled(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     lensHub(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
