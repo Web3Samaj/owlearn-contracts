@@ -3,7 +3,7 @@
   "chainId": "80001",
   "contracts": {
     "ImplementationRegistery": {
-      "address": "0x65309b467462b5609395F5C75Dc39C1c474c0696",
+      "address": "0x21B6885a720C4C2Cac534588c5c4BC9eAd9Ee524",
       "abi": [
         {
           "inputs": [],
@@ -309,7 +309,7 @@
       ]
     },
     "OwlearnCourse": {
-      "address": "0xE6d530b8A8B7a354C8057921eEa1fDe5DA12DF7A",
+      "address": "0x01B68Ceec167aAD7cbe3131c5518bC0765b00C88",
       "abi": [
         {
           "inputs": [],
@@ -1476,7 +1476,7 @@
       ]
     },
     "OwlearnCourseFactory": {
-      "address": "0xA8c18a59d51Bc87A9Cc4b15274c5E055C891ce20",
+      "address": "0x03C7FC3Ff55660003ffB90B14f366c98b0643f28",
       "abi": [
         {
           "inputs": [],
@@ -1995,7 +1995,7 @@
       ]
     },
     "OwlearnCourseResources": {
-      "address": "0xf203d2Cd2107e89abcC0d522Cd3B3Dc15D95EcE6",
+      "address": "0x7Be3658fADf76436f25efe1aeA5752edBC67B727",
       "abi": [
         {
           "inputs": [],
@@ -2852,7 +2852,7 @@
       ]
     },
     "OwlearnEducatorBadge": {
-      "address": "0x67ef530a7E7C3755Ea9323663d7c178d7300DE27",
+      "address": "0xB26dfA3f1F78083aAbc9B4e07A659CE25BDf8135",
       "abi": [
         {
           "inputs": [],
@@ -3480,6 +3480,19 @@
         {
           "inputs": [
             {
+              "internalType": "contract OwlearnId",
+              "name": "owlearnIdNew",
+              "type": "address"
+            }
+          ],
+          "name": "updateOwlearnId",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
               "internalType": "address",
               "name": "newImplementation",
               "type": "address"
@@ -3530,7 +3543,7 @@
       ]
     },
     "OwlearnId": {
-      "address": "0x2250F8D3202EbB641197A1451C68eF673E8d553f",
+      "address": "0x003069002550be7164e2Fbcf6b94F7979AC11c58",
       "abi": [
         {
           "inputs": [],
@@ -3556,6 +3569,16 @@
         {
           "inputs": [],
           "name": "Unauthorized",
+          "type": "error"
+        },
+        {
+          "inputs": [],
+          "name": "notAllowlisted",
+          "type": "error"
+        },
+        {
+          "inputs": [],
+          "name": "usernameBlackListed",
           "type": "error"
         },
         {
@@ -3782,6 +3805,19 @@
         },
         {
           "inputs": [],
+          "name": "ONE_LETTER_MULTIPLIER",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [],
           "name": "PRICE_MULTIPLIER",
           "outputs": [
             {
@@ -3801,6 +3837,32 @@
               "internalType": "uint256",
               "name": "",
               "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "TWO_LETTER_MULTIPLIER",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "allowlistMerkleRoot",
+          "outputs": [
+            {
+              "internalType": "bytes32",
+              "name": "",
+              "type": "bytes32"
             }
           ],
           "stateMutability": "view",
@@ -3838,6 +3900,105 @@
               "internalType": "uint256",
               "name": "",
               "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "blackListNameMerkleRoot",
+          "outputs": [
+            {
+              "internalType": "bytes32",
+              "name": "",
+              "type": "bytes32"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "bytes32[]",
+              "name": "proof",
+              "type": "bytes32[]"
+            },
+            {
+              "internalType": "address",
+              "name": "user",
+              "type": "address"
+            }
+          ],
+          "name": "checkAllowlist",
+          "outputs": [
+            {
+              "internalType": "bool",
+              "name": "isAllowed",
+              "type": "bool"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "bytes32[]",
+              "name": "proof",
+              "type": "bytes32[]"
+            },
+            {
+              "internalType": "string",
+              "name": "_username",
+              "type": "string"
+            }
+          ],
+          "name": "checkBlackListName",
+          "outputs": [
+            {
+              "internalType": "bool",
+              "name": "isAllowed",
+              "type": "bool"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "string",
+              "name": "_username",
+              "type": "string"
+            }
+          ],
+          "name": "checkHandle",
+          "outputs": [
+            {
+              "internalType": "bool",
+              "name": "isEligible",
+              "type": "bool"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "user",
+              "type": "address"
+            }
+          ],
+          "name": "checkLensHandle",
+          "outputs": [
+            {
+              "internalType": "bool",
+              "name": "ownsLensHandle",
+              "type": "bool"
             }
           ],
           "stateMutability": "view",
@@ -3969,13 +4130,65 @@
           "inputs": [
             {
               "internalType": "string",
+              "name": "_username",
+              "type": "string"
+            },
+            {
+              "internalType": "address",
+              "name": "user",
+              "type": "address"
+            }
+          ],
+          "name": "getPrice",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "string",
               "name": "_tld",
               "type": "string"
+            },
+            {
+              "internalType": "address",
+              "name": "_lensHub",
+              "type": "address"
+            },
+            {
+              "internalType": "bytes32",
+              "name": "_allowListmerkleRoot",
+              "type": "bytes32"
+            },
+            {
+              "internalType": "bytes32",
+              "name": "_blackListNameMerkleRoot",
+              "type": "bytes32"
             }
           ],
           "name": "initialize",
           "outputs": [],
           "stateMutability": "payable",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "isAllowListEnabled",
+          "outputs": [
+            {
+              "internalType": "bool",
+              "name": "",
+              "type": "bool"
+            }
+          ],
+          "stateMutability": "view",
           "type": "function"
         },
         {
@@ -3997,6 +4210,45 @@
               "internalType": "bool",
               "name": "",
               "type": "bool"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "isBlackListEnabled",
+          "outputs": [
+            {
+              "internalType": "bool",
+              "name": "",
+              "type": "bool"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "isFeeEnabled",
+          "outputs": [
+            {
+              "internalType": "bool",
+              "name": "",
+              "type": "bool"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "lensHub",
+          "outputs": [
+            {
+              "internalType": "contract ILensHub",
+              "name": "",
+              "type": "address"
             }
           ],
           "stateMutability": "view",
@@ -4048,25 +4300,6 @@
           "type": "function"
         },
         {
-          "inputs": [
-            {
-              "internalType": "string",
-              "name": "_username",
-              "type": "string"
-            }
-          ],
-          "name": "price",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "amount",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "pure",
-          "type": "function"
-        },
-        {
           "inputs": [],
           "name": "proxiableUUID",
           "outputs": [
@@ -4085,9 +4318,48 @@
               "internalType": "string",
               "name": "_username",
               "type": "string"
+            },
+            {
+              "internalType": "bytes32[]",
+              "name": "allowListProof",
+              "type": "bytes32[]"
+            },
+            {
+              "internalType": "bytes32[]",
+              "name": "blackListProof",
+              "type": "bytes32[]"
             }
           ],
-          "name": "register",
+          "name": "registerOwlId",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "recordID",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "payable",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "to",
+              "type": "address"
+            },
+            {
+              "internalType": "string",
+              "name": "_username",
+              "type": "string"
+            },
+            {
+              "internalType": "bytes32[]",
+              "name": "proof",
+              "type": "bytes32[]"
+            }
+          ],
+          "name": "registerRestrictedNames",
           "outputs": [
             {
               "internalType": "uint256",
@@ -4194,6 +4466,45 @@
           "type": "function"
         },
         {
+          "inputs": [
+            {
+              "internalType": "bool",
+              "name": "_isAllowListEnabled",
+              "type": "bool"
+            }
+          ],
+          "name": "switchIsAllowlistEnabled",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "bool",
+              "name": "_isBlackListEnabled",
+              "type": "bool"
+            }
+          ],
+          "name": "switchIsBlackListEnabled",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "bool",
+              "name": "_isFeeEnabled",
+              "type": "bool"
+            }
+          ],
+          "name": "switchIsFeeEnabled",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
           "inputs": [],
           "name": "symbol",
           "outputs": [
@@ -4277,6 +4588,32 @@
         {
           "inputs": [
             {
+              "internalType": "bytes32",
+              "name": "_allowListmerkleRoot",
+              "type": "bytes32"
+            }
+          ],
+          "name": "updateAllowlistMerkleRoot",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "bytes32",
+              "name": "_blackListNameMerkleRoot",
+              "type": "bytes32"
+            }
+          ],
+          "name": "updateBlacklistNameMerkleRoot",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
               "internalType": "address",
               "name": "newImplementation",
               "type": "address"
@@ -4315,7 +4652,7 @@
       ]
     },
     "OwlearnModuleRegistery": {
-      "address": "0xbaA8B35791ca55bDA54FDa3cB5237Db7b2413425",
+      "address": "0xe44B1d674515714bE9A1EDD0CA568523BdBeD4BF",
       "abi": [
         {
           "inputs": [],
