@@ -6,4 +6,9 @@ pragma solidity ^0.8.12;
 abstract contract OwlearnModuleRegisteryStorage {
     /*///////////////////// Mappings //////////////////////////////////*/
     mapping(address => bool) public getWhitelistedModules;
+
+    // adding a gap variable to allow future upgrades
+    mapping(address => bool) public getWhitelistedModuleImplementation;
+    address public factory;
+    uint256[48] private __gap;
 }
