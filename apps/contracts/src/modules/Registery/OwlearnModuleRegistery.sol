@@ -49,17 +49,15 @@ contract OwlearnModuleRegistery is
         getWhitelistedModuleImplementation[_implementationAddress] = true;
     }
 
-    // Whitelist a new Implementation only by the owner
-    // Deploy a new Proxy by the creator for a module
-    // whitelist the new proxy
-
     /**
      * @dev create a New module proxy
      * @notice Only Whitelisted Implementation
      *
      * @param _implementationAddress module address
      */
-    function createModuleProxy(address _implementationAddress) public {
+    function createModuleProxy(
+        address _implementationAddress
+    ) public returns (address moduleProxy) {
         require(
             getWhitelistedModuleImplementation[_implementationAddress],
             "ONLY WHITELISTED MODULE IMPLEMENTATION ALLOWED"
@@ -72,7 +70,7 @@ contract OwlearnModuleRegistery is
         );
 
         //  Deploy new Proxy for the implementation
-        address moduleProxy = address(
+        moduleProxy = address(
             new ModuleProxy(_implementationAddress, factoryInitCode)
         );
 
