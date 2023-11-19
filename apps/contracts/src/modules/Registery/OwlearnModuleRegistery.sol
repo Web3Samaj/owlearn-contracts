@@ -4,6 +4,8 @@ pragma solidity ^0.8.12;
 import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import {OwlearnModuleRegisteryStorage} from "./OwlearnModuleRegisteryStorage.sol";
 import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {OwlearnModuleBase} from "../Base/OwlearnModuleBase.sol";
+import {ModuleProxy} from "../../Proxy/ModuleProxy.sol";
 
 /// @title OwlearnModuleRegistery
 /// @notice Module registery responsible for keeping track on whitelisted Modules
@@ -27,19 +29,64 @@ contract OwlearnModuleRegistery is
     /**
      * @dev for initialising the contract with Ownable
      *
+     * @param _factory Factory contract Address
      */
-    function initialise() external payable initializer {
+    function initialise(address _factory) external payable initializer {
         // initialise ownable contract
         __Ownable_init();
+        factory = _factory;
+    }
+
+    /**
+     * @dev Whitelist a new module Implementation
+     * @notice Only Allowed for Owner
+     *
+     * @param _implementationAddress module address
+     */
+    function whitelistModuleImplementation(
+        address _implementationAddress
+    ) public onlyOwner {
+        getWhitelistedModuleImplementation[_implementationAddress] = true;
+    }
+
+    // Whitelist a new Implementation only by the owner
+    // Deploy a new Proxy by the creator for a module
+    // whitelist the new proxy
+
+    /**
+     * @dev create a New module proxy
+     * @notice Only Whitelisted Implementation
+     *
+     * @param _implementationAddress module address
+     */
+    function createModuleProxy(address _implementationAddress) public {
+        require(
+            getWhitelistedModuleImplementation[_implementationAddress],
+            "ONLY WHITELISTED MODULE IMPLEMENTATION ALLOWED"
+        );
+
+        // Module initialiser
+        bytes memory factoryInitCode = abi.encodeWithSelector(
+            OwlearnModuleBase.initialize.selector,
+            factory
+        );
+
+        //  Deploy new Proxy for the implementation
+        address moduleProxy = address(
+            new ModuleProxy(_implementationAddress, factoryInitCode)
+        );
+
+        //  Whitelist the new proxy
+        _whitelistModule(moduleProxy);
     }
 
     /**
      * @dev Whitelist a new module contract
-     * @notice Only Allowed for Owner
+     * @notice Only internal ,whitelisted whena a module proxy is created
      *
      * @param _moduleAddress module address
      */
-    function whitelistModule(address _moduleAddress) public onlyOwner {
+    function _whitelistModule(address _moduleAddress) internal {
         getWhitelistedModules[_moduleAddress] = true;
     }
 
