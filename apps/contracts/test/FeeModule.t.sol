@@ -29,10 +29,10 @@ contract FeeModuleScript is Test {
     function setUp() public {
         // setup registery
         OwlearnModuleRegistery moduleRegistery = new OwlearnModuleRegistery();
-        moduleRegistery.initialise();
+        moduleRegistery.initialize();
 
         ImplementationRegistery implRegistery = new ImplementationRegistery();
-        implRegistery.initialise();
+        implRegistery.initialize();
 
         // setup factory
         OwlearnEducatorBadge owlearnEducatorBadge = new OwlearnEducatorBadge();

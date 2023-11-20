@@ -30,7 +30,7 @@ contract OwlearnModuleRegistery is
      * @dev for initialising the contract with Ownable
      *
      */
-    function initialise() external payable initializer {
+    function initialize() external payable initializer {
         // initialise ownable contract
         __Ownable_init();
     }

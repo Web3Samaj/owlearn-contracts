@@ -27,7 +27,7 @@ contract OwlearnCourseResourcesScript is Test {
         newNFTURIs.push("s3");
         newNFTURIs.push("s4");
         implRegistery = new ImplementationRegistery();
-        implRegistery.initialise();
+        implRegistery.initialize();
 
         address owlearnCourseResourcesAddress = address(
             new OwlearnCourseResources()

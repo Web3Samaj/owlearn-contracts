@@ -24,7 +24,7 @@ contract OwlearnModuleRegisteryScript is Test {
 
     function setUp() public {
         ImplementationRegistery implRegistery = new ImplementationRegistery();
-        implRegistery.initialise();
+        implRegistery.initialize();
 
         // setup factory
         OwlearnEducatorBadge owlearnEducatorBadge = new OwlearnEducatorBadge();
@@ -60,7 +60,7 @@ contract OwlearnModuleRegisteryScript is Test {
         );
 
         bytes memory registeryInitCode = abi.encodeWithSelector(
-            OwlearnModuleRegistery.initialise.selector
+            OwlearnModuleRegistery.initialize.selector
         );
 
         moduleRegistery = OwlearnModuleRegistery(

@@ -42,12 +42,12 @@ contract OwlearnCourseScript is Test {
         OwlearnEducatorBadge owlearnEducatorBadge = new OwlearnEducatorBadge();
         OwlearnCourseFactory courseFactoryImplementation = new OwlearnCourseFactory();
         implRegistery = new ImplementationRegistery();
-        implRegistery.initialise();
+        implRegistery.initialize();
 
         // deploy the registery
         OwlearnModuleRegistery moduleRegistery = new OwlearnModuleRegistery();
         // Initialise
-        moduleRegistery.initialise();
+        moduleRegistery.initialize();
 
         // setup factory for ModuleBase
 
