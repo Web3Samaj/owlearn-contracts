@@ -13,6 +13,8 @@ export const CONTRACT_NAMES = {
   FactoryProxy: "FactoryProxy",
   OwlearnIdProxy: "OwlearnIdProxy",
   ResourceProxy: "ResourceProxy",
+  FeeModule: "FeeModule",
+  FreeModule: "FreeModule",
 };
 
 export const OwlearnIdName = "Owlearn ID";

@@ -21,13 +21,13 @@ abstract contract OwlearnModuleBase is
     address public factory;
 
     /*======================== Constructor Functions ========================*/
-    /**
-     * @dev Lock implementation contract
-     */
-    constructor() {
-        // disabling initialisation of implementation contract to prevent attacks
-        _disableInitializers();
-    }
+    // /**
+    //  * @dev Lock implementation contract
+    //  */
+    // constructor() {
+    //     // disabling initialisation of implementation contract to prevent attacks
+    //     // _disableInitializers();
+    // }
 
     /**
      * @dev Initialize the Module
