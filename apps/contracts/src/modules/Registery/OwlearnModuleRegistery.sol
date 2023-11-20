@@ -29,11 +29,18 @@ contract OwlearnModuleRegistery is
     /**
      * @dev for initialising the contract with Ownable
      *
-     * @param _factory Factory contract Address
      */
-    function initialise(address _factory) external payable initializer {
+    function initialise() external payable initializer {
         // initialise ownable contract
         __Ownable_init();
+    }
+
+    /**
+     * @dev Update/Set the Owlearn Course Factory contracts
+     *
+     * @param _factory - factory Address
+     */
+    function setFactory(address _factory) external onlyOwner {
         factory = _factory;
     }
 
@@ -64,14 +71,14 @@ contract OwlearnModuleRegistery is
         );
 
         // Module initialiser
-        bytes memory factoryInitCode = abi.encodeWithSelector(
+        bytes memory moduleInitCode = abi.encodeWithSelector(
             OwlearnModuleBase.initialize.selector,
             factory
         );
 
         //  Deploy new Proxy for the implementation
         moduleProxy = address(
-            new ModuleProxy(_implementationAddress, factoryInitCode)
+            new ModuleProxy(_implementationAddress, moduleInitCode)
         );
 
         //  Whitelist the new proxy
@@ -80,7 +87,7 @@ contract OwlearnModuleRegistery is
 
     /**
      * @dev Whitelist a new module contract
-     * @notice Only internal ,whitelisted whena a module proxy is created
+     * @notice Only internal ,whitelisted when a module proxy is created
      *
      * @param _moduleAddress module address
      */
