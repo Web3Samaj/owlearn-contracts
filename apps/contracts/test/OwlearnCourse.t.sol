@@ -71,11 +71,12 @@ contract OwlearnCourseScript is Test {
         );
 
         // Deploying the Module
-        FreeModule freeModule = new FreeModule(address(courseFactory));
-        module = address(freeModule);
+        FreeModule freeModuleImpl = new FreeModule();
+        moduleRegistery.setFactory(address(courseFactory));
+        moduleRegistery.whitelistModuleImplementation(address(freeModuleImpl));
+        module = moduleRegistery.createModuleProxy(address(freeModuleImpl));
 
         // then the module is whitelisted
-        moduleRegistery.whitelistModule(address(freeModule));
 
         // deploy the course
         bytes memory courseInitCode = abi.encodeWithSelector(

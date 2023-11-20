@@ -30,7 +30,11 @@ contract OwlearnEducatorBadgeScript is Test {
 
     bytes32[] _userNameProof = [bytes32(0), bytes32(0), bytes32(0)];
 
+<<<<<<< HEAD
     address _lensHub = address(0x0);
+=======
+    address _lensHub = address(0);
+>>>>>>> 8f7cccf (feat: Tests modified + added new tests for MOdule Registery)
 
     function setUp() public {
         owlearnID = new OwlearnId();
