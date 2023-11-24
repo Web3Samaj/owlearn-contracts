@@ -1,7 +1,10 @@
 import { Address, DeployFunction } from "hardhat-deploy/types";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { CONTRACT_NAMES } from "../config/constants";
-import { OwlearnCourseFactory } from "../typechain-types";
+import {
+  OwlearnCourseFactory,
+  OwlearnModuleRegistery,
+} from "../typechain-types";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 const contractName = CONTRACT_NAMES.OwlearnCourseFactory;
@@ -142,6 +145,15 @@ const deployCourseFactory: DeployFunction = async (
       resolve(1);
     }, 15000);
   });
+
+  const moduleRegistery = (await ethers.getContract(
+    CONTRACT_NAMES.OwlearnModuleRegistery
+  )) as OwlearnModuleRegistery;
+
+  console.log(
+    `Setting ${contractName} on network ${network.name} using address ${deployer.address} in the Module Registery`
+  );
+  await moduleRegistery.setFactory(courseFactory.address);
 };
 
 deployCourseFactory.tags = [contractName];

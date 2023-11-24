@@ -18,8 +18,6 @@ contract FeeModule is OwlearnModuleBase {
 
     mapping(address => FeeData) internal _feeData;
 
-    constructor(address factory) OwlearnModuleBase(factory) {}
-
     /**
      * @dev for initialising the actual Owlearn Course Data for this contract
      *
@@ -52,16 +50,14 @@ contract FeeModule is OwlearnModuleBase {
     /**
      * @dev Hook called before Minting the certificate NFT
      *
-     * @param creatorId  Course Creator Id
      * @param courseId  Course ID for which the module is being used
      * @param user User minting the certificate
-     * @param data External Data  , sent by the USER during the mint Call
      */
     function beforeMint(
-        uint creatorId,
+        uint,
         uint courseId,
         address user,
-        bytes calldata data
+        bytes calldata
     ) external payable override onlyCourses(courseId) {
         address courseAddress = msg.sender;
         FeeData memory feeData = _feeData[courseAddress];

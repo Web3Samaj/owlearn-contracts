@@ -1,5 +1,9 @@
 [
-  { "inputs": [], "stateMutability": "nonpayable", "type": "constructor" },
+  {
+    "inputs": [],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
   {
     "anonymous": false,
     "inputs": [
@@ -150,7 +154,13 @@
   {
     "inputs": [],
     "name": "courseId",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
@@ -170,13 +180,23 @@
   {
     "inputs": [],
     "name": "creatorId",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
     ],
     "name": "deleteCourseNFT",
     "outputs": [],
@@ -192,8 +212,16 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
-      { "internalType": "string", "name": "newNFTURI", "type": "string" }
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "newNFTURI",
+        "type": "string"
+      }
     ],
     "name": "editCourseNFT",
     "outputs": [],
@@ -215,12 +243,36 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_creatorId", "type": "uint256" },
-      { "internalType": "uint256", "name": "_courseId", "type": "uint256" },
-      { "internalType": "string", "name": "courseName", "type": "string" },
-      { "internalType": "string", "name": "courseSymbol", "type": "string" },
-      { "internalType": "address", "name": "courseCreator", "type": "address" },
-      { "internalType": "string", "name": "courseURI", "type": "string" },
+      {
+        "internalType": "uint256",
+        "name": "_creatorId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_courseId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "courseName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "courseSymbol",
+        "type": "string"
+      },
+      {
+        "internalType": "address",
+        "name": "courseCreator",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "courseURI",
+        "type": "string"
+      },
       {
         "internalType": "string[]",
         "name": "courseNFTURIs",
@@ -259,12 +311,24 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "to", "type": "address" },
-      { "internalType": "bytes", "name": "data", "type": "bytes" }
+      {
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      }
     ],
     "name": "mintCourseCertificate",
     "outputs": [
-      { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
     ],
     "stateMutability": "payable",
     "type": "function"
@@ -285,7 +349,13 @@
   {
     "inputs": [],
     "name": "mintModule",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
@@ -305,14 +375,26 @@
   {
     "inputs": [],
     "name": "owner",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "proxiableUUID",
-    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
@@ -325,8 +407,16 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_mintModule", "type": "address" },
-      { "internalType": "bytes", "name": "data", "type": "bytes" }
+      {
+        "internalType": "address",
+        "name": "_mintModule",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      }
     ],
     "name": "setAndInitialiseMintModule",
     "outputs": [],
@@ -335,7 +425,11 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "newOwner", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
     ],
     "name": "transferOwnership",
     "outputs": [],
@@ -362,7 +456,11 @@
         "name": "newImplementation",
         "type": "address"
       },
-      { "internalType": "bytes", "name": "data", "type": "bytes" }
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      }
     ],
     "name": "upgradeToAndCall",
     "outputs": [],

@@ -915,6 +915,36 @@ export class TransferOwnershipCall__Outputs {
   }
 }
 
+export class UpdateOwlearnIdCall extends ethereum.Call {
+  get inputs(): UpdateOwlearnIdCall__Inputs {
+    return new UpdateOwlearnIdCall__Inputs(this);
+  }
+
+  get outputs(): UpdateOwlearnIdCall__Outputs {
+    return new UpdateOwlearnIdCall__Outputs(this);
+  }
+}
+
+export class UpdateOwlearnIdCall__Inputs {
+  _call: UpdateOwlearnIdCall;
+
+  constructor(call: UpdateOwlearnIdCall) {
+    this._call = call;
+  }
+
+  get owlearnIdNew(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class UpdateOwlearnIdCall__Outputs {
+  _call: UpdateOwlearnIdCall;
+
+  constructor(call: UpdateOwlearnIdCall) {
+    this._call = call;
+  }
+}
+
 export class UpgradeToCall extends ethereum.Call {
   get inputs(): UpgradeToCall__Inputs {
     return new UpgradeToCall__Inputs(this);

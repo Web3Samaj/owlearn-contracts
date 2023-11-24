@@ -326,6 +326,29 @@ export class OwlearnId extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
+  ONE_LETTER_MULTIPLIER(): BigInt {
+    let result = super.call(
+      "ONE_LETTER_MULTIPLIER",
+      "ONE_LETTER_MULTIPLIER():(uint256)",
+      []
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_ONE_LETTER_MULTIPLIER(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "ONE_LETTER_MULTIPLIER",
+      "ONE_LETTER_MULTIPLIER():(uint256)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
   PRICE_MULTIPLIER(): BigInt {
     let result = super.call(
       "PRICE_MULTIPLIER",
@@ -372,6 +395,52 @@ export class OwlearnId extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
+  TWO_LETTER_MULTIPLIER(): BigInt {
+    let result = super.call(
+      "TWO_LETTER_MULTIPLIER",
+      "TWO_LETTER_MULTIPLIER():(uint256)",
+      []
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_TWO_LETTER_MULTIPLIER(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "TWO_LETTER_MULTIPLIER",
+      "TWO_LETTER_MULTIPLIER():(uint256)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  allowlistMerkleRoot(): Bytes {
+    let result = super.call(
+      "allowlistMerkleRoot",
+      "allowlistMerkleRoot():(bytes32)",
+      []
+    );
+
+    return result[0].toBytes();
+  }
+
+  try_allowlistMerkleRoot(): ethereum.CallResult<Bytes> {
+    let result = super.tryCall(
+      "allowlistMerkleRoot",
+      "allowlistMerkleRoot():(bytes32)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBytes());
+  }
+
   balanceOf(owner: Address): BigInt {
     let result = super.call("balanceOf", "balanceOf(address):(uint256)", [
       ethereum.Value.fromAddress(owner)
@@ -389,6 +458,135 @@ export class OwlearnId extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  blackListNameMerkleRoot(): Bytes {
+    let result = super.call(
+      "blackListNameMerkleRoot",
+      "blackListNameMerkleRoot():(bytes32)",
+      []
+    );
+
+    return result[0].toBytes();
+  }
+
+  try_blackListNameMerkleRoot(): ethereum.CallResult<Bytes> {
+    let result = super.tryCall(
+      "blackListNameMerkleRoot",
+      "blackListNameMerkleRoot():(bytes32)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBytes());
+  }
+
+  checkAllowlist(proof: Array<Bytes>, user: Address): boolean {
+    let result = super.call(
+      "checkAllowlist",
+      "checkAllowlist(bytes32[],address):(bool)",
+      [
+        ethereum.Value.fromFixedBytesArray(proof),
+        ethereum.Value.fromAddress(user)
+      ]
+    );
+
+    return result[0].toBoolean();
+  }
+
+  try_checkAllowlist(
+    proof: Array<Bytes>,
+    user: Address
+  ): ethereum.CallResult<boolean> {
+    let result = super.tryCall(
+      "checkAllowlist",
+      "checkAllowlist(bytes32[],address):(bool)",
+      [
+        ethereum.Value.fromFixedBytesArray(proof),
+        ethereum.Value.fromAddress(user)
+      ]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
+  checkBlackListName(proof: Array<Bytes>, _username: string): boolean {
+    let result = super.call(
+      "checkBlackListName",
+      "checkBlackListName(bytes32[],string):(bool)",
+      [
+        ethereum.Value.fromFixedBytesArray(proof),
+        ethereum.Value.fromString(_username)
+      ]
+    );
+
+    return result[0].toBoolean();
+  }
+
+  try_checkBlackListName(
+    proof: Array<Bytes>,
+    _username: string
+  ): ethereum.CallResult<boolean> {
+    let result = super.tryCall(
+      "checkBlackListName",
+      "checkBlackListName(bytes32[],string):(bool)",
+      [
+        ethereum.Value.fromFixedBytesArray(proof),
+        ethereum.Value.fromString(_username)
+      ]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
+  checkHandle(_username: string): boolean {
+    let result = super.call("checkHandle", "checkHandle(string):(bool)", [
+      ethereum.Value.fromString(_username)
+    ]);
+
+    return result[0].toBoolean();
+  }
+
+  try_checkHandle(_username: string): ethereum.CallResult<boolean> {
+    let result = super.tryCall("checkHandle", "checkHandle(string):(bool)", [
+      ethereum.Value.fromString(_username)
+    ]);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
+  checkLensHandle(user: Address): boolean {
+    let result = super.call(
+      "checkLensHandle",
+      "checkLensHandle(address):(bool)",
+      [ethereum.Value.fromAddress(user)]
+    );
+
+    return result[0].toBoolean();
+  }
+
+  try_checkLensHandle(user: Address): ethereum.CallResult<boolean> {
+    let result = super.tryCall(
+      "checkLensHandle",
+      "checkLensHandle(address):(bool)",
+      [ethereum.Value.fromAddress(user)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
   domainNames(param0: string): OwlearnId__domainNamesResult {
@@ -522,6 +720,51 @@ export class OwlearnId extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toString());
   }
 
+  getPrice(_username: string, user: Address): BigInt {
+    let result = super.call("getPrice", "getPrice(string,address):(uint256)", [
+      ethereum.Value.fromString(_username),
+      ethereum.Value.fromAddress(user)
+    ]);
+
+    return result[0].toBigInt();
+  }
+
+  try_getPrice(_username: string, user: Address): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "getPrice",
+      "getPrice(string,address):(uint256)",
+      [ethereum.Value.fromString(_username), ethereum.Value.fromAddress(user)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  isAllowListEnabled(): boolean {
+    let result = super.call(
+      "isAllowListEnabled",
+      "isAllowListEnabled():(bool)",
+      []
+    );
+
+    return result[0].toBoolean();
+  }
+
+  try_isAllowListEnabled(): ethereum.CallResult<boolean> {
+    let result = super.tryCall(
+      "isAllowListEnabled",
+      "isAllowListEnabled():(bool)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
   isApprovedForAll(owner: Address, operator: Address): boolean {
     let result = super.call(
       "isApprovedForAll",
@@ -546,6 +789,59 @@ export class OwlearnId extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
+  isBlackListEnabled(): boolean {
+    let result = super.call(
+      "isBlackListEnabled",
+      "isBlackListEnabled():(bool)",
+      []
+    );
+
+    return result[0].toBoolean();
+  }
+
+  try_isBlackListEnabled(): ethereum.CallResult<boolean> {
+    let result = super.tryCall(
+      "isBlackListEnabled",
+      "isBlackListEnabled():(bool)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
+  isFeeEnabled(): boolean {
+    let result = super.call("isFeeEnabled", "isFeeEnabled():(bool)", []);
+
+    return result[0].toBoolean();
+  }
+
+  try_isFeeEnabled(): ethereum.CallResult<boolean> {
+    let result = super.tryCall("isFeeEnabled", "isFeeEnabled():(bool)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
+  lensHub(): Address {
+    let result = super.call("lensHub", "lensHub():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_lensHub(): ethereum.CallResult<Address> {
+    let result = super.tryCall("lensHub", "lensHub():(address)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   name(): string {
@@ -595,25 +891,6 @@ export class OwlearnId extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
-  price(_username: string): BigInt {
-    let result = super.call("price", "price(string):(uint256)", [
-      ethereum.Value.fromString(_username)
-    ]);
-
-    return result[0].toBigInt();
-  }
-
-  try_price(_username: string): ethereum.CallResult<BigInt> {
-    let result = super.tryCall("price", "price(string):(uint256)", [
-      ethereum.Value.fromString(_username)
-    ]);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
   proxiableUUID(): Bytes {
@@ -788,6 +1065,18 @@ export class InitializeCall__Inputs {
   get _tld(): string {
     return this._call.inputValues[0].value.toString();
   }
+
+  get _lensHub(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+
+  get _allowListmerkleRoot(): Bytes {
+    return this._call.inputValues[2].value.toBytes();
+  }
+
+  get _blackListNameMerkleRoot(): Bytes {
+    return this._call.inputValues[3].value.toBytes();
+  }
 }
 
 export class InitializeCall__Outputs {
@@ -798,32 +1087,82 @@ export class InitializeCall__Outputs {
   }
 }
 
-export class RegisterCall extends ethereum.Call {
-  get inputs(): RegisterCall__Inputs {
-    return new RegisterCall__Inputs(this);
+export class RegisterOwlIdCall extends ethereum.Call {
+  get inputs(): RegisterOwlIdCall__Inputs {
+    return new RegisterOwlIdCall__Inputs(this);
   }
 
-  get outputs(): RegisterCall__Outputs {
-    return new RegisterCall__Outputs(this);
+  get outputs(): RegisterOwlIdCall__Outputs {
+    return new RegisterOwlIdCall__Outputs(this);
   }
 }
 
-export class RegisterCall__Inputs {
-  _call: RegisterCall;
+export class RegisterOwlIdCall__Inputs {
+  _call: RegisterOwlIdCall;
 
-  constructor(call: RegisterCall) {
+  constructor(call: RegisterOwlIdCall) {
     this._call = call;
   }
 
   get _username(): string {
     return this._call.inputValues[0].value.toString();
   }
+
+  get allowListProof(): Array<Bytes> {
+    return this._call.inputValues[1].value.toBytesArray();
+  }
+
+  get blackListProof(): Array<Bytes> {
+    return this._call.inputValues[2].value.toBytesArray();
+  }
 }
 
-export class RegisterCall__Outputs {
-  _call: RegisterCall;
+export class RegisterOwlIdCall__Outputs {
+  _call: RegisterOwlIdCall;
 
-  constructor(call: RegisterCall) {
+  constructor(call: RegisterOwlIdCall) {
+    this._call = call;
+  }
+
+  get recordID(): BigInt {
+    return this._call.outputValues[0].value.toBigInt();
+  }
+}
+
+export class RegisterRestrictedNamesCall extends ethereum.Call {
+  get inputs(): RegisterRestrictedNamesCall__Inputs {
+    return new RegisterRestrictedNamesCall__Inputs(this);
+  }
+
+  get outputs(): RegisterRestrictedNamesCall__Outputs {
+    return new RegisterRestrictedNamesCall__Outputs(this);
+  }
+}
+
+export class RegisterRestrictedNamesCall__Inputs {
+  _call: RegisterRestrictedNamesCall;
+
+  constructor(call: RegisterRestrictedNamesCall) {
+    this._call = call;
+  }
+
+  get to(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get _username(): string {
+    return this._call.inputValues[1].value.toString();
+  }
+
+  get proof(): Array<Bytes> {
+    return this._call.inputValues[2].value.toBytesArray();
+  }
+}
+
+export class RegisterRestrictedNamesCall__Outputs {
+  _call: RegisterRestrictedNamesCall;
+
+  constructor(call: RegisterRestrictedNamesCall) {
     this._call = call;
   }
 
@@ -972,6 +1311,96 @@ export class SetApprovalForAllCall__Outputs {
   }
 }
 
+export class SwitchIsAllowlistEnabledCall extends ethereum.Call {
+  get inputs(): SwitchIsAllowlistEnabledCall__Inputs {
+    return new SwitchIsAllowlistEnabledCall__Inputs(this);
+  }
+
+  get outputs(): SwitchIsAllowlistEnabledCall__Outputs {
+    return new SwitchIsAllowlistEnabledCall__Outputs(this);
+  }
+}
+
+export class SwitchIsAllowlistEnabledCall__Inputs {
+  _call: SwitchIsAllowlistEnabledCall;
+
+  constructor(call: SwitchIsAllowlistEnabledCall) {
+    this._call = call;
+  }
+
+  get _isAllowListEnabled(): boolean {
+    return this._call.inputValues[0].value.toBoolean();
+  }
+}
+
+export class SwitchIsAllowlistEnabledCall__Outputs {
+  _call: SwitchIsAllowlistEnabledCall;
+
+  constructor(call: SwitchIsAllowlistEnabledCall) {
+    this._call = call;
+  }
+}
+
+export class SwitchIsBlackListEnabledCall extends ethereum.Call {
+  get inputs(): SwitchIsBlackListEnabledCall__Inputs {
+    return new SwitchIsBlackListEnabledCall__Inputs(this);
+  }
+
+  get outputs(): SwitchIsBlackListEnabledCall__Outputs {
+    return new SwitchIsBlackListEnabledCall__Outputs(this);
+  }
+}
+
+export class SwitchIsBlackListEnabledCall__Inputs {
+  _call: SwitchIsBlackListEnabledCall;
+
+  constructor(call: SwitchIsBlackListEnabledCall) {
+    this._call = call;
+  }
+
+  get _isBlackListEnabled(): boolean {
+    return this._call.inputValues[0].value.toBoolean();
+  }
+}
+
+export class SwitchIsBlackListEnabledCall__Outputs {
+  _call: SwitchIsBlackListEnabledCall;
+
+  constructor(call: SwitchIsBlackListEnabledCall) {
+    this._call = call;
+  }
+}
+
+export class SwitchIsFeeEnabledCall extends ethereum.Call {
+  get inputs(): SwitchIsFeeEnabledCall__Inputs {
+    return new SwitchIsFeeEnabledCall__Inputs(this);
+  }
+
+  get outputs(): SwitchIsFeeEnabledCall__Outputs {
+    return new SwitchIsFeeEnabledCall__Outputs(this);
+  }
+}
+
+export class SwitchIsFeeEnabledCall__Inputs {
+  _call: SwitchIsFeeEnabledCall;
+
+  constructor(call: SwitchIsFeeEnabledCall) {
+    this._call = call;
+  }
+
+  get _isFeeEnabled(): boolean {
+    return this._call.inputValues[0].value.toBoolean();
+  }
+}
+
+export class SwitchIsFeeEnabledCall__Outputs {
+  _call: SwitchIsFeeEnabledCall;
+
+  constructor(call: SwitchIsFeeEnabledCall) {
+    this._call = call;
+  }
+}
+
 export class TransferFromCall extends ethereum.Call {
   get inputs(): TransferFromCall__Inputs {
     return new TransferFromCall__Inputs(this);
@@ -1036,6 +1465,66 @@ export class TransferOwnershipCall__Outputs {
   _call: TransferOwnershipCall;
 
   constructor(call: TransferOwnershipCall) {
+    this._call = call;
+  }
+}
+
+export class UpdateAllowlistMerkleRootCall extends ethereum.Call {
+  get inputs(): UpdateAllowlistMerkleRootCall__Inputs {
+    return new UpdateAllowlistMerkleRootCall__Inputs(this);
+  }
+
+  get outputs(): UpdateAllowlistMerkleRootCall__Outputs {
+    return new UpdateAllowlistMerkleRootCall__Outputs(this);
+  }
+}
+
+export class UpdateAllowlistMerkleRootCall__Inputs {
+  _call: UpdateAllowlistMerkleRootCall;
+
+  constructor(call: UpdateAllowlistMerkleRootCall) {
+    this._call = call;
+  }
+
+  get _allowListmerkleRoot(): Bytes {
+    return this._call.inputValues[0].value.toBytes();
+  }
+}
+
+export class UpdateAllowlistMerkleRootCall__Outputs {
+  _call: UpdateAllowlistMerkleRootCall;
+
+  constructor(call: UpdateAllowlistMerkleRootCall) {
+    this._call = call;
+  }
+}
+
+export class UpdateBlacklistNameMerkleRootCall extends ethereum.Call {
+  get inputs(): UpdateBlacklistNameMerkleRootCall__Inputs {
+    return new UpdateBlacklistNameMerkleRootCall__Inputs(this);
+  }
+
+  get outputs(): UpdateBlacklistNameMerkleRootCall__Outputs {
+    return new UpdateBlacklistNameMerkleRootCall__Outputs(this);
+  }
+}
+
+export class UpdateBlacklistNameMerkleRootCall__Inputs {
+  _call: UpdateBlacklistNameMerkleRootCall;
+
+  constructor(call: UpdateBlacklistNameMerkleRootCall) {
+    this._call = call;
+  }
+
+  get _blackListNameMerkleRoot(): Bytes {
+    return this._call.inputValues[0].value.toBytes();
+  }
+}
+
+export class UpdateBlacklistNameMerkleRootCall__Outputs {
+  _call: UpdateBlacklistNameMerkleRootCall;
+
+  constructor(call: UpdateBlacklistNameMerkleRootCall) {
     this._call = call;
   }
 }

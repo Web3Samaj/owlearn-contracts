@@ -1,7 +1,7 @@
 // Educator Badge ID of the creator
 // 1 - Basic
 // 2-  more elit badges to come
-export const creatorId = 0;
+export const creatorId = 1;
 
 // Name of the course
 export const courseName = "Introduction to Solidity";
