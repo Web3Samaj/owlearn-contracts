@@ -29,10 +29,10 @@ contract FeeModuleScript is Test {
     function setUp() public {
         // setup registery
         OwlearnModuleRegistery moduleRegistery = new OwlearnModuleRegistery();
-        moduleRegistery.initialise();
+        moduleRegistery.initialize();
 
         ImplementationRegistery implRegistery = new ImplementationRegistery();
-        implRegistery.initialise();
+        implRegistery.initialize();
 
         // setup factory
         OwlearnEducatorBadge owlearnEducatorBadge = new OwlearnEducatorBadge();
@@ -62,10 +62,15 @@ contract FeeModuleScript is Test {
             )
         );
 
-        // create & whitelisit the new module
-        feeModule = new FeeModule(address(courseFactory));
+        address feeModuleImplementation = address(new FeeModule());
+        moduleRegistery.setFactory(address(courseFactory));
+        moduleRegistery.whitelistModuleImplementation(feeModuleImplementation);
+        address feeModuleProxy = moduleRegistery.createModuleProxy(
+            feeModuleImplementation
+        );
 
-        moduleRegistery.whitelistModule(address(feeModule));
+        //  Deploy new Proxy for the implementation
+        feeModule = FeeModule(feeModuleProxy);
 
         // create a course
         nftURIs.push("s1");

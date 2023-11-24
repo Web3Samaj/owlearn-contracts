@@ -168,6 +168,8 @@ export type { EducatorBadgeProxy } from "./src/Proxy/EducatorBadgeProxy";
 export { EducatorBadgeProxy__factory } from "./factories/src/Proxy/EducatorBadgeProxy__factory";
 export type { FactoryProxy } from "./src/Proxy/FactoryProxy";
 export { FactoryProxy__factory } from "./factories/src/Proxy/FactoryProxy__factory";
+export type { ModuleProxy } from "./src/Proxy/ModuleProxy";
+export { ModuleProxy__factory } from "./factories/src/Proxy/ModuleProxy__factory";
 export type { ModuleRegisteryProxy } from "./src/Proxy/ModuleRegisteryProxy";
 export { ModuleRegisteryProxy__factory } from "./factories/src/Proxy/ModuleRegisteryProxy__factory";
 export type { OwlearnIdProxy } from "./src/Proxy/OwlearnIdProxy";

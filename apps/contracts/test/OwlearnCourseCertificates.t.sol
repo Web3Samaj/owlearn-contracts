@@ -21,7 +21,7 @@ contract OwlearnCourseCertificatesScript is Test {
             new OwlearnCourseCertificates()
         );
         implRegistery = new ImplementationRegistery();
-        implRegistery.initialise();
+        implRegistery.initialize();
 
         bytes memory initData = abi.encodeWithSelector(
             owlearnCourseCertificates.initialize.selector,

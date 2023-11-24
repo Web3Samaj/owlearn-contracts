@@ -4,8 +4,6 @@ pragma solidity ^0.8.12;
 import {OwlearnModuleBase} from "../Base/OwlearnModuleBase.sol";
 
 contract FreeModule is OwlearnModuleBase {
-    constructor(address factory) OwlearnModuleBase(factory) {}
-
     /**
      * @dev for initialising the actual Owlearn Course Data for this contract
      *

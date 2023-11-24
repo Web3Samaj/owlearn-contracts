@@ -3,6 +3,7 @@ pragma solidity ^0.8.12;
 
 import {OwlearnModuleBaseStorage} from "./OwlearnModuleBaseStorage.sol";
 import {IMintModule} from "../../interfaces/IMintModule.sol";
+import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 interface IFactory {
     function getCourse(uint courseId) external returns (address course);
@@ -12,24 +13,30 @@ interface IFactory {
 /// @notice Base Module Contract for Owlearn Mint Module
 /// @author Dhruv <contact.dhruvagarwal@gmail.com>
 /// @notice Add Call restricitions , which contract can actually call these
-abstract contract OwlearnModuleBase is IMintModule, OwlearnModuleBaseStorage {
-    address public immutable FACTORY;
+abstract contract OwlearnModuleBase is
+    IMintModule,
+    OwlearnModuleBaseStorage,
+    UUPSUpgradeable
+{
+    address public factory;
 
     /*======================== Constructor Functions ========================*/
-    /// Constructor can be used to set few variables at the time of deploy
     // /**
-    //  * For Upgradeable Modules , use initialize function instead of constructor
-    //  * @dev Intialise the Module with basic contract Data Initialiser
-    //  *
-    //  * @param _course  Course Contract address for which the Module is minted for
+    //  * @dev Lock implementation contract
     //  */
-    // function initialize(address _course) external initializer {
-    //     owlearnCourse = _course;
+    // constructor() {
+    //     // disabling initialisation of implementation contract to prevent attacks
+    //     // _disableInitializers();
     // }
 
-    constructor(address factory) {
-        require(factory != address(0), "NOT A VALID PARAM");
-        FACTORY = factory;
+    /**
+     * @dev Initialize the Module
+     *
+     * @param _factory Factory contract Address
+     */
+    function initialize(address _factory) external initializer {
+        require(_factory != address(0), "NOT A VALID PARAM");
+        factory = _factory;
     }
 
     /*======================== Modifier Functions ========================*/
@@ -39,11 +46,14 @@ abstract contract OwlearnModuleBase is IMintModule, OwlearnModuleBaseStorage {
 
     modifier onlyCourses(uint courseId) {
         require(
-            IFactory(FACTORY).getCourse(courseId) == msg.sender,
+            IFactory(factory).getCourse(courseId) == msg.sender,
             "ONLY AUTHORISED TO VALID COURSES"
         );
         _;
     }
 
-    /*======================== External Virtual Functions ========================*/
+    // No Upgradation Allowed Once the initialisation is done
+    function _authorizeUpgrade(address) internal virtual override {
+        revert();
+    }
 }
